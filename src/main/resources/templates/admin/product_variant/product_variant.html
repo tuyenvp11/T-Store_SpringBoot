@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<div th:replace="admin/fragments/head :: head"></div>
+
+<body>
+<!-- Header -->
+<div th:replace="admin/fragments/header :: header"></div>
+
+<!-- Sidenav -->
+<div id="layoutSidenav">
+    <div th:replace="admin/fragments/sidebar :: sidebar"></div>
+
+    <!-- Sidenav Content -->
+    <div id="layoutSidenav_content">
+        <main>
+            <div class="container-fluid px-4">
+                <h1 class="mt-4">Sản phẩm</h1>
+
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <i class="fas fa-table me-1"></i>
+                        Bảng sản phẩm
+                    </div>
+
+                    <form class="d-none d-md-inline-block form-inline ms-auto me-0 me-md-3 mt-2" th:action="@{/templates/admin/product_variant}">
+                        <div class="input-group">
+                            <input class="form-control" name="keyword" type="text" placeholder="Tìm kiếm..."  th:value="${keyword}"/>
+                            <button class="btn btn-primary" type="submit"><i class="fas fa-search"></i></button>
+                        </div>
+                    </form>
+
+                    <div class="card-body">
+                        <table class="table table-bordered">
+                            <thead>
+                            <tr>
+                                <th class="col-1">Sản phẩm</th>
+                                <th class="col-1">Màu sản phẩm</th>
+                                <th class="col-1">Size</th>
+                                <th class="col-1">Số lượng sản phẩm</th>
+                                <th class="col-1 justify-content-center">
+                                    <a th:href="@{product_variant/add_variant}" class="btn btn-success" style="padding: 5px 10px; font-size: 14px;">
+                                        <i class="fa-solid fa-square-plus"></i> Thêm chi tiết sản phẩm
+                                    </a>
+                                </th>
+                            </tr>
+                            </thead>
+
+                            <tbody>
+                            <tr th:each="variant : ${ListProductVariant}">
+                                <td th:text="${variant.product.product_name}"></td>
+                                <td th:text="${variant.color.color_name}"></td>
+                                <td th:text="${variant.size.size_name}"></td>
+                                <td th:text="${variant.product_quantity}"></td>
+                                <td>
+                                    <a th:href="@{/admin/product/edit_variant/{variant_id}(variant_id=${variant.variant_id})}" class="btn btn-warning" style="padding: 5px 10px; font-size: 10px;">
+                                        <i class="fa-solid fa-pen-to-square"></i>
+                                    </a>
+                                    <a th:href="@{/admin/product/del_variant/{variant_id}(variant_id=${variant.variant_id})}" onclick="return confirm('Bạn có muốn xóa sản phẩm này?')" class="btn btn-danger" style="padding: 5px 10px; font-size: 10px;">
+                                        <i class="fa-solid fa-trash-can"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                            </tbody>
+
+
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Phân trang -->
+            <!--<div class="d-flex justify-content-center">
+                <nav aria-label="Page navigation example">
+                    <ul class="pagination">
+                        <li class="page-item">
+                            <a class="page-link" aria-label="Previous" th:if="${currentPage > 1}" th:href="@{'?pageNo='+${currentPage - 1}}">
+                                <span aria-hidden="true">&laquo;</span>
+                            </a>
+                        </li>
+                        <li class="page-item" th:each="i:${#numbers.sequence(1, totalPage)}" th:classappend="${currentPage==i?'active' : ''}">
+                            <a class="page-link" th:href="@{${keyword != null && keyword!=''? '?keyword='+keyword+'&':'?'} + 'pageNo='+${i}}" th:text="${i}">1</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" aria-label="Next" th:if="${currentPage < totalPage}" th:href="@{'?pageNo='+${currentPage + 1}}">
+                                <span aria-hidden="true">&raquo;</span>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>-->
+        </main>
+
+
+        <footer class="py-4 bg-light mt-auto">
+            <div class="container-fluid px-4">
+                <div class="d-flex align-items-center justify-content-between small">
+                    <div class="text-muted">Copyright &copy; Phạm Văn Tuyến</div>
+                    <div>
+                        <a href="#">Chính sách riêng tư</a>
+                        &middot;
+                        <a href="#">Điều khoản &amp; dịch vụ</a>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </div>
+</div>
+<script th:src="@{https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js}" crossorigin="anonymous"></script>
+
+</body>
+</html>

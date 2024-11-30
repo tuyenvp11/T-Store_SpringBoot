@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<div th:replace="admin/fragments/head :: head"></div>
+
+<body>
+    <section>
+    <div class="container mt-5 p-5">
+        <div class="row">
+
+            <div class="col-md-7 p-2 offset-md-2">
+                <div class="card shadow p-3 mb-5 bg-body-tertiary rounded">
+                    <div class="card-header text-center">
+                        <p class="fs-4 text-center">Thêm Admin</p>
+                        <th:block th:if="${session.succMsg}">
+                            <p class="text-success fw-bold">[[${session.succMsg}]]</p>
+                            <th:block th:text="${@commnServiceImpl.removeSessionMessage()}"></th:block>
+                        </th:block>
+
+                        <th:block th:if="${session.errorMsg}">
+                            <p class="text-danger fw-bold">[[${session.errorMsg}]]</p>
+                            <th:block th:text="${@commnServiceImpl.removeSessionMessage()}"></th:block>
+                        </th:block>
+                    </div>
+                    <div class="card-body">
+                        <form action="/admin/save_admin" enctype="multipart/form-data" method="post">
+                            <div class="row">
+                                <div class="col">
+                                    <label class="form-label">Họ và tên</label>
+                                    <input required class="form-control" name="name" type="text">
+                                </div>
+
+                                <div class="col">
+                                    <label class="form-label">Số điện thoại</label>
+                                    <input required class="form-control" name="mobileNumber" type="number">
+                                </div>
+
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">Email</label>
+                                <input required class="form-control" name="email" type="email">
+                            </div>
+
+
+                            <div class="row">
+                                <div class="col">
+                                    <label class="form-label">Tỉnh/thành phố</label>
+                                    <input required class="form-control" name="province" type="text">
+                                </div>
+
+                                <div class="col">
+                                    <label class="form-label">Huyện/quận</label>
+                                    <input required class="form-control" name="district" type="text">
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col">
+                                    <label class="form-label">Xã/phường</label>
+                                    <input required class="form-control" name="commune" type="text">
+                                </div>
+
+                                <div class="col">
+                                    <label class="form-label">Số nhà</label>
+                                    <input required class="form-control" name="address" type="text">
+                                </div>
+
+                            </div>
+
+                            <div class="row">
+                                <div class="col">
+                                    <label class="form-label">Mật khẩu</label>
+                                    <input required class="form-control" name="password" type="password">
+                                </div>
+                                <div class="col">
+                                    <label class="form-label">Xác nhận mật khẩu</label>
+                                    <input required class="form-control" name="cpassword" type="password">
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Ảnh hồ sơ</label> <input
+                                    class="form-control" name="img" type="file">
+                            </div>
+                            <button type="submit"
+                                    class="btn bg-primary text-white col-md-12">Đăng ký</button>
+                        </form>
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+</section>
+</body>
+</html>

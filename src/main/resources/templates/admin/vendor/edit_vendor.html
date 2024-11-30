@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<div th:replace="admin/fragments/head :: head"></div>
+
+<body>
+<!-- Header -->
+<div th:replace="admin/fragments/header :: header"></div>
+
+<!-- Sidenav -->
+<div id="layoutSidenav">
+    <div th:replace="admin/fragments/sidebar :: sidebar"></div>
+
+    <!-- Sidenav Content -->
+    <div id="layoutSidenav_content">
+        <main>
+            <div class="container-fluid px-4">
+                <h1 class="mt-4">Sửa thông tin nhà cung cấp</h1>
+
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <i class="fas fa-table me-1"></i>
+                        Nhà cung cấp
+                    </div>
+                    <div class="card-body">
+                        <form role="form" method="post" th:action="@{/admin/vendor/edit_vendor}" th:object="${edit_vendor}">
+                            <input type="hidden" class="form-control" id="productId" th:field="*{vendor_id}">
+                            <div class="form-group">
+                                <label >Nhà cung cấp</label>
+                                <input type="text" class="form-control" id="nameVendor" th:field="*{vendor_name}">
+                            </div>
+                            <div class="form-group">
+                                <label>Hotline nhà cung cấp</label>
+                                <input type="text" class="form-control" id="hotlineVendor" th:field="*{vendor_hotline}">
+                            </div>
+                            <div class="form-group">
+                                <label>Địa chỉ nhà cung cấp</label>
+                                <input type="text" class="form-control" id="addressVendor" th:field="*{vendor_address}">
+                            </div>
+                            <button type="submit" class="btn btn-primary">Cập nhật</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+
+        <footer class="py-4 bg-light mt-auto">
+            <div class="container-fluid px-4">
+                <div class="d-flex align-items-center justify-content-between small">
+                    <div class="text-muted">Copyright &copy; Phạm Văn Tuyến</div>
+                    <div>
+                        <a href="#">Chính sách riêng tư</a>
+                        &middot;
+                        <a href="#">Điều khoản &amp; dịch vụ</a>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </div>
+</div>
+<script th:src="@{https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js}" crossorigin="anonymous"></script>
+
+</body>
+</html>

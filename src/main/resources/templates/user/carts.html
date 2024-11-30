@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<!-- Start Head -->
+<div th:replace="/fragments/head :: head"></div>
+<!-- End Head -->
+
+<body>
+<!-- Start Navbar  -->
+<div th:replace="/fragments/header :: header"></div>
+<!-- End Navbar -->
+
+<!-- Content container -->
+<section>
+    <div class="container-fluid mt-5 p-5">
+
+        <div class="card card-sh">
+            <div class="card-header text-center">
+                <p class="fs-4">Giỏ hàng</p>
+                <th:block th:if="${session.succMsg}">
+                    <p class="text-success fw-bold">[[${session.succMsg}]]</p>
+                    <th:block th:text="${@commnServiceImpl.removeSessionMessage()}"></th:block>
+                </th:block>
+
+                <th:block th:if="${session.errorMsg}">
+                    <p class="text-danger fw-bold">[[${session.errorMsg}]]</p>
+                    <th:block th:text="${@commnServiceImpl.removeSessionMessage()}"></th:block>
+                </th:block>
+            </div>
+            <div class="card-body">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col"></th>
+                            <th scope="col">Hình ảnh</th>
+                            <th scope="col">Tên sản phẩm</th>
+                            <th scope="col">Đơn giá</th>
+                            <th scope="col" class="text-center">Số lượng</th>
+                            <th scope="col">Thành tiền</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="cart, c:${carts}">
+                            <th scope="row">[[${c.count}]]</th>
+                            <td>
+                                <img th:src="@{'/be/img/products/' + ${cart.product.product_img}}"
+                                     width="60px" height="80px">
+                            </td>
+                            <td th:text="${cart.product.product_name ?: 'không xác định'}"></td>
+                            <td th:text="${@formatUtils.formatCurrency(cart.product.product_price) ?: 0}"></td>
+                            <td class="text-center"><a
+                                    th:href="@{'/user/cartQuantityUpdate?sy=de&cid='+${cart.cart_id}}">
+                                <i class="fa-solid fa-minus"></i>
+                                </a> [ [[${cart.quantity}]] ] <a
+                                        th:href="@{'/user/cartQuantityUpdate?sy=in&cid='+${cart.cart_id}}">
+                                    <i class="fa-solid fa-plus"></i>
+                                </a>
+                            </td>
+                            <td th:text="${@formatUtils.formatCurrency(cart.totalPrice) != null ? @formatUtils.formatCurrency(cart.totalPrice) : '0.00'}"></td>
+                        </tr>
+                        <tr>
+                            <td colspan="4"></td>
+                            <td class="fw-bold">Tổng tiền</td>
+                            <td class="fw-bold">[[${@formatUtils.formatCurrency(totalOrderPrice)}]]</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="text-center">
+                    <a href="/user/orders" class="btn btn-warning"> Tiến hành thanh toán</a>
+                </div>
+            </div>
+
+            <div th:if="${carts.size() == 0}">
+                <p>Giỏ hàng của bạn trống.</p>
+            </div>
+
+        </div>
+    </div>
+
+</section>
+
+<hr class="brick">
+
+<!-- Start Footer -->
+<div th:replace="/fragments/footer :: footer"></div>
+<!-- End Footer  -->
+
+
+<!-- Jquery Validation Library  -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.js}"></script>
+<script type="text/javascript" th:src="@{fe/js/script.js}"></script>
+<!-- End  -->
+<script
+        src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous">
+</script>
+</body>
+</html>

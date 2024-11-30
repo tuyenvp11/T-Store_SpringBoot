@@ -1,0 +1,112 @@
+@charset "ISO-8859-1";
+
+
+.card-sh {
+	box-shadow: 0 0 3px 0 rgba(0, 0, 0, 0.3);
+}
+
+.cat-div {
+	box-shadow: 0 0 10px rgba(0, 0, 0, .1);
+}
+
+.error {
+	color: red;
+}
+
+/* Header */
+header {
+	box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+	top: 0;
+	width: 100%;
+	z-index: 999; /* Ensure the header is on top of other elements */
+	padding-bottom: 20px;
+}
+header .navbar-brand img {
+	max-height: 50px;
+}
+header .form-control {
+	border-radius: 0;
+}
+header .btn {
+	background-color: #ff5722;
+	border: none;
+	color: white;
+}
+header a {
+	font-weight: 500;
+}
+header a:hover {
+	/*color: #ffc107;*/
+	color: #f8f9fa;
+}
+
+header a,
+footer a {
+
+	text-decoration: none !important;
+}
+header a:hover,
+footer a:hover {
+	text-decoration: underline;
+}
+
+
+
+
+/* index container */
+/* sidebar */
+.sidebar {
+	border: 2px solid red;
+	padding: 10px;
+}
+.sidebar .nav-link {
+	color: #000; /* Default text color */
+	padding: 10px;
+	display: block;
+	transition: background-color 0.3s ease;
+}
+.sidebar .nav-link:hover {
+	background-color: #ff0000; /* Red background color on hover */
+	color: #fff; /* White text color on hover */
+}
+
+/* san pham */
+/*.col-lg-15 {
+	width: 20%; !* 100% / 5 = 20% m?i c?t *!
+}*/
+
+
+/*@media(min-width: 1200px) {
+	.col-lg-2 {
+		flex: 0 0 19%; !* Chi?m kho?ng 19% c?a hàng *!
+		max-width: 19%;
+	}
+
+	.card {
+		margin-right: 0.8%; !* Thêm kho?ng cách nh? gi?a các s?n ph?m *!
+	}
+}*/
+
+/* Product Detail */
+.product-details {
+	margin-top: 50px;
+}
+.product-image img {
+	width: 100%;
+	height: auto;
+}
+.price {
+	font-size: 24px;
+	color: #e74c3c;
+	font-weight: bold;
+}
+.add-to-cart-btn {
+	background-color: #28a745;
+	color: #fff;
+}
+.add-to-cart-btn:hover {
+	background-color: #218838;
+}
+
+
+

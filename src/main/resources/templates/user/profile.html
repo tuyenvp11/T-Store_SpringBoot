@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<!-- Start Head -->
+<div th:replace="/fragments/head :: head"></div>
+<!-- End Head -->
+
+<body>
+<!-- Start Navbar  -->
+<div th:replace="/fragments/header :: header"></div>
+<!-- End Navbar -->
+
+<!-- Content container -->
+<section>
+    <div class="container-fluid mt-5 p-5 bg-light">
+        <div class="row">
+            <div class="col-md-10 offset-md-1 ">
+
+                <p class="fs-3 text-center">Thông tin cá nhân</p>
+                <th:block th:if="${session.succMsg}">
+                    <p class="text-success fw-bold  text-center">[[${session.succMsg}]]</p>
+                    <th:block th:text="${@commnServiceImpl.removeSessionMessage()}"></th:block>
+                </th:block>
+
+                <th:block th:if="${session.errorMsg}">
+                    <p class="text-danger fw-bold  text-center">[[${session.errorMsg}]]</p>
+                    <th:block th:text="${@commnServiceImpl.removeSessionMessage()}"></th:block>
+                </th:block>
+
+                <hr>
+                <div class="text-center">
+                    <img alt="" th:src="@{${user.profileImage}}"
+                         class="border p-2" style="width: 110px; height: 110px; border-radius: 50%;">
+                </div>
+                <div class="col-md-8 offset-md-2 mt-4">
+                    <table class="table table-borderless">
+                        <tbody>
+                        <form action="/user/update-profile" method="post"
+                              enctype="multipart/form-data">
+                            <tr>
+                                <th scope="row">Họ và tên</th>
+                                <td>:</td>
+                                <td><input type="text" name="name" class="form-control"
+                                           th:value="${user.name}"></td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Số điện thoại</th>
+                                <td>:</td>
+                                <td><input type="text" name="mobileNumber" class="form-control"
+                                           th:value="${user.mobileNumber}"></td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Email</th>
+                                <td>:</td>
+                                <td><input type="text" name="email" class="form-control"
+                                           readonly th:value="${user.email}"></td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Tỉnh/thành phố</th>
+                                <td>:</td>
+                                <td><input type="text" name="province" class="form-control"
+                                           th:value="${user.province}"></td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Huyện/quận</th>
+                                <td>:</td>
+                                <td><input type="text" name="district" class="form-control"
+                                           th:value="${user.district}"></td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Xã/phường</th>
+                                <td>:</td>
+                                <td><input type="text" name="commune" class="form-control"
+                                           th:value="${user.commune}"></td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Số nhà</th>
+                                <td>:</td>
+                                <td><input type="text" name="address" class="form-control"
+                                           th:value="${user.address}"></td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Ảnh đại diện</th>
+                                <td>:</td>
+                                <td><input type="file" name="img" class="form-control" value=""></td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Vai trò</th>
+                                <td>:</td>
+                                <td><input type="text" name="" class="form-control" readonly
+                                           th:value="${user.role}"></td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Trạng thái</th>
+                                <td>:</td>
+                                <td>
+                                    <input type="text" name="" class="form-control" readonly
+                                           th:value="${user.isEnable}">
+                                    <input type="hidden" th:value="${user.id}" name="id"></td>
+                            </tr>
+
+                            <tr>
+                                <td></td>
+                                <td class="text-center">
+                                    <button class="btn btn-sm bg-primary text-light">Cập nhật thông tin</button>
+                                </td>
+                            </tr>
+                        </form>
+                        </tbody>
+                    </table>
+
+                </div>
+
+            </div>
+            <hr>
+            <div class="col-md-10 offset-md-1 mt-1">
+                <div class="row">
+                    <p class="text-center fs-3">Thay đổi mật khẩu</p>
+                    <div class="col-md-6 offset-md-3">
+                        <table class="table table-borderless">
+
+                            <tbody>
+                            <form action="/user/change-password" method="post">
+                                <tr>
+                                    <th scope="row">Mật khẩu hiện tại</th>
+
+                                    <td><input type="text" name="currentPassword" class="form-control"></td>
+                                </tr>
+
+                                <tr>
+                                    <th scope="row">Mật khẩu mới</th>
+
+                                    <td><input type="text" name="newPassword" class="form-control"></td>
+                                </tr>
+
+                                <tr>
+                                    <th scope="row">Xác nhận mật khẩu</th>
+
+                                    <td><input type="text" name="confirmPassword" class="form-control"></td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td class="text-center">
+                                        <button class="btn btn-sm bg-primary text-light col-md-4">Cập nhật mật khẩu</button>
+                                    </td>
+
+                                </tr>
+                            </form>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+
+
+
+</section>
+
+<hr class="brick">
+
+<!-- Start Footer -->
+<div th:replace="/fragments/footer :: footer"></div>
+<!-- End Footer  -->
+
+
+<!-- Jquery Validation Library  -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.js}"></script>
+<script type="text/javascript" th:src="@{fe/js/script.js}"></script>
+<!-- End  -->
+<script
+        src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous">
+</script>
+</body>
+</html>

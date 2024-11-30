@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<div th:replace="admin/fragments/head :: head"></div>
+
+<body>
+<!-- Header -->
+<div th:replace="admin/fragments/header :: header"></div>
+
+<!-- Sidenav -->
+<div id="layoutSidenav">
+  <div th:replace="admin/fragments/sidebar :: sidebar"></div>
+
+  <!-- Sidenav Content -->
+  <div id="layoutSidenav_content">
+    <main>
+      <div class="container-fluid px-4">
+        <h1 class="mt-4">Thêm danh mục</h1>
+
+        <div class="card mb-4">
+          <!--<div class="card-header">
+            <i class="fas fa-table me-1"></i>
+            Danh mục
+          </div>-->
+          <div class="card-body">
+            <form role="form" method="post" th:action="@{/admin/category/add_category}" th:object="${add_category}">
+              <div class="form-group">
+                <label>Tên danh mục</label>
+                <input type="text" class="form-control" th:field="*{category_name}">
+                <!--<span th:if="${param.}" th:errors="*{category_name}"></span>-->
+              </div>
+
+              <button type="submit" class="btn btn-primary" >Thêm</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </main>
+
+
+    <footer class="py-4 bg-light mt-auto">
+      <div class="container-fluid px-4">
+        <div class="d-flex align-items-center justify-content-between small">
+          <div class="text-muted">Copyright &copy; Phạm Văn Tuyến</div>
+          <div>
+            <a href="#">Chính sách riêng tư</a>
+            &middot;
+            <a href="#">Điều khoản &amp; dịch vụ</a>
+          </div>
+        </div>
+      </div>
+    </footer>
+  </div>
+</div>
+<script th:src="@{https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js}" crossorigin="anonymous"></script>
+
+</body>
+</html>

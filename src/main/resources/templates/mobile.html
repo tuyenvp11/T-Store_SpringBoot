@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<!-- Start Head -->
+<div th:replace="fragments/head :: head"></div>
+<!-- End Head -->
+
+<body>
+<!-- Start Navbar  -->
+<div th:replace="fragments/header :: header"></div>
+<!-- End Navbar -->
+
+
+<!-- Start View Product -->
+<div class="container mt-3">
+    <div class="row">
+        <!-- Phần tiêu đề danh mục sản phẩm -->
+        <div class="col-12 mb-3">
+            <h5 class="home-filter_label">ĐIỆN THOẠI NỔI BẬT</h5>
+            <div class="btn-group" role="group" aria-label="Phone brands">
+                <button type="button" class="btn btn-outline-primary">Iphone</button>
+                <button type="button" class="btn btn-outline-primary">Samsung</button>
+                <button type="button" class="btn btn-outline-primary">Xiaomi</button>
+                <button type="button" class="btn btn-outline-primary">Realme</button>
+                <button type="button" class="btn btn-outline-primary">Oppo</button>
+                <button type="button" class="btn btn-outline-primary">Vivo</button>
+                <button type="button" class="btn btn-outline-primary">Nokia</button>
+                <button type="button" class="btn btn-outline-primary">Asus</button>
+                <button type="button" class="btn btn-primary">Xem tất cả</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Phần sản phẩm -->
+    <div class="row d-flex flex-row" th:each="product : ${products}">
+        <!-- Sản phẩm 1 -->
+        <div class="col-lg-2 col-md-3 col-sm-6 mb-4">
+            <a href="/detail_product" class="text-decoration-none">
+                <div class="card h-100 shadow-sm">
+                    <img th:src="@{'/be/img/products/'+${product.product_img}}" class="card-img-top p-3" alt="Ảnh sản phẩm">
+                    <div class="card-body text-center">
+                        <h6 class="card-title mb-2" th:text="${product.product_name}"></h6>
+                        <p class="card-text">
+                            <del class="text-muted">600.000</del><br>
+                            <span class="text-danger font-weight-bold" th:text="${product.product_price}"></span>
+                        </p>
+                        <div class="d-flex justify-content-center align-items-center">
+                            <div class="rating text-warning" style="font-size: 12px;">
+                                <i class="fa-solid fa-star"></i>
+                                <i class="fa-solid fa-star"></i>
+                                <i class="fa-solid fa-star"></i>
+                                <i class="fa-solid fa-star"></i>
+                                <i class="fa-solid fa-star"></i>
+                            </div>
+                            <span class="ms-2 text-muted" style="font-size: 12px;">112 đánh giá</span>
+                        </div>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <!-- Sản phẩm 2 -->
+        <!--<div class="col-lg-2 col-md-4 col-sm-6 mb-4">
+            <div class="card h-100 shadow-sm">
+                <img src="https://cellphones.com.vn/media/catalog/product/i/p/iphone_13-_pro-5_4.jpg" class="card-img-top p-3" alt="IPhone 13 Pro Max 128GB">
+                <div class="card-body text-center">
+                    <h6 class="card-title mb-2">IPhone 13 Pro Max 128GB | Chính hãng VN/A</h6>
+                    <p class="card-text">
+                        <del class="text-muted">34.990.000</del><br>
+                        <span class="text-danger font-weight-bold">26.990.000</span>
+                    </p>
+                    <div class="d-flex justify-content-center align-items-center">
+                        <div class="rating text-warning" style="font-size: 12px;">
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star"></i>
+                        </div>
+                        <span class="ms-2 text-muted" style="font-size: 12px;">112 đánh giá</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        &lt;!&ndash; Sản phẩm 3 &ndash;&gt;
+        <div class="col-lg-2 col-md-4 col-sm-6 mb-4">
+            <div class="card h-100 shadow-sm">
+                <img src="https://cellphones.com.vn/media/catalog/product/i/p/iphone_13-_pro-5_4.jpg" class="card-img-top p-3" alt="IPhone 13 Pro Max 128GB">
+                <div class="card-body">
+                    <h6 class="card-title mb-2">IPhone 13 Pro Max 128GB | Chính hãng VN/A</h6>
+                    <p class="card-text">
+                        <del class="text-muted">34.990.000</del><br>
+                        <span class="text-danger font-weight-bold">26.990.000</span>
+                    </p>
+                    <div class="d-flex justify-content-center align-items-center">
+                        <div class="rating text-warning" style="font-size: 12px;">
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star"></i>
+                        </div>
+                        <span class="ms-2 text-muted" style="font-size: 12px;">112 đánh giá</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        &lt;!&ndash; Sản phẩm 4 &ndash;&gt;
+        <div class="col-lg-2 col-md-4 col-sm-6 mb-4">
+            <div class="card h-100 shadow-sm">
+                <img src="https://cdn2.cellphones.com.vn/358x/media/catalog/product/i/p/ip13-pro_2.jpg" class="card-img-top p-3" alt="IPhone 13 128GB">
+                <div class="card-body">
+                    <h6 class="card-title mb-2">IPhone 13 128GB | Chính hãng VN/A</h6>
+                    <p class="card-text">
+                        <del class="text-muted">34.990.000</del><br>
+                        <span class="text-danger font-weight-bold">26.990.000</span>
+                    </p>
+                    <div class="d-flex justify-content-center align-items-center">
+                        <div class="rating text-warning" style="font-size: 12px;">
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star"></i>
+                        </div>
+                        <span class="ms-2 text-muted" style="font-size: 12px;">112 đánh giá</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        &lt;!&ndash; Sản phẩm 5 &ndash;&gt;
+        <div class="col-lg-2 col-md-4 col-sm-6 mb-4">
+            <div class="card h-100">
+                <img src="https://cdn2.cellphones.com.vn/358x/media/catalog/product/i/p/iphone_12_blue.png" class="card-img-top" alt="IPhone 12 64GB">
+                <div class="card-body">
+                    <h6 class="card-title">IPhone 12 64GB | Chính hãng VN/A</h6>
+                    <p class="card-text">
+                        <del class="text-muted">22.990.000</del>
+                        <span class="text-danger">15.990.000</span>
+                    </p>
+                    <div class="d-flex justify-content-start align-items-center">
+                        <div class="rating text-warning" style="font-size: 8px;">
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star"></i>
+                        </div>
+                        <span class="ms-2 text-muted">185 đánh giá</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        &lt;!&ndash; Sản phẩm 6 &ndash;&gt;
+        <div class="col-lg-2 col-md-4 col-sm-6 mb-4">
+            <div class="card h-100">
+                <img src="https://cdn2.cellphones.com.vn/358x/media/catalog/product/i/p/iphone_13-_pro-5_4.jpg" class="card-img-top" alt="IPhone 13 Pro Max 128GB">
+                <div class="card-body">
+                    <h6 class="card-title">IPhone 13 Pro Max 128GB | Chính hãng VN/A</h6>
+                    <p class="card-text">
+                        <del class="text-muted">34.990.000</del>
+                        <span class="text-danger">26.990.000</span>
+                    </p>
+                    <div class="d-flex justify-content-start align-items-center">
+                        <div class="rating text-warning" style="font-size: 8px;">
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star"></i>
+                        </div>
+                        <span class="ms-2 text-muted">112 đánh giá</span>
+                    </div>
+                </div>
+            </div>
+        </div>&ndash;&gt;
+    </div>-->
+
+
+    </div>
+    <!-- End View Product -->
+</div>
+
+
+<hr class="brick">
+
+<!-- Start Footer -->
+<div th:replace="fragments/footer :: footer"></div>
+<!-- End Footer  -->
+
+<!-- Jquery Validation Library  -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.js}"></script>
+<script type="text/javascript" th:src="@{fe/js/script.js}"></script>
+<!-- End  -->
+<script
+        src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous">
+</script>
+</body>
+</html>

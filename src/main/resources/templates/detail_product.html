@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<!-- Start Head -->
+<div th:replace="fragments/head :: head"></div>
+<!-- End Head -->
+
+<body>
+
+<!-- Start Navbar  -->
+<div th:replace="fragments/header :: header"></div>
+<!-- End Navbar -->
+
+<!-- Start Detail Product -->
+<div class="container product-details">
+    <div class="row">
+        <th:block th:if="${session.succMsg}">
+            <p class="text-success alert alert-success text-center" role="alert">[[${session.succMsg}]]</p>
+            <th:block th:text="${@commnServiceImpl.removeSessionMessage()}"></th:block>
+        </th:block>
+
+        <th:block th:if="${session.errorMsg}">
+            <p class="text-danger text-center  alert alert-danger">[[${session.errorMsg}]]</p>
+            <th:block th:text="${@commnServiceImpl.removeSessionMessage()}"></th:block>
+        </th:block>
+        <!-- Product Image -->
+        <div class="col-md-5 product-image">
+            <img th:src="@{'/be/img/products/'+${product.product_img}}" alt="Product Image" class="img-fluid">
+        </div>
+
+        <!-- Product Info -->
+        <div class="col-md-7" >
+            <h2 class="product-title">[[${product.product_name}]]</h2>
+            <p class="price">[[${@formatUtils.formatCurrency(product.product_price)}]]</p>
+
+            <p class="description">[[${product.product_descrip}]]</p>
+
+            <p>
+                <span class="fw-bold"> Chi tiết sản phẩm: </span>
+                <br>
+                Trạng thái :
+                <th:block th:if="${product.product_quantity>0}">
+                    <span class="badge bg-success">Còn hàng</span>
+                </th:block>
+
+                <th:block th:unless="${product.product_quantity>0}">
+                    <span class="badge bg-warning">Hết hàng</span>
+                </th:block>
+
+
+                <br> Danh mục: [[${product.category.category_name}]]<br> Chính sách : 7 ngày đổi trả
+            </p>
+
+            <!-- Add to Cart and Buy Now buttons -->
+            <!--<div class="buttons">-->
+                <th:block th:if="${product.product_quantity>0}">
+                    <th:block th:if="${user==null}">
+                        <a href="/login" class="btn btn-danger col-md-12">Thêm vào giỏ</a>
+                    </th:block>
+                    <form action="/user/addToCart" method="get">
+                        <th:block th:unless="${user==null}">
+                            <a th:href="@{'/user/addToCart?pid='+${product.product_id}+'&uid='+${user.id}}"
+                               class="btn btn-danger col-md-12">Thêm vào giỏ</a>
+                        </th:block>
+                    </form>
+                </th:block>
+                <!--<a class="btn btn-lg btn-danger">Thêm vào giỏ hàng</a>
+                <a class="btn btn-lg btn-primary ml-3">Mua ngay</a>-->
+           <!-- </div>-->
+
+            <th:block th:unless="${product.product_quantity>0}">
+                <a href="#" class="btn text-white btn-warning col-md-12">Tạm hết hàng</a>
+            </th:block>
+
+            <!-- Product Specifications -->
+            <div class="product-specifications mt-4">
+                <h4>Thông số kỹ thuật</h4>
+                <ul class="list-group">
+                    <li class="list-group-item">Màn hình: 6.5 inches, OLED</li>
+                    <li class="list-group-item">Bộ vi xử lý: Snapdragon 888</li>
+                    <li class="list-group-item">RAM: 8GB</li>
+                    <li class="list-group-item">Pin: 5000mAh</li>
+                    <li class="list-group-item">Camera chính: 108MP</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Additional information or reviews section -->
+    <div class="row mt-5">
+        <div class="col-md-12">
+            <h4>Đánh giá và nhận xét</h4>
+            <p>Phần này có thể chứa các đánh giá của khách hàng hoặc mô tả chi tiết thêm về sản phẩm.</p>
+        </div>
+    </div>
+</div>
+<!-- End Detail Product -->
+
+
+<!-- Start Footer -->
+<div th:replace="fragments/footer :: footer"></div>
+<!-- End Footer  -->
+
+<hr class="brick">
+
+<!-- Jquery Validation Library  -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.js}"></script>
+<script type="text/javascript" th:src="@{fe/js/script.js}"></script>
+<!-- End  -->
+<script
+        src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous">
+</script>
+</body>
+</html>

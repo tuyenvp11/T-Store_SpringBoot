@@ -1,0 +1,108 @@
+<div id="layoutSidenav_nav" th:fragment="sidebar">
+    <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
+        <div class="sb-sidenav-menu">
+            <div class="nav">
+                <div class="sb-sidenav-menu-heading">Điều khiển</div>
+                <a class="nav-link" th:href="@{/admin}">
+                    <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                    Bảng điều khiển
+                </a>
+                <div class="sb-sidenav-menu-heading">Quản lý cửa hàng</div>
+
+                <!-- Quản lý danh mục -->
+                <a class="nav-link" th:href="@{/admin/category}">
+                    <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
+                    Quản lý danh mục
+                </a>
+
+                <!-- Quản lý sản phẩm -->
+                <a class="nav-link collapsed" data-bs-toggle="collapse" data-bs-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
+                    <div class="sb-nav-link-icon"><i class="fa-solid fa-bag-shopping"></i></div>
+                    Quản lý kho hàng
+                    <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                </a>
+                <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                    <nav class="sb-sidenav-menu-nested nav">
+                        <a class="nav-link" th:href="@{/admin/product}">Quản lý sản phẩm</a>
+                        <a class="nav-link" th:href="@{/admin/product_variant}">Chi tiết sản phẩm</a>
+                        <a class="nav-link" th:href="@{/admin/color_product}">Màu sản phẩm</a>
+                        <a class="nav-link" th:href="@{/admin/size_product}">Kích cỡ sản phẩm</a>
+                    </nav>
+                </div>
+
+                <!-- Quản lý nhà cung cấp -->
+                <a class="nav-link" th:href="@{/admin/vendor}">
+                    <div class="sb-nav-link-icon"><i class="fa-solid fa-handshake"></i></div>
+                    Quản lý nhà cung cấp
+                </a>
+
+                <!-- Quản lý đơn hàng -->
+                <a class="nav-link" th:href="@{/admin/order}">
+                    <div class="sb-nav-link-icon"><i class="fa-solid fa-truck"></i></div>
+                    Quản lý đơn hàng
+                </a>
+
+                <!-- Quản lý khách hàng -->
+                <a class="nav-link" th:href="@{/admin/customer}">
+                    <div class="sb-nav-link-icon"><i class="fa-solid fa-users"></i></div>
+                    Quản lý khách hàng
+                </a>
+
+                <!-- Quản lý người dùng -->
+                <a class="nav-link" th:href="@{/admin/users}">
+                    <div class="sb-nav-link-icon"><i class="fa-solid fa-users"></i></div>
+                    Quản lý tài khoản
+                </a>
+
+                <!-- Quản lý thống kê -->
+                <a class="nav-link" th:href="@{/admin/statistic}">
+                    <div class="sb-nav-link-icon"><i class="fa-solid fa-chart-simple"></i></div>
+                    Thống kê
+                </a>
+
+                <div class="sb-sidenav-menu-heading">Tài khoản</div>
+                <a class="nav-link" th:href="@{/admin/login}">
+                    <div class="sb-nav-link-icon"><i class="fa-solid fa-right-to-bracket"></i>
+                    Đăng nhập
+                </a>
+                <!--<div class="collapse" id="collapsePages" aria-labelledby="headingTwo" data-bs-parent="#sidenavAccordion">
+                    <nav class="sb-sidenav-menu-nested nav accordion" id="sidenavAccordionPages">
+                        <a class="nav-link collapsed" href="" data-bs-toggle="collapse" data-bs-target="#pagesCollapseAuth" aria-expanded="false" aria-controls="pagesCollapseAuth">
+                            Tài khoản người dùng
+                            <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                        </a>
+                        <div class="collapse" id="pagesCollapseAuth" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordionPages">
+                            <nav class="sb-sidenav-menu-nested nav">
+                                <a class="nav-link" href="">Đăng nhập</a>
+                                <a class="nav-link" href="">Đăng ký</a>
+                                <a class="nav-link" href="">Quên mật khẩu</a>
+                            </nav>
+                        </div>
+                        <a class="nav-link collapsed" href="" data-bs-toggle="collapse" data-bs-target="#pagesCollapseError" aria-expanded="false" aria-controls="pagesCollapseError">
+                            Error
+                            <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                        </a>
+                        <div class="collapse" id="pagesCollapseError" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordionPages">
+                            <nav class="sb-sidenav-menu-nested nav">
+                                <a class="nav-link" href="#">401 Page</a>
+                                <a class="nav-link" href="#">404 Page</a>
+                                <a class="nav-link" href="#">500 Page</a>
+                            </nav>
+                        </div>
+                    </nav>
+                </div>-->
+
+                <!-- Trang chủ -->
+                <div class="sb-sidenav-menu-heading">Trang chủ</div>
+                <a class="nav-link" th:href="@{/}">
+                    <div class="sb-nav-link-icon"><i class="fa-solid fa-shop"></i></div>
+                    Trang chủ
+                </a>
+            </div>
+        </div>
+        <div class="sb-sidenav-footer">
+            <div class="small">Đã đăng nhập:</div>
+            Admin
+        </div>
+    </nav>
+</div>
