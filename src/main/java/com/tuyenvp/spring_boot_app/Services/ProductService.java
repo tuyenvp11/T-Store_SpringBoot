@@ -19,6 +19,7 @@ public interface ProductService {
     Page<Product> searchProduct(String keyword, Integer pageNo);
     public Product getProductById(int product_id);
     public List<Product> getAllProducts();
-    //public List<Product> getProductByCategory(String category);
+    public List<Product> getProductByCategory(int categoryId);
+    public List<Product> searchProductsByKeywordAndCategory(String keyword, Integer categoryId);
     public long getTotalProducts();
 }

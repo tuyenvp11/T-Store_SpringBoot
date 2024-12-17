@@ -11,4 +11,5 @@ import java.util.List;
 public interface CategoryRepo extends JpaRepository<Category, Integer> {
     @Query("SELECT c FROM Category c WHERE c.category_name LIKE %?1%")
     List<Category> searchCategory(String keyword);
+
 }

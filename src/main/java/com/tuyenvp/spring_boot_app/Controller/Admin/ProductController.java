@@ -7,6 +7,11 @@ import com.tuyenvp.spring_boot_app.Services.CategoryService;
 import com.tuyenvp.spring_boot_app.Services.ProductService;
 import com.tuyenvp.spring_boot_app.Services.SystemStorageService;
 import com.tuyenvp.spring_boot_app.Services.VendorService;
+import jakarta.servlet.http.HttpServletResponse;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.repository.query.Param;
@@ -15,6 +20,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -45,8 +51,6 @@ public class ProductController {
         model.addAttribute("totalPage", list.getTotalPages());
         model.addAttribute("currentPage", pageNo);
 
-        //model.addAttribute("list", list.getContent());
-        //List<Product> products = productService.ListProduct();
         model.addAttribute("ListProduct", list);
         return "admin/product/product";
     }
@@ -65,7 +69,8 @@ public class ProductController {
         return "admin/product/add_product";
     }
     @PostMapping("product/add_product")
-    public String save_product(@ModelAttribute("product") Product product, @RequestParam("img") MultipartFile file) {
+    public String save_product(@ModelAttribute("product") Product product,
+                               @RequestParam("img") MultipartFile file) {
         // upload file
         systemStorageService.store(file);
         String fileName = file.getOriginalFilename();
@@ -108,6 +113,46 @@ public class ProductController {
     public String del_product(@PathVariable("product_id") Integer product_id) {
         productService.deleteProduct(product_id);
         return "redirect:/admin/product";
+    }
+
+
+    // Xuat bao cao ra file excel
+    @GetMapping("/product/export-products")
+    public void exportProductsToExcel(HttpServletResponse response) throws IOException {
+        response.setContentType("application/octet-stream");
+        String headerKey = "Content-Disposition";
+        String headerValue = "attachment; filename=san_pham_t-store.xlsx";
+        response.setHeader(headerKey, headerValue);
+
+        List<Product> products = productService.getAllProducts(); // Lấy dữ liệu từ DB
+        Workbook workbook = new XSSFWorkbook();
+        Sheet sheet = workbook.createSheet("Product");
+
+        Row headerRow = sheet.createRow(0);
+        headerRow.createCell(0).setCellValue("Mã sản phẩm");
+        headerRow.createCell(1).setCellValue("Tên sản phẩm");
+        headerRow.createCell(2).setCellValue("Danh mục");
+        headerRow.createCell(3).setCellValue("Nhà cung cấp");
+        headerRow.createCell(4).setCellValue("Hình ảnh");
+        headerRow.createCell(5).setCellValue("Mô tả sản phẩm");
+        headerRow.createCell(6).setCellValue("Giá sản phẩm");
+        headerRow.createCell(7).setCellValue("Tổng số lượng nhập");
+
+        int rowCount = 1;
+        for (Product product : products) {
+            Row row = sheet.createRow(rowCount++);
+            row.createCell(0).setCellValue(product.getProduct_id());
+            row.createCell(1).setCellValue(product.getProduct_name());
+            row.createCell(2).setCellValue(product.getCategory().getCategory_name());
+            row.createCell(3).setCellValue(product.getVendor().getVendor_name());
+            row.createCell(4).setCellValue(product.getProduct_img());
+            row.createCell(5).setCellValue(product.getProduct_descrip());
+            row.createCell(6).setCellValue(product.getProduct_price());
+            row.createCell(7).setCellValue(product.getProduct_quantity());
+        }
+
+        workbook.write(response.getOutputStream());
+        workbook.close();
     }
 
 

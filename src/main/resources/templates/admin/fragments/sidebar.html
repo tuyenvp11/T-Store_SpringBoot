@@ -26,7 +26,7 @@
                         <a class="nav-link" th:href="@{/admin/product}">Quản lý sản phẩm</a>
                         <a class="nav-link" th:href="@{/admin/product_variant}">Chi tiết sản phẩm</a>
                         <a class="nav-link" th:href="@{/admin/color_product}">Màu sản phẩm</a>
-                        <a class="nav-link" th:href="@{/admin/size_product}">Kích cỡ sản phẩm</a>
+                        <a class="nav-link" th:href="@{/admin/size_product}">Dung lượng sản phẩm</a>
                     </nav>
                 </div>
 
@@ -42,14 +42,8 @@
                     Quản lý đơn hàng
                 </a>
 
-                <!-- Quản lý khách hàng -->
-                <a class="nav-link" th:href="@{/admin/customer}">
-                    <div class="sb-nav-link-icon"><i class="fa-solid fa-users"></i></div>
-                    Quản lý khách hàng
-                </a>
-
                 <!-- Quản lý người dùng -->
-                <a class="nav-link" th:href="@{/admin/users}">
+                <a class="nav-link" th:href="@{/admin/customer}">
                     <div class="sb-nav-link-icon"><i class="fa-solid fa-users"></i></div>
                     Quản lý tài khoản
                 </a>
@@ -61,9 +55,9 @@
                 </a>
 
                 <div class="sb-sidenav-menu-heading">Tài khoản</div>
-                <a class="nav-link" th:href="@{/admin/login}">
-                    <div class="sb-nav-link-icon"><i class="fa-solid fa-right-to-bracket"></i>
-                    Đăng nhập
+                <a class="nav-link" th:href="@{/admin/add_admin}">
+                    <div class="sb-nav-link-icon"><i class="fa-solid fa-right-to-bracket"> </i></div>
+                    Đăng ký tài khoản
                 </a>
                 <!--<div class="collapse" id="collapsePages" aria-labelledby="headingTwo" data-bs-parent="#sidenavAccordion">
                     <nav class="sb-sidenav-menu-nested nav accordion" id="sidenavAccordionPages">

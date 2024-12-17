@@ -61,6 +61,20 @@
             <version>1.5.2</version>
         </dependency>
 
+        <!-- apache poi - xuat file excel -->
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi-ooxml</artifactId>
+            <version>5.2.3</version>
+        </dependency>
+
+        <!-- itextpdf - xuat file pdf -->
+        <dependency>
+            <groupId>com.itextpdf</groupId>
+            <artifactId>itext7-core</artifactId>
+            <version>7.2.5</version>
+        </dependency>
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-mail</artifactId>
@@ -110,6 +124,7 @@
             <artifactId>spring-boot-starter-mail</artifactId>
             <!--<version>3.3.1</version>-->
         </dependency>
+
 
     </dependencies>
 

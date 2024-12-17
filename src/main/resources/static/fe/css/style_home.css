@@ -15,10 +15,11 @@
 
 /* Header */
 header {
-	box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+	position: sticky;
 	top: 0;
-	width: 100%;
 	z-index: 999; /* Ensure the header is on top of other elements */
+	box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+	width: 100%;
 	padding-bottom: 20px;
 }
 header .navbar-brand img {
@@ -108,5 +109,14 @@ footer a:hover {
 	background-color: #218838;
 }
 
-
-
+/* Product Page */
+.product-list {
+	padding-top: 20px;
+	padding-bottom: 20px;
+}
+.product-list .card {
+	transition: transform 0.3s ease;
+}
+.product-list .card:hover {
+	transform: translateY(-10px);
+}

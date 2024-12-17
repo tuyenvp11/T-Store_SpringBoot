@@ -16,9 +16,9 @@
     <div id="layoutSidenav_content">
         <main>
             <div class="container-fluid px-4">
-                <h1 class="mt-4">Sản phẩm</h1>
-                <p class="fs-4" th:if="${userType==1}">Users</p>
-                <p class="fs-4" th:if="${userType==2}">Admin</p>
+                <h1 class="mt-4">Quản lý tài khoản</h1>
+                <p class="fs-4" th:if="${userType==1}">Tài khoản người dùng</p>
+                <p class="fs-4" th:if="${userType==2}">Tài khoản quản trị viên</p>
                 <th:block th:if="${session.succMsg}">
                     <p class="text-success fw-bold">[[${session.succMsg}]]</p>
                     <th:block th:text="${@commnServiceImpl.removeSessionMessage()}"></th:block>
@@ -31,7 +31,7 @@
                 <div class="card mb-4">
                     <div class="card-header">
                         <i class="fas fa-table me-1"></i>
-                        Bảng khách hàng
+                        Bảng tài khoản
                     </div>
 
                     <form class="d-none d-md-inline-block form-inline ms-auto me-0 me-md-3 mt-2" th:action="@{/admin/users}">
@@ -52,7 +52,7 @@
                                 <th scope="col">Số điện thoại</th>
                                 <th scope="col">Địa chỉ</th>
                                 <th scope="col">Trạng thái</th>
-                                <th scope="col">Action</th>
+                                <th scope="col">#</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -81,7 +81,7 @@
             </div>
 
             <!-- Phân trang -->
-            <div class="d-flex justify-content-center">
+            <!--<div class="d-flex justify-content-center">
                 <nav aria-label="Page navigation example">
                     <ul class="pagination">
                         <li class="page-item">
@@ -99,7 +99,7 @@
                         </li>
                     </ul>
                 </nav>
-            </div>
+            </div>-->
         </main>
 
 

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<div th:replace="admin/fragments/head :: head"></div>
+
+<body>
+<!-- Header -->
+<div th:replace="admin/fragments/header :: header"></div>
+
+<!-- Sidenav -->
+<div id="layoutSidenav">
+    <div th:replace="admin/fragments/sidebar :: sidebar"></div>
+
+    <!-- Sidenav Content -->
+    <div id="layoutSidenav_content">
+        <main>
+            <div class="container-fluid px-4">
+                <h1 class="mt-4">Thống kê</h1>
+                <ol class="breadcrumb mb-4">
+                    <li class="breadcrumb-item active">Thống kê</li>
+                </ol>
+
+            </div>
+
+            <div class="row">
+                <div class="col-xl-6">
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            <i class="fas fa-chart-area me-1"></i>
+                            Area Chart
+                        </div>
+                        <div class="card-body"><canvas id="myAreaChart" width="100%" height="40"></canvas></div>
+                    </div>
+                </div>
+                <div class="col-xl-6">
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            <i class="fas fa-chart-bar me-1"></i>
+                            Bar Chart
+                            <div class="card-body" style="text-align: center;">
+                                <img src="/admin/chartBar-revenue" alt="Bar Chart"
+                                     style="max-width: 100%; height: auto; height: 400px">
+                            </div>
+                            <h4>Tổng doanh thu: [[${@formatUtils.formatCurrency(totalRevenue)}]]</h4>
+                        </div>
+                        <div class="card-body"><canvas id="myBarChart" width="100%" height="40"></canvas></div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+
+        <footer class="py-4 bg-light mt-auto">
+            <div class="container-fluid px-4">
+                <div class="d-flex align-items-center justify-content-between small">
+                    <div class="text-muted">Copyright &copy; Phạm Văn Tuyến</div>
+                    <div>
+                        <a href="#">Chính sách riêng tư</a>
+                        &middot;
+                        <a href="#">Điều khoản &amp; dịch vụ</a>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+
+</body>
+</html>

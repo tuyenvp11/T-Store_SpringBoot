@@ -9,14 +9,15 @@
                 <h3 class="navbar-brand">
                     <i class="fa-solid fa-list"></i> Danh mục
                 </h3>
-                <ul class="navbar-nav flex-column w-100" th:each="c:${categories}">
+                <ul class="navbar-nav flex-column w-100" href="/products" th:each="c:${categories}">
                     <li class="nav-item active">
-                        <a th:href="@{'/products?category=' + ${c.category_name}}" class="nav-link d-flex align-items-center">
+                        <a th:href="@{'/products?category=' + ${c.id}}" class="nav-link d-flex align-items-center">
                             <!--<i class="fa-solid fa-mobile-screen-button me-2"></i>-->
                             [[${c.category_name}]]
                         </a>
                     </li>
-                    <!--<li class="nav-item">
+                </ul>
+                <!--<li class="nav-item">
                         <a href="/laptop" class="nav-link d-flex align-items-center">
                             <i class="fa-solid fa-laptop me-2"></i>
                             Laptop
@@ -58,7 +59,6 @@
                             Ti vi
                         </a>
                     </li>-->
-                </ul>
             </nav>
         </div>
 

@@ -23,14 +23,11 @@
                     <div class="card-header">
                         <p class="fs-4 text-center">Đăng nhập</p>
                         <div th:if="${param.error}" class="alert alert-danger text-center">
-
-
-
                         </div>
 
                         <div th:if="${param.logout}" class="alert alert-success">
                             Đăng xuất thành công</div>
-                    </div>
+                        </div>
                     <div class="card-body">
                         <form action="/login" method="post">
                             <div class="mb-3">

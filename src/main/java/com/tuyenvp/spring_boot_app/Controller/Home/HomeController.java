@@ -6,16 +6,11 @@ import com.tuyenvp.spring_boot_app.Model.UserDtls;
 import com.tuyenvp.spring_boot_app.Repository.DbConnect;
 import com.tuyenvp.spring_boot_app.Services.CartService;
 import com.tuyenvp.spring_boot_app.Services.CategoryService;
-import com.tuyenvp.spring_boot_app.Services.Impl.CartServiceImpl;
-import com.tuyenvp.spring_boot_app.Services.Impl.CategoryServiceImpl;
-import com.tuyenvp.spring_boot_app.Services.Impl.ProductServiceImpl;
-import com.tuyenvp.spring_boot_app.Services.Impl.UserServiceImpl;
 import com.tuyenvp.spring_boot_app.Services.ProductService;
 import com.tuyenvp.spring_boot_app.Services.UserService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.ObjectUtils;
@@ -61,15 +56,15 @@ public class HomeController {
     }
 
     @GetMapping("/")
-    public String index(Model model, @AuthenticationPrincipal UserDtls userDtls) {
-        /*Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication != null && authentication.isAuthenticated()) {
-            String username = authentication.getName();
-            model.addAttribute("user", username);
-        }*/
-
-
+    public String index(Model model,
+                        @RequestParam(value = "category_id", required = false)
+                        Integer category_id) {
         List<Product> products = productService.getAllProducts();
+        if (category_id != null) {
+            products = productService.getProductByCategory(category_id);
+        }else {
+            products = productService.getAllProducts();
+        }
         model.addAttribute("products", products);
 
         List<Category> categories = categoryService.getAllCategory();
@@ -86,9 +81,6 @@ public class HomeController {
     public String login(Model model) {
         return "login";
     }
-
-
-
 
     @PostMapping("/saveUser")
     public String saveUser(@ModelAttribute UserDtls user, @RequestParam("img") MultipartFile file, HttpSession session)
@@ -124,11 +116,31 @@ public class HomeController {
 
 
     @GetMapping("/products")
-    public String products(Model model) {
-        List<Product> products = productService.getAllProducts();
+    public String products(Model model,
+                           @RequestParam(value = "category", defaultValue = "") String category,
+                           @RequestParam(value = "category_id", required = false) Integer category_id,
+                           @RequestParam(value="keyword", required = false) String keyword) {
+        List<Product> products ;
+        if (keyword != null && !keyword.isEmpty() && category_id != null) {
+            products = productService.searchProductsByKeywordAndCategory(keyword, category_id);
+        } else if (keyword != null && !keyword.isEmpty()) {
+            products = productService.searchProduct(keyword);
+            model.addAttribute("keyword", keyword);
+        } else if (category_id != null) {
+            products = productService.getProductByCategory(category_id);
+        } else {
+            products = productService.getAllProducts();
+        }
+
+        List<Category> categories = categoryService.getAllCategory();
+        model.addAttribute("categories", categories);
         model.addAttribute("products", products);
+        model.addAttribute("category_id", category_id); // Giữ ID của danh mục được chọn
+        model.addAttribute("paramValue", category);
+
         return "products";
     }
+
 
     @GetMapping("/detail_product/{product_id}")
     public String detail_product(@PathVariable int product_id, Model model, Principal principal) {

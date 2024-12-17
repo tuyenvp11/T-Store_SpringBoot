@@ -15,7 +15,7 @@
     <div id="layoutSidenav_content">
         <main>
             <div class="container-fluid px-4">
-                <h1 class="mt-4">Danh mục</h1>
+                <h1 class="mt-4">Quản lý danh mục</h1>
 
                 <div class="card mb-4">
                     <div class="card-header">
@@ -46,13 +46,16 @@
 
                             <tbody>
                                 <tr th:each="category : ${ListCategory}">
-                                    <td th:text="${category.category_id}"></td>
+                                    <td th:text="${category.id}"></td>
                                     <td th:text="${category.category_name}"></td>
                                     <td>
-                                        <a th:href="@{/admin/category/edit_category/{category_id}(category_id=${category.category_id})}" class="btn btn-warning" style="padding: 5px 10px; font-size: 10px;">
-                                            <i class="fa-solid fa-pen-to-square"></i>
+                                        <a th:href="@{/admin/category/edit_category/{id}(id=${category.id})}"
+                                           class="btn btn-warning" style="padding: 5px 10px; font-size: 10px;">
+                                                <i class="fa-solid fa-pen-to-square"></i>
                                         </a>
-                                        <a th:href="@{/admin/category/del_category/{category_id}(category_id=${category.category_id})}" onclick="return confirm('Bạn có muốn xóa danh mục này!')" class="btn btn-danger" style="padding: 5px 10px; font-size: 10px;">
+                                        <a th:href="@{/admin/category/del_category/{id}(id=${category.id})}"
+                                           onclick="return confirm('Bạn có muốn xóa danh mục này!')" class="btn btn-danger"
+                                           style="padding: 5px 10px; font-size: 10px;">
                                             <i class="fa-solid fa-trash-can"></i>
                                         </a>
                                     </td>
@@ -103,7 +106,7 @@
         </footer>
     </div>
 </div>
-<script th:src="@{https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js}" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
 
 </body>
 </html>

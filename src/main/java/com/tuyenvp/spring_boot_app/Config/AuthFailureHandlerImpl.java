@@ -60,7 +60,7 @@ public class AuthFailureHandlerImpl extends SimpleUrlAuthenticationFailureHandle
 			exception = new LockedException("Email & Mật khẩu không đúng");
 		}
 
-		super.setDefaultFailureUrl("/signin?error");
+		super.setDefaultFailureUrl("/login?error");
 		super.onAuthenticationFailure(request, response, exception);
 	}
 

@@ -13,8 +13,11 @@
 <!-- Content container -->
 <section>
     <div class="container-fluid mt-5 p-5">
+        <div th:if="${carts.size() == 0}" class="d-flex flex-column justify-content-center align-items-center">
+            <h6>Bạn cần đăng nhập để thêm vào giỏ hàng <a href="/login" class="text-primary">Đăng nhập</a></h6>
+        </div>
 
-        <div class="card card-sh">
+        <div class="card card-sh" th:if="${carts.size() > 0}">
             <div class="card-header text-center">
                 <p class="fs-4">Giỏ hàng</p>
                 <th:block th:if="${session.succMsg}">
@@ -31,7 +34,7 @@
                 <table class="table">
                     <thead>
                         <tr>
-                            <th scope="col"></th>
+                            <th scope="col">STT</th>
                             <th scope="col">Hình ảnh</th>
                             <th scope="col">Tên sản phẩm</th>
                             <th scope="col">Đơn giá</th>
@@ -68,10 +71,6 @@
                 <div class="text-center">
                     <a href="/user/orders" class="btn btn-warning"> Tiến hành thanh toán</a>
                 </div>
-            </div>
-
-            <div th:if="${carts.size() == 0}">
-                <p>Giỏ hàng của bạn trống.</p>
             </div>
 
         </div>

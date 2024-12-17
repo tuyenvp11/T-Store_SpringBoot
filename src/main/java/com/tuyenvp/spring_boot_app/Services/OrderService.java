@@ -23,8 +23,6 @@ public interface OrderService {
 
     Page<ProductOrder> searchProductOrder(String keyword, Integer pageNo);
 
-    //public ProductOrder getOrdersByOrderId(String orderId);
-
     //public Page<ProductOrder> getAllOrdersPagination(Integer pageNo, Integer pageSize);
 
     public long getTotalOrders();

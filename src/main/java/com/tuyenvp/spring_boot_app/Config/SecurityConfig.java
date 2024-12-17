@@ -43,20 +43,32 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.csrf(csrf->csrf.disable()).cors(cors->cors.disable())
-                .authorizeHttpRequests(req->req.requestMatchers("/user**").hasRole("USER")
-                        .requestMatchers("/admin**").hasRole("ADMIN")
-                        .requestMatchers("/**").permitAll()
-                        .requestMatchers("/user/carts**").hasRole("USER") )
-                .formLogin(form->form.loginPage("/register")
-                        .loginProcessingUrl("/login")
-						.defaultSuccessUrl("/")
-                        .failureHandler(authenticationFailureHandler)
-                        .successHandler(authenticationSuccessHandler))
-                .logout(logout->logout.permitAll());
+        http
+            .csrf(csrf->csrf.disable())
+            .cors(cors->cors.disable())
+            .authorizeHttpRequests(req->req
+                    .requestMatchers("/user**").hasRole("USER")
+                    .requestMatchers("/admin**").hasRole("ADMIN")
+                    .requestMatchers("/**")
+                    .permitAll()
+                    .requestMatchers("/user/carts**").hasRole("USER"))
+            .formLogin(form->form
+                    .loginPage("/login")
+                    .loginProcessingUrl("/login")
+                    .defaultSuccessUrl("/")
+                    .failureHandler(authenticationFailureHandler)
+                    .successHandler(authenticationSuccessHandler)
+                    .permitAll())
+            .logout(logout->logout
+                    .logoutUrl("/logout") // URL cho logout
+                    .logoutSuccessUrl("/login?logout=true") // Chuyển hướng về trang login
+                    .invalidateHttpSession(true) // Hủy session
+                    .clearAuthentication(true) // Xóa xác thực
+                    .deleteCookies("JSESSIONID")); // Xóa cookie phiên
 
         return http.build();
     }
+
 
 
 }

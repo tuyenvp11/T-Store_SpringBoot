@@ -10,49 +10,41 @@
     <div th:replace="fragments/header :: header"></div>
     <!-- End Navbar -->
 
-    <h1>Sản phẩm thuộc danh mục: ${category}</h1>
+    <div class="product-list container mt-4 mb-4">
+         <div class="row">
+            <div class="col-6 col-md-4 col-lg-2 mb-4" th:each="product : ${products}">
+                <a th:href="@{'/detail_product/' + ${product.product_id}}" class="text-decoration-none">
+                    <div class="card h-100 shadow-sm">
+                        <img th:src="@{'/be/img/products/'+${product.product_img}}" class="card-img-top p-3" alt="Ảnh sản phẩm">
+                        <div class="card-body text-center d-flex flex-column justify-content-between">
+                            <h6 class="card-title mb-2" th:text="${product.product_name}"></h6>
 
-    <div class="product-list">
-        <!--<ul>
-            <li th:each="product : ${products}">
-                <div class="product-item">
-                    <h3 th:text="${product.product_name}"></h3>
-                    <p th:text="${product.product_descrip}"></p>
-                    <span th:text="${product.product_price}">Price</span>
-                </div>
-            </li>
-        </ul>-->
-
-        <div class="col-6 col-md-4 col-lg-2 mb-4" th:each="product : ${products}">
-            <a th:href="@{'/detail_product/' + ${product.product_id}}" class="text-decoration-none">
-                <div class="card h-100 shadow-sm">
-                    <img th:src="@{'/be/img/products/'+${product.product_img}}" class="card-img-top p-3" alt="Ảnh sản phẩm">
-                    <div class="card-body text-center d-flex flex-column justify-content-between">
-                        <h6 class="card-title mb-2" th:text="${product.product_name}"></h6>
-
-                        <!-- Price Section with Fixed Height -->
-                        <div style="min-height: 70px;">
-                            <p class="card-text">
-                                <del class="text-muted">600.000</del><br>
-                                <span class="text-danger font-weight-bold" th:text="${product.product_price}"></span>
-                            </p>
-                        </div>
-
-                        <!-- Rating Section -->
-                        <div class="d-flex justify-content-center align-items-center">
-                            <div class="rating text-warning" style="font-size: 12px;">
-                                <i class="fa-solid fa-star"></i>
-                                <i class="fa-solid fa-star"></i>
-                                <i class="fa-solid fa-star"></i>
-                                <i class="fa-solid fa-star"></i>
-                                <i class="fa-solid fa-star"></i>
+                            <!-- Price Section with Fixed Height -->
+                            <div style="min-height: 70px;">
+                                <p class="card-text">
+                                    <!--<del class="text-muted">600.000</del><br>-->
+                                    <span class="text-danger font-weight-bold" th:text="${@formatUtils.formatCurrency(product.product_price)}"></span>
+                                </p>
                             </div>
-                            <span class="ms-2 text-muted" style="font-size: 12px;">112 đánh giá</span>
+
+                            <!-- Rating Section -->
+                            <div class="d-flex justify-content-center align-items-center">
+                                <div class="rating text-warning" style="font-size: 12px;">
+                                    <i class="fa-solid fa-star"></i>
+                                    <i class="fa-solid fa-star"></i>
+                                    <i class="fa-solid fa-star"></i>
+                                    <i class="fa-solid fa-star"></i>
+                                    <i class="fa-solid fa-star"></i>
+                                </div>
+                                <span class="ms-2 text-muted" style="font-size: 12px;">112 đánh giá</span>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </a>
+                </a>
+            </div>
         </div>
+    </div>
+
 
     </div>
 

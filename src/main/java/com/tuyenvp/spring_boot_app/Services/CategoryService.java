@@ -18,4 +18,5 @@ public interface CategoryService {
     Page<Category> getAll(Integer pageNo);
     List<Category> getAllCategory();
     Page<Category> searchCategory(String keyword, Integer pageNo);
+    //public Category getCategoryById(int category_id);
 }

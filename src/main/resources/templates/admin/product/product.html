@@ -15,7 +15,7 @@
     <div id="layoutSidenav_content">
         <main>
             <div class="container-fluid px-4">
-                <h1 class="mt-4">Sản phẩm</h1>
+                <h1 class="mt-4">Quản lý sản phẩm</h1>
 
                 <div class="card mb-4">
                     <div class="card-header">
@@ -72,10 +72,12 @@
                                     </td>
                                 </tr>
                             </tbody>
-
-
                         </table>
                     </div>
+
+                    <form action="/admin/product/export-products" method="get">
+                        <button type="submit" class="btn btn-primary">Xuất Excel</button>
+                    </form>
                 </div>
             </div>
 

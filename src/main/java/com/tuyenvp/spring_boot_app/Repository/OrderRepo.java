@@ -12,7 +12,7 @@ public interface OrderRepo extends JpaRepository<ProductOrder, Integer> {
     //ProductOrder findByOrderId(String orderId);
 
     // Truy vấn tìm kiếm đơn hàng
-    @Query("SELECT o FROM ProductOrder o WHERE o.user.name LIKE %?1%")
+    @Query("SELECT o FROM ProductOrder o WHERE o.product.product_name LIKE %?1%")
     List<ProductOrder> searchProductOrder(String keyword);
 
     // Truy vấn tính tổng doanh thu theo tháng

@@ -5,8 +5,6 @@ import com.tuyenvp.spring_boot_app.Model.OrderRequest;
 import com.tuyenvp.spring_boot_app.Model.ProductOrder;
 import com.tuyenvp.spring_boot_app.Model.UserDtls;
 import com.tuyenvp.spring_boot_app.Services.CartService;
-import com.tuyenvp.spring_boot_app.Services.Impl.CategoryServiceImpl;
-import com.tuyenvp.spring_boot_app.Services.Impl.UserServiceImpl;
 import com.tuyenvp.spring_boot_app.Services.OrderService;
 import com.tuyenvp.spring_boot_app.Services.UserService;
 import com.tuyenvp.spring_boot_app.Util.CommonUtil;
@@ -22,6 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.math.BigDecimal;
 import java.security.Principal;
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -78,20 +77,20 @@ public class UserController {
         return "redirect:/detail_product/" + pid;
     }
 
-    @GetMapping("/carts")
+    /*@GetMapping("/carts")
     public String loadCartPage(Principal principal, Model model) {
         if (principal == null) {
             System.out.println("Principal is null. Người dùng chưa đăng nhập.");
-            model.addAttribute("errorMessage", "Vui lòng đăng nhập để xem giỏ hàng.");
-            return "redirect:/login";
+            model.addAttribute("errorMsg", "Vui lòng đăng nhập để xem giỏ hàng.");
+            return "redirect:/user/carts";
         }
 
         UserDtls user = getLoggedInUserDetails(principal);
 
         if (user == null) {
             // Chuyển hướng hoặc trả về thông báo lỗi nếu người dùng không đăng nhập
-            model.addAttribute("errorMessage", "Vui lòng đăng nhập để xem giỏ hàng.");
-            return "redirect:/login";
+            model.addAttribute("errorMsg", "Vui lòng đăng nhập để xem giỏ hàng.");
+            return "redirect:/user/carts";
         }
 
         List<Cart> carts = cartService.getCartByUser(user.getId());
@@ -110,7 +109,39 @@ public class UserController {
             model.addAttribute("totalOrderPrice", 0.0);
         }
         return "user/carts";
+    }*/
+
+    @GetMapping("/carts")
+    public String loadCartPage(Principal principal, Model model) {
+        List<Cart> carts = new ArrayList<>();
+        BigDecimal totalOrderPrice = BigDecimal.ZERO;
+
+        if (principal != null) {
+            // Lấy thông tin người dùng đăng nhập
+            UserDtls user = getLoggedInUserDetails(principal);
+
+            if (user != null) {
+                // Lấy giỏ hàng của người dùng từ cơ sở dữ liệu
+                carts = cartService.getCartByUser(user.getId());
+
+                if (!carts.isEmpty()) {
+                    // Tính tổng giá trị đơn hàng nếu có sản phẩm trong giỏ hàng
+                    totalOrderPrice = carts.get(carts.size() - 1).getTotalOrderPrice();
+                }
+            }
+        }
+
+        // Nếu người dùng chưa đăng nhập hoặc giỏ hàng rỗng
+        model.addAttribute("carts", carts);
+        model.addAttribute("totalOrderPrice", totalOrderPrice);
+
+        if (carts.isEmpty()) {
+            model.addAttribute("message", "Giỏ hàng của bạn đang trống.");
+        }
+
+        return "user/carts";
     }
+
 
     // cập nhật số lượng trong giỏ hàng
     @GetMapping("/cartQuantityUpdate")

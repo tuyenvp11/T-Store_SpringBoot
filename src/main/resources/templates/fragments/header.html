@@ -89,8 +89,9 @@
 
             <!-- Search Bar -->
             <div class="col-md-4">
-                <form class="d-flex">
-                    <input class="form-control me-2" type="search" placeholder="Bạn cần tìm gì?" aria-label="Search">
+                <form class="d-flex" action="/products" method="get">
+                    <input class="form-control me-2" type="text" placeholder="Bạn cần tìm gì?"
+                           aria-label="Search" name="keyword" th:value="${keyword}" required>
                     <button class="btn btn-outline-light" type="submit">
                         <i class="fa-solid fa-magnifying-glass"></i>
                     </button>
@@ -120,7 +121,6 @@
                     <!-- Nếu người dùng chưa đăng nhập -->
                     <div>
                         <th:block th:if="${user==null}">
-                            <a href="/register" class="text-white me-3">Đăng ký</a>
                             <a href="/login" class="text-white">Đăng nhập</a>
                         </th:block>
                     </div>
@@ -142,6 +142,37 @@
                         </th:block>
                     </div>
 
+                <!-- Xu ly ngon ngu -->
+                <!--<div>
+                    <select id="language-selector" onchange="changeLanguage()">
+                        <option value="en">English</option>
+                        <option value="vi">Tiếng Việt</option>
+                    </select>
+                </div>
+                &lt;!&ndash; Su dung fetch de gọi Api &ndash;&gt;
+                <script>
+                    function changeLanguage() {
+                        const language = document.getElementById("language-selector").value;
+
+                        // Gọi API để lấy nội dung theo ngôn ngữ đã chọn
+                        fetch(`/api/language/translate?key=greeting&lang=${language}`)
+                            .then(response => response.text())
+                            .then(data => {
+                                // Cập nhật nội dung trên giao diện
+                                document.getElementById("greeting").innerText = data;
+                            })
+                            .catch(error => console.error("Error:", error));
+                    }
+
+                    // Gọi API để khởi tạo ngôn ngữ mặc định (nếu cần)
+                    document.addEventListener("DOMContentLoaded", function () {
+                        changeLanguage();
+                    });
+                </script>
+
+                <div>
+                    <h1 id="greeting">Loading...</h1>
+                </div>-->
 
             </div>
         </div>

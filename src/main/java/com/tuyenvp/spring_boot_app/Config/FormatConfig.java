@@ -5,7 +5,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-public class ThymeleafConfig {
+public class FormatConfig {
     @Bean
     public FormatUtil formatUtils() {
         return new FormatUtil();

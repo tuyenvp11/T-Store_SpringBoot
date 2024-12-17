@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<div th:replace="admin/fragments/head :: head"></div>
+
+<body>
+<!-- Header -->
+<div th:replace="admin/fragments/header :: header"></div>
+
+<!-- Sidenav -->
+<div id="layoutSidenav">
+    <div th:replace="admin/fragments/sidebar :: sidebar"></div>
+
+    <!-- Sidenav Content -->
+    <div id="layoutSidenav_content">
+        <main>
+            <div class="container-fluid px-4">
+                <h1 class="mt-4">Quản lý đơn hàng</h1>
+                <th:block th:if="${session.succMsg}">
+                    <p class="text-success fw-bold text-center">[[${session.succMsg}]]</p>
+                    <th:block th:text="${@commnServiceImpl.removeSessionMessage()}"></th:block>
+                </th:block>
+
+                <th:block th:if="${session.errorMsg}">
+                    <p class="text-danger fw-bold text-center">[[${session.errorMsg}]]</p>
+                    <th:block th:text="${@commnServiceImpl.removeSessionMessage()}"></th:block>
+                </th:block>
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <i class="fas fa-table me-1"></i>
+                        Bảng đơn hàng
+                    </div>
+
+                    <form class="d-none d-md-inline-block form-inline ms-auto me-0 me-md-3 mt-2" th:action="@{/admin/order}">
+                        <div class="input-group">
+                            <input class="form-control" name="keyword" type="text" placeholder="Tìm kiếm..." th:value="${keyword}"/>
+                            <button class="btn btn-primary" type="submit"><i class="fas fa-search"></i></button>
+                        </div>
+                    </form>
+
+                    <div class="card-body">
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th class="col-1">Mã đơn hàng</th>
+                                    <th class="col-1">Chi tiết vận chuyển</th>
+                                    <th class="col-1">Ngày đặt hàng</th>
+                                    <th class="col-1">Chi tiết sản phẩm</th>
+                                    <th class="col-1">Tổng tiền</th>
+                                    <th class="col-1">Trạng thái</th>
+                                    <th class="col-1">#</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Hiển thị danh sách khi có đơn hàng -->
+                                <tr th:each="o : ${ListOrder}">
+                                    <td th:if="${o?.id != null}">[[${o.id}]]</td>
+                                    <td th:if="${o?.orderAddress != null}">
+                                        <b>Họ và Tên:</b> [[${o.orderAddress.firstName+' '+o.orderAddress.lastName}]]<br>
+                                        <b>Email:</b> [[${o.orderAddress.email}]] <br>
+                                        <b>Số điện thoại:</b> [[${o.orderAddress.phone}]] <br>
+                                        <b>Tỉnh/Thành phố:</b> [[${o.orderAddress.province}]] <br>
+                                        <b>Quận/Huyện:</b> [[${o.orderAddress.district}]] <br>
+                                        <b>Phường/Xã:</b> [[${o.orderAddress.commune}]] <br>
+                                        <b>Địa chỉ:</b> [[${o.orderAddress.address}]]
+                                    </td>
+                                    <td th:text="${o.orderDate}"></td>
+                                    <td th:text="${o.product.product_name}"></td>
+                                    <td>
+                                        <b>Số lượng:</b> [[${o.quantity}]] <br>
+                                        <b>Giá:</b> [[${@formatUtils.formatCurrency(o.price)}]] <br>
+                                        <b>Tổng tiền:</b> [[${@formatUtils.formatCurrency(o.quantity * o.price)}]]
+                                    </td>
+                                    <td th:text="${o.status}"></td>
+                                    <td>
+                                        <form action="/admin/update-order-status" method="post">
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <select class="form-control" name="st">
+                                                        <option>--Lựa chọn--</option>
+                                                        <option value="1">Đang xử lý</option>
+                                                        <option value="2">Đã xác nhận</option>
+                                                        <option value="3">Sản phẩm đang được đóng gói</option>
+                                                        <option value="4">Đang giao hàng</option>
+                                                        <option value="5">Đã giao hàng</option>
+                                                        <option value="6">Đã huỷ</option>
+                                                    </select>
+                                                </div>
+                                                <input th:value="${o.id}" name="id" type="hidden">
+                                                <div class="col-md-6">
+                                                    <th:block
+                                                            th:if="${o.status=='Huỷ' || o.status=='Đã giao hàng'}">
+                                                        <button class="btn btn-primary btn-sm col disabled">Cập nhật</button>
+                                                    </th:block>
+                                                    <th:block
+                                                            th:unless="${o.status=='Huỷ' || o.status=='Đã giao hàng'}">
+                                                        <button class="btn btn-sm btn-primary ">Cập nhật</button>
+                                                    </th:block>
+
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </td>
+                                </tr>
+
+                            </tbody>
+                        </table>
+
+                    </div>
+
+                    <!-- Phân trang -->
+                    <div class="d-flex justify-content-center">
+                        <nav aria-label="Page navigation example">
+                            <ul class="pagination">
+                                <li class="page-item">
+                                    <a class="page-link" aria-label="Previous" th:if="${currentPage > 1}" th:href="@{'?pageNo='+${currentPage - 1}}">
+                                        <span aria-hidden="true">&laquo;</span>
+                                    </a>
+                                </li>
+                                <li class="page-item" th:each="i:${#numbers.sequence(1, totalPage)}" th:classappend="${currentPage==i?'active' : ''}">
+                                    <a class="page-link" th:href="@{${keyword != null && keyword!=''? '?keyword='+keyword+'&':'?'} + 'pageNo='+${i}}" th:text="${i}">1</a>
+                                </li>
+                                <li class="page-item">
+                                    <a class="page-link" aria-label="Next" th:if="${currentPage < totalPage}" th:href="@{'?pageNo='+${currentPage + 1}}">
+                                        <span aria-hidden="true">&raquo;</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
+
+                </div>
+
+            </div>
+        </main>
+
+
+        <footer class="py-4 bg-light mt-auto">
+            <div class="container-fluid px-4">
+                <div class="d-flex align-items-center justify-content-between small">
+                    <div class="text-muted">Copyright &copy; Phạm Văn Tuyến</div>
+                    <div>
+                        <a href="#">Chính sách riêng tư</a>
+                        &middot;
+                        <a href="#">Điều khoản &amp; dịch vụ</a>
+                    </div>
+                </div>
+            </div>
+        </footer>
+
+
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+
+</body>
+</html>

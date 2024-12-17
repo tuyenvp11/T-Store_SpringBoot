@@ -101,8 +101,13 @@ public class ProductServiceImpl implements ProductService {
         return product;
     }
 
-//    @Override
-//    public List<Product> getProductByCategory(String category) {
-//        return DbConnect.productRepo.findByCategory(category);
-//    }
+    @Override
+    public List<Product> getProductByCategory(int categoryId) {
+        return DbConnect.productRepo.findByCategory_id(categoryId);
+    }
+
+    @Override
+    public List<Product> searchProductsByKeywordAndCategory(String keyword, Integer categoryId) {
+        return DbConnect.productRepo.findByKeywordAndCategory(keyword, categoryId);
+    }
 }

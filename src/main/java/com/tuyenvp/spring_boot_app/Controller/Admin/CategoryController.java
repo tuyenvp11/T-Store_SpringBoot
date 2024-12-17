@@ -54,9 +54,9 @@ public class CategoryController {
     }
 
     // sửa danh mục
-    @GetMapping("/category/edit_category/{category_id}")
-    public String edit_category(Model model, @PathVariable("category_id")Integer category_id){
-        Optional<Category>category = categoryServiceImpl.findCategoryById(category_id);
+    @GetMapping("/category/edit_category/{id}")
+    public String edit_category(Model model, @PathVariable("id")Integer id){
+        Optional<Category>category = categoryServiceImpl.findCategoryById(id);
         model.addAttribute("edit_category", category.get());
         return "admin/category/edit_category";
     }
@@ -69,9 +69,9 @@ public class CategoryController {
         return "redirect:/admin/category";
     }
 
-    @GetMapping("/category/del_category/{category_id}")
-    public String del_category(Model model, @PathVariable("category_id")Integer idCategory){
-        categoryServiceImpl.deleteCategory(idCategory);
+    @GetMapping("/category/del_category/{id}")
+    public String del_category(Model model, @PathVariable("id")Integer id){
+        categoryServiceImpl.deleteCategory(id);
         return "redirect:/admin/category";
     }
 }

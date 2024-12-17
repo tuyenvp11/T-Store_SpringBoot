@@ -35,7 +35,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public Category updateCategory(Category edit_category) {
-        Optional<Category>category = DbConnect.categoryRepo.findById(edit_category.getCategory_id());
+        Optional<Category>category = DbConnect.categoryRepo.findById(edit_category.getId());
         if (category.isEmpty()) {
             return null;
         }
@@ -84,5 +84,10 @@ public class CategoryServiceImpl implements CategoryService {
         list = list.subList(start, end);
         return new PageImpl<Category>(list, pageable, searchCategory(keyword).size());
     }
+
+    /*@Override
+    public Category getCategoryById(int category_id) {
+        return DbConnect.categoryRepo.getById(category_id);
+    }*/
 
 }

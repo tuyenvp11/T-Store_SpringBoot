@@ -26,7 +26,7 @@ public class OrderController {
     @Autowired
     private CommonUtil commonUtil;
 
-    @GetMapping("/admin/order")
+    @GetMapping("/order")
     public String getAllOrders(Model model,
                                @Param(value="keyword") String keyword,
                                @RequestParam(value="pageNo", defaultValue = "1") Integer pageNo) {
@@ -40,9 +40,9 @@ public class OrderController {
         model.addAttribute("totalPage", orders.getTotalPages());
         model.addAttribute("currentPage", pageNo);
 
-        model.addAttribute("orders", orders.getContent());
+        model.addAttribute("ListOrder", orders.getContent());
 
-        return "admin/order/order";
+        return "admin/order";
     }
 
     @PostMapping("/update-order-status")
