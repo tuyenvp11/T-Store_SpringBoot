@@ -1,6 +1,8 @@
 package com.tuyenvp.spring_boot_app.Services.Impl;
 
+import com.tuyenvp.spring_boot_app.Model.Category;
 import com.tuyenvp.spring_boot_app.Model.Product;
+import com.tuyenvp.spring_boot_app.Model.Specification;
 import com.tuyenvp.spring_boot_app.Repository.DbConnect;
 import com.tuyenvp.spring_boot_app.Services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,8 +12,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
+import java.math.BigDecimal;
+import java.util.*;
 
 @Service
 public class ProductServiceImpl implements ProductService {
@@ -30,23 +32,28 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public Product addProduct(Product add_product) {
+        // Tạo Specification từ dữ liệu của add_product
+        Specification spec = add_product.getSpecification();
+
         return DbConnect.productRepo.save(add_product);
     }
 
     @Override
     public Product updateProduct(Product editProduct) {
-        Optional<Product> product = DbConnect.productRepo.findById(editProduct.getProduct_id());
+        Optional<Product> product = DbConnect.productRepo.findById(editProduct.getProductId());
         if(product.isEmpty()) {
             return null;
         }
         Product updateProduct = product.get();
-        updateProduct.setProduct_name(editProduct.getProduct_name());
-        updateProduct.setCategory_id(editProduct.getCategory_id());
-        updateProduct.setVendor_id(editProduct.getVendor_id());
-        updateProduct.setProduct_img(editProduct.getProduct_img());
-        updateProduct.setProduct_descrip(editProduct.getProduct_descrip());
-        updateProduct.setProduct_price(editProduct.getProduct_price());
-        updateProduct.setProduct_quantity(editProduct.getProduct_quantity());
+        updateProduct.setProductName(editProduct.getProductName());
+        updateProduct.setCategoryId(editProduct.getCategoryId());
+        updateProduct.setBrand(editProduct.getBrand());
+        updateProduct.setThumbnail(editProduct.getThumbnail());
+        updateProduct.setProductDescrip(editProduct.getProductDescrip());
+        updateProduct.setOriginalPrice(editProduct.getOriginalPrice());
+        updateProduct.setPrice(editProduct.getPrice());
+        updateProduct.setReleaseDate(editProduct.getReleaseDate());
+        updateProduct.setWarranty(editProduct.getWarranty());
         DbConnect.productRepo.save(updateProduct);
         return updateProduct;
     }
@@ -76,9 +83,31 @@ public class ProductServiceImpl implements ProductService {
         return DbConnect.productRepo.findAll();
     }
 
+
     @Override
     public long getTotalProducts() {
         return DbConnect.productRepo.count();
+    }
+
+    @Override
+    public List<Product> filterByBrandAndPrice(String brand, Integer minPrice, Integer maxPrice) {
+        if (minPrice == null) minPrice = 0;
+        if (maxPrice == null) maxPrice = Integer.MAX_VALUE;
+
+        BigDecimal min = BigDecimal.valueOf(minPrice);
+        BigDecimal max = BigDecimal.valueOf(maxPrice);
+
+        if (brand == null || brand.isEmpty()) {
+            return DbConnect.productRepo.findByPriceBetween(min, max);
+        } else {
+            return DbConnect.productRepo.findByBrandAndPriceBetween(brand, min, max);
+        }
+    }
+
+
+    @Override
+    public List<String> getAllBrands() {
+        return DbConnect.productRepo.findDistinctBrand();
     }
 
 
@@ -96,18 +125,26 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Product getProductById(int product_id) {
-        Product product = DbConnect.productRepo.findById(product_id).orElse(null);
+    public Product getProductById(int productId) {
+        Product product = DbConnect.productRepo.findByProductId(productId)
+                .orElseThrow(() -> new RuntimeException("San pham khong tim thay"));
         return product;
     }
 
     @Override
-    public List<Product> getProductByCategory(int categoryId) {
-        return DbConnect.productRepo.findByCategory_id(categoryId);
+    public List<Product> getProductByCategory(Category category) {
+        return DbConnect.productRepo.findByCategory(category);
     }
 
     @Override
-    public List<Product> searchProductsByKeywordAndCategory(String keyword, Integer categoryId) {
-        return DbConnect.productRepo.findByKeywordAndCategory(keyword, categoryId);
+    public List<Product> getProductByCategoryId(Integer categoryId) {
+        return DbConnect.productRepo.findByCategory_CategoryId(categoryId);
     }
+
+
+    @Override
+    public List<Category> getAllCategories() {
+        return DbConnect.categoryRepo.findAll();
+    }
+
 }

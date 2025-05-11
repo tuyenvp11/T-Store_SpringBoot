@@ -1,0 +1,63 @@
+/* Hot Sale Section */
+.hot-sale {
+    background: #FFE8E8;
+    padding: 20px;
+    margin: 20px 0;
+    border-radius: 8px;
+}
+
+.hot-sale-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.hot-sale-title {
+    color: var(--primary-color);
+    font-size: 24px;
+    font-weight: bold;
+    margin: 0;
+}
+
+.countdown {
+    display: flex;
+    gap: 5px;
+    align-items: center;
+}
+
+/* Product Styles */
+.product-card {
+    transition: transform 0.2s, box-shadow 0.2s;
+    cursor: pointer;
+}
+
+.product-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.product-discount {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: var(--primary-color);
+    color: white;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+}
+
+.product-price {
+    color: var(--primary-color);
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 15px;
+}
+
+.product-old-price {
+    color: #666;
+    font-size: 13px;
+    text-decoration: line-through;
+    margin-bottom: 5px;
+}

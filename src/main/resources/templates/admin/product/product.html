@@ -15,12 +15,12 @@
     <div id="layoutSidenav_content">
         <main>
             <div class="container-fluid px-4">
-                <h1 class="mt-4">Quản lý sản phẩm</h1>
+                <h4 class="mt-4">Thông tin sản phẩm</h4>
 
                 <div class="card mb-4">
                     <div class="card-header">
                         <i class="fas fa-table me-1"></i>
-                        Bảng sản phẩm
+                        Danh sách sản phẩm
                     </div>
 
                     <form class="d-none d-md-inline-block form-inline ms-auto me-0 me-md-3 mt-2" th:action="@{/admin/product}">
@@ -34,17 +34,19 @@
                         <table class="table table-bordered">
                             <thead>
                                 <tr>
-                                    <th class="col-1">Mã sản phẩm</th>
-                                    <th class="col-1">Tên sản phẩm</th>
-                                    <th class="col-1">Danh mục</th>
-                                    <th class="col-1">Nhà cung cấp</th>
-                                    <th class="col-1">Hình ảnh</th>
-                                    <th class="col-2">Mô tả sản phẩm</th>
-                                    <th class="col-1">Giá sản phẩm</th>
-                                    <th class="col-1">Tổng số lượng nhập</th>
-                                    <th class="col-1 justify-content-center">
-                                        <a th:href="@{product/add_product}" class="btn btn-success" style="padding: 5px 10px; font-size: 14px;">
-                                            <i class="fa-solid fa-square-plus"></i> Thêm sản phẩm
+                                    <th style="width: 5%;">Mã</th>
+                                    <th style="width: 15%;">Tên sản phẩm</th>
+                                    <th style="width: 12%;">Danh mục</th>
+                                    <th style="width: 12%;">Thương hiệu</th>
+                                    <th style="width: 12%;">Hình ảnh</th>
+                                    <!--<th style="width: 18%;">Giới thiệu</th>-->
+                                    <th style="width: 10%;">Giá gốc</th>
+                                    <th style="width: 10%;">Giá niêm yết</th>
+                                    <th style="width: 10%;">Ngày ra mắt</th>
+                                    <th style="width: 10%;">Bảo hành</th>
+                                    <th style="width: 13%;">
+                                        <a th:href="@{/admin/product/add_product}" class="btn btn-success btn-sm">
+                                            <i class="fa-solid fa-square-plus"></i> Thêm
                                         </a>
                                     </th>
                                 </tr>
@@ -52,21 +54,30 @@
 
                             <tbody>
                                 <tr th:each="product : ${ListProduct}">
-                                    <td th:text="${product.product_id}"></td>
-                                    <td th:text="${product.product_name}"></td>
-                                    <td th:text="${product.category.category_name}"></td>
-                                    <td th:text="${product.vendor.vendor_name}"></td>
+                                    <td th:text="${product.productId}"></td>
+                                    <td th:text="${product.productName}"></td>
+                                    <td th:text="${product.category.categoryName}"></td>
+                                    <td th:text="${product.brand}"></td>
                                     <td>
-                                        <img th:src="@{'/be/img/products/'+${product.product_img}}" width="50px" height="80px">
+                                        <img th:src="@{'/be/img/products/'+${product.thumbnail}}" width="80px" height="80px">
                                     </td>
-                                    <td th:text="${product.product_descrip}"></td>
-                                    <td th:text="${@formatUtils.formatCurrency(product.product_price)}"></td>
-                                    <td th:text="${product.product_quantity}"></td>
-                                    <td>
-                                        <a th:href="@{/admin/product/edit_product/{product_id}(product_id=${product.product_id})}" class="btn btn-warning" style="padding: 5px 10px; font-size: 10px;">
+                                    <!--<td th:text="${product.productDescrip}"></td>-->
+                                    <td th:text="${@formatUtils.formatCurrency(product.originalPrice)}"></td>
+                                    <td th:text="${@formatUtils.formatCurrency(product.price)}"></td>
+                                    <td th:text="${product.releaseDate}"></td>
+                                    <td th:text="${product.warranty}"></td>
+
+                                    <td class="d-flex justify-content-center gap-1">
+                                        <a th:href="@{/admin/product/product_detail/{productId}(productId=${product.productId})}"
+                                           class="btn btn-info btn-sm" title="Xem chi tiết">
+                                            <i class="fa-solid fa-eye"></i>
+                                        </a>
+                                        <a th:href="@{/admin/product/edit_product/{product_id}(product_id=${product.productId})}"
+                                           class="btn btn-warning btn-sm" title="Chỉnh sửa">
                                             <i class="fa-solid fa-pen-to-square"></i>
                                         </a>
-                                        <a th:href="@{/admin/product/del_product/{product_id}(product_id=${product.product_id})}" onclick="return confirm('Bạn có muốn xóa sản phẩm này?')" class="btn btn-danger" style="padding: 5px 10px; font-size: 10px;">
+                                        <a th:href="@{/admin/product/del_product/{product_id}(product_id=${product.productId})}"
+                                           onclick="return confirm('Bạn có muốn xóa sản phẩm này?')" class="btn btn-danger btn-sm" title="Xóa">
                                             <i class="fa-solid fa-trash-can"></i>
                                         </a>
                                     </td>
@@ -75,9 +86,11 @@
                         </table>
                     </div>
 
-                    <form action="/admin/product/export-products" method="get">
-                        <button type="submit" class="btn btn-primary">Xuất Excel</button>
-                    </form>
+                </div>
+                <div class="d-flex justify-content-end mb-3">
+                    <a th:href="@{/admin/product/export-products}" class="btn btn-primary btn-sm">
+                        <i class="fa-solid fa-file-export"></i> Xuất file Excel
+                    </a>
                 </div>
             </div>
 

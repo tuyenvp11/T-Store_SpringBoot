@@ -1,7 +1,8 @@
 package com.tuyenvp.spring_boot_app.Controller.Admin;
 
 import com.tuyenvp.spring_boot_app.Model.ColorProduct;
-import com.tuyenvp.spring_boot_app.Services.Impl.ColorProductService;
+import com.tuyenvp.spring_boot_app.Services.ColorProductService;
+import com.tuyenvp.spring_boot_app.Services.Impl.ColorProductServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

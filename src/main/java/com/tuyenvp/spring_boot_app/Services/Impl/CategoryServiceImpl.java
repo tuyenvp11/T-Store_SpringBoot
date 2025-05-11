@@ -29,19 +29,26 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public Category addCategory(Category add_category) {
-        return DbConnect.categoryRepo.save(add_category);
+    public String addCategory(Category add_category) {
+        Optional<Category> existingCategory = DbConnect.categoryRepo.findByCategoryName(add_category.getCategoryName());
+        if (existingCategory.isPresent()) {
+            return "Danh mục đã tồn tại!";
+        }
+        DbConnect.categoryRepo.save(add_category);
+        return "Thêm danh mục thành công!";
+
     }
 
     @Override
     public Category updateCategory(Category edit_category) {
-        Optional<Category>category = DbConnect.categoryRepo.findById(edit_category.getId());
+        Optional<Category>category = DbConnect.categoryRepo.findById(edit_category.getCategoryId());
         if (category.isEmpty()) {
             return null;
         }
         Category update_category = category.get();
         // cập nhật tên danh mục
-        update_category.setCategory_name(edit_category.getCategory_name());
+        update_category.setCategoryName(edit_category.getCategoryName());
+        update_category.setIconUrl(edit_category.getIconUrl());
         DbConnect.categoryRepo.save(update_category);
         return update_category;
     }
@@ -85,6 +92,14 @@ public class CategoryServiceImpl implements CategoryService {
         return new PageImpl<Category>(list, pageable, searchCategory(keyword).size());
     }
 
+    @Override
+    public long getTotalCategory() {
+        return DbConnect.categoryRepo.count();
+    }
+
+    public boolean isCategoryExists(String name) {
+        return DbConnect.categoryRepo.existsByCategoryName(name);
+    }
     /*@Override
     public Category getCategoryById(int category_id) {
         return DbConnect.categoryRepo.getById(category_id);

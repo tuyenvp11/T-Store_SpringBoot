@@ -1,0 +1,11 @@
+<nav class="main-breadcrumb" style="margin-top: 20px" th:fragment="breadcrumb">
+    <div class="container">
+        <ol class="breadcrumb" style="margin-bottom: 0; font-size: 14px;">
+            <li class="breadcrumb-item"><a th:href="@{/}" style="text-decoration: none; color:#212529bf">Trang chủ</a></li>
+            <li class="breadcrumb-item" th:each="item : ${breadcrumb}" th:classappend="${item.last} ? 'active' : ''">
+                <a th:if="!${item.last}" th:href="${item.url}" th:text="${item.name}" style="text-decoration: none; color:#212529bf"></a>
+                <span th:if="${item.last}" th:text="${item.name}" aria-current="page"></span>
+            </li>
+        </ol>
+    </div>
+</nav>

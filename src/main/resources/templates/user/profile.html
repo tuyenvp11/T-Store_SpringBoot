@@ -10,158 +10,337 @@
 <div th:replace="/fragments/header :: header"></div>
 <!-- End Navbar -->
 
-<!-- Content container -->
-<section>
-    <div class="container-fluid mt-5 p-5 bg-light">
-        <div class="row">
-            <div class="col-md-10 offset-md-1 ">
+<!-- Start nav -->
+<div th:replace="fragments/nav :: nav"></div>
+<!-- End nav -->
 
-                <p class="fs-3 text-center">Thông tin cá nhân</p>
-                <th:block th:if="${session.succMsg}">
-                    <p class="text-success fw-bold  text-center">[[${session.succMsg}]]</p>
-                    <th:block th:text="${@commnServiceImpl.removeSessionMessage()}"></th:block>
-                </th:block>
+<div th:replace="fragments/breadcrumb :: breadcrumb"></div>
 
-                <th:block th:if="${session.errorMsg}">
-                    <p class="text-danger fw-bold  text-center">[[${session.errorMsg}]]</p>
-                    <th:block th:text="${@commnServiceImpl.removeSessionMessage()}"></th:block>
-                </th:block>
-
-                <hr>
-                <div class="text-center">
-                    <img alt="" th:src="@{${user.profileImage}}"
-                         class="border p-2" style="width: 110px; height: 110px; border-radius: 50%;">
+<main class="main-content">
+    <div class="container">
+        <div class="profile-container">
+            <div class="profile-header">
+                <div class="profile-avatar">
+                    <i class="bi bi-person"></i>
+                    <!--<img th:src="@{'/fe/img/profile_img' + ${user.profileImage}}"
+                         alt="Avatar" style="width: 100px; height: 100px; border-radius: 50%;">-->
                 </div>
-                <div class="col-md-8 offset-md-2 mt-4">
-                    <table class="table table-borderless">
-                        <tbody>
-                        <form action="/user/update-profile" method="post"
-                              enctype="multipart/form-data">
-                            <tr>
-                                <th scope="row">Họ và tên</th>
-                                <td>:</td>
-                                <td><input type="text" name="name" class="form-control"
-                                           th:value="${user.name}"></td>
-                            </tr>
-                            <tr>
-                                <th scope="row">Số điện thoại</th>
-                                <td>:</td>
-                                <td><input type="text" name="mobileNumber" class="form-control"
-                                           th:value="${user.mobileNumber}"></td>
-                            </tr>
-                            <tr>
-                                <th scope="row">Email</th>
-                                <td>:</td>
-                                <td><input type="text" name="email" class="form-control"
-                                           readonly th:value="${user.email}"></td>
-                            </tr>
-                            <tr>
-                                <th scope="row">Tỉnh/thành phố</th>
-                                <td>:</td>
-                                <td><input type="text" name="province" class="form-control"
-                                           th:value="${user.province}"></td>
-                            </tr>
-                            <tr>
-                                <th scope="row">Huyện/quận</th>
-                                <td>:</td>
-                                <td><input type="text" name="district" class="form-control"
-                                           th:value="${user.district}"></td>
-                            </tr>
-                            <tr>
-                                <th scope="row">Xã/phường</th>
-                                <td>:</td>
-                                <td><input type="text" name="commune" class="form-control"
-                                           th:value="${user.commune}"></td>
-                            </tr>
-                            <tr>
-                                <th scope="row">Số nhà</th>
-                                <td>:</td>
-                                <td><input type="text" name="address" class="form-control"
-                                           th:value="${user.address}"></td>
-                            </tr>
-                            <tr>
-                                <th scope="row">Ảnh đại diện</th>
-                                <td>:</td>
-                                <td><input type="file" name="img" class="form-control" value=""></td>
-                            </tr>
-                            <tr>
-                                <th scope="row">Vai trò</th>
-                                <td>:</td>
-                                <td><input type="text" name="" class="form-control" readonly
-                                           th:value="${user.role}"></td>
-                            </tr>
-                            <tr>
-                                <th scope="row">Trạng thái</th>
-                                <td>:</td>
-                                <td>
-                                    <input type="text" name="" class="form-control" readonly
-                                           th:value="${user.isEnable}">
-                                    <input type="hidden" th:value="${user.id}" name="id"></td>
-                            </tr>
-
-                            <tr>
-                                <td></td>
-                                <td class="text-center">
-                                    <button class="btn btn-sm bg-primary text-light">Cập nhật thông tin</button>
-                                </td>
-                            </tr>
-                        </form>
-                        </tbody>
-                    </table>
-
+                <div class="profile-info">
+                    <h1 th:text="${user.name}"></h1>
+                    <p th:text="${user.phone}"></p>
+                    <p th:text="${user.email}"></p>
                 </div>
-
+                <form action="/logout">
+                    <button class="logout-btn">
+                        <i class="bi bi-box-arrow-right"></i>
+                        Đăng xuất
+                    </button>
+                </form>
             </div>
-            <hr>
-            <div class="col-md-10 offset-md-1 mt-1">
-                <div class="row">
-                    <p class="text-center fs-3">Thay đổi mật khẩu</p>
-                    <div class="col-md-6 offset-md-3">
-                        <table class="table table-borderless">
 
-                            <tbody>
-                            <form action="/user/change-password" method="post">
-                                <tr>
-                                    <th scope="row">Mật khẩu hiện tại</th>
+            <th:block th:if="${session.succMsg}">
+                <p class="text-success fw-bold">[[${session.succMsg}]]</p>
+                <th:block th:text="${@commnServiceImpl.removeSessionMessage()}"></th:block>
+            </th:block>
 
-                                    <td><input type="text" name="currentPassword" class="form-control"></td>
-                                </tr>
+            <th:block th:if="${session.errorMsg}">
+                <p class="text-danger fw-bold">[[${session.errorMsg}]]</p>
+                <th:block th:text="${@commnServiceImpl.removeSessionMessage()}"></th:block>
+            </th:block>
 
-                                <tr>
-                                    <th scope="row">Mật khẩu mới</th>
+            <ul class="nav nav-tabs" id="profileTabs" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="info-tab" data-bs-toggle="tab" data-bs-target="#info" type="button">
+                        Thông tin tài khoản
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="password-tab" data-bs-toggle="tab" data-bs-target="#password" type="button">
+                        Đổi mật khẩu
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="orders-tab" data-bs-toggle="tab" data-bs-target="#orders" type="button">
+                        Đơn hàng của tôi
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="addresses-tab" data-bs-toggle="tab" data-bs-target="#addresses" type="button">
+                        Sổ địa chỉ
+                    </button>
+                </li>
+            </ul>
 
-                                    <td><input type="text" name="newPassword" class="form-control"></td>
-                                </tr>
+            <div class="tab-content" id="profileTabsContent">
+                <div class="tab-pane fade show active" id="info">
+                    <form id="profileForm" action="/user/update-profile" method="post" th:object="${user}" enctype="multipart/form-data">
+                        <div class="row">
+                            <input type="hidden" th:field="*{id}" />
 
-                                <tr>
-                                    <th scope="row">Xác nhận mật khẩu</th>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="name">Họ và tên</label>
+                                    <input type="text" class="form-control" id="name" th:field="*{name}">
+                                </div>
+                            </div>
 
-                                    <td><input type="text" name="confirmPassword" class="form-control"></td>
-                                </tr>
-                                <tr>
-                                    <td></td>
-                                    <td class="text-center">
-                                        <button class="btn btn-sm bg-primary text-light col-md-4">Cập nhật mật khẩu</button>
-                                    </td>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="mobileNumber">Số điện thoại</label>
+                                    <input type="tel" class="form-control" id="mobileNumber" th:field="*{phone}">
+                                </div>
+                            </div>
 
-                                </tr>
-                            </form>
-                            </tbody>
-                        </table>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="email">Email</label>
+                                    <input type="email" class="form-control" id="email" th:field="*{email}" readonly>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="birthday">Ngày sinh</label>
+                                    <input type="date" class="form-control" id="birthday" th:field="*{birthday}">
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="gender">Giới tính</label>
+                                    <select class="form-control" id="gender" th:field="*{gender}">
+                                        <option value="male">Nam</option>
+                                        <option value="female">Nữ</option>
+                                        <option value="other">Khác</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!--<div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="img">Ảnh đại diện</label>
+                                    <input type="file" id="img" name="img" class="form-control">
+                                    <input type="hidden" th:field="*{profileImage}" />
+                                    <small>Hình ảnh hiện tại: <span th:text="*{profileImage}"></span></small>
+                                </div>
+                            </div>-->
+
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="isEnable">Trạng thái</label>
+                                    <input type="text" class="form-control" id="isEnable" th:field="*{isEnable}" readonly>
+                                </div>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="save-btn">Lưu thay đổi</button>
+                    </form>
+                </div>
+
+                <div class="tab-pane fade" id="password">
+                    <form id="passwordForm" class="password-form" action="/user/change-password" method="post">
+                        <div class="form-group">
+                            <label for="currentPassword">Mật khẩu hiện tại</label>
+                            <input type="password" class="form-control" id="currentPassword" name="currentPassword" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="newPassword">Mật khẩu mới</label>
+                            <input type="password" class="form-control" id="newPassword" name="newPassword"
+                                   pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$"
+                                   title="Mật khẩu phải có ít nhất 8 ký tự, bao gồm ít nhất 1 chữ hoa, 1 chữ thường, 1 số và 1 ký tự đặc biệt (!@#$%^&*)"
+                                   required>
+                            <div class="password-strength">
+                                <div class="password-strength-bar"></div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="confirmPassword">Xác nhận mật khẩu mới</label>
+                            <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" required>
+                        </div>
+
+                        <button type="submit" class="save-btn">Đổi mật khẩu</button>
+
+                        <div class="password-requirements">
+                            <strong>Yêu cầu mật khẩu:</strong>
+                            <ul>
+                                <li>Ít nhất 8 ký tự</li>
+                                <li>Ít nhất 1 chữ hoa</li>
+                                <li>Ít nhất 1 chữ thường</li>
+                                <li>Ít nhất 1 số</li>
+                                <li>Ít nhất 1 ký tự đặc biệt (!@#$%^&*)</li>
+                            </ul>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="tab-pane fade" id="orders">
+                    <!-- danh sach don hang -->
+                    <div class="order-card" th:each="order : ${orders}">
+                        <div class="order-header">
+                            <span class="order-id" th:text="'Mã đơn hàng: '+${order.orderId}"></span>
+                            <span class="order-date" th:text="'Thời gian đặt: '+${@formatUtils.formatDateTime(order.orderDate)}"></span>
+
+                            <!-- Hiển thị trạng thái đơn hàng -->
+                            <th:block th:if="${order.status == 'Đã giao hàng' || order.status == 'Giao thành công'}">
+                                <span class="order-status status-completed" th:text="${order.status}"></span>
+                            </th:block>
+
+                            <th:block th:unless="${order.status == 'Đã giao hàng' || order.status == 'Giao thành công'}">
+                                <span class="order-status status-processing" th:text="${order.status}"></span>
+                            </th:block>
+
+                            <!-- Nút huỷ chỉ hiển thị khi trạng thái là Đang xử lý hoặc Đã xác nhận -->
+                            <th:block th:if="${order.status == 'Đang xử lý' || order.status == 'Đã xác nhận'}">
+                                <a th:href="@{'/user/update-status?id=' + ${order.orderId} + '&st=6'}"
+                                   class="btn btn-sm btn-danger">Huỷ</a>
+                            </th:block>
+
+                            <!-- Trạng thái khác thì disable nút huỷ -->
+                            <th:block th:unless="${order.status == 'Đang xử lý' || order.status == 'Đã xác nhận'}">
+                                <a href="#" class="btn btn-sm btn-danger disabled" title="Không thể huỷ đơn hàng ở trạng thái hiện tại">Huỷ</a>
+                            </th:block>
+
+
+                        </div>
+
+                        <div class="order-item" th:each="detail : ${order.orderDetail}">
+                            <img th:src="@{'/be/img/products/' + ${detail.productVariant.productImg}}" alt="Ảnh sản phẩm">
+                            <div class="order-item-details">
+                                <h6 th:text="${detail.productVariant.product.productName}"></h6>
+                                <div class="order-item-price" th:text="${@formatUtils.formatCurrency(detail.sellPrice)}"></div>
+                                <div th:text="'Số lượng: ' +${detail.quantity}"></div>
+                            </div>
+                        </div>
+
+                        <div class="order-total">
+                            <span class="total-label">Tổng tiền đơn hàng:</span>
+                            <span class="total-amount" th:text="${@formatUtils.formatCurrency(order.totalPrice)}"></span>
+                        </div>
                     </div>
+
+
                 </div>
+
+                <div class="tab-pane fade" id="addresses">
+                    <!-- Danh sách địa chỉ -->
+                    <div class="address-card" th:each="address : ${address}">
+                        <div class="address-type">
+                            [[${address.type}]]
+                            <th:block th:if="${address.default == true}">
+                                <span class="address-default">Mặc định</span>
+                            </th:block>
+                            <th:block th:if="${address.default == false}">
+                                <span class="address-not-default">Phụ</span>
+                            </th:block>
+
+                        </div>
+                        <div th:text="${address.receiverName}"></div>
+                        <div th:text="${address.receiverPhone}"></div>
+                        <div th:text="${address.fullAddress}"></div>
+                        <div class="address-actions">
+                            <button type="button" class="btn btn-primary"
+                                    th:attr="data-id=${address.addressId},
+                                 data-type=${address.type},
+                                 data-name=${address.receiverName},
+                                 data-phone=${address.receiverPhone},
+                                 data-fulladdress=${address.fullAddress},
+                                 data-default=${address.default}"
+                                    data-bs-toggle="modal" data-bs-target="#editAddressModal"> Chỉnh sửa
+                            </button>
+                            <button type="button" class="btn btn-primary">
+                                <a th:href="@{/user/profile/delete/{addressId}(addressId=${address.addressId})}">
+                                    Xóa
+                                </a>
+                            </button>
+                            <th:block th:if="${address.default == false}">
+                                <button type="button" class="btn btn-primary">
+                                    <a th:href="@{/user/profile/set-default/{addressId}(addressId=${address.addressId})}">
+                                        Đặt làm mặc định
+                                    </a>
+                                </button>
+                            </th:block>
+                        </div>
+                    </div>
+
+                    <!-- Nút thêm địa chỉ -->
+                    <button class="add-address-btn" data-bs-toggle="modal" data-bs-target="#addAddressModal">
+                        <i class="bi bi-plus-circle"></i> Thêm địa chỉ mới
+                    </button>
+
+                    <!-- Modal Thêm Địa Chỉ -->
+                    <div class="modal fade" id="addAddressModal" tabindex="-1" aria-labelledby="addAddressModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content rounded-3 shadow">
+                                <div class="modal-header bg-danger text-white">
+                                    <h5 class="modal-title" id="addAddressModalLabel">Thêm địa chỉ mới</h5>
+                                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <form th:action="@{/user/profile/add-address}" method="post">
+                                    <div class="modal-body">
+                                        <div class="mb-3">
+                                            <input type="text" class="form-control" name="type" placeholder="Loại địa chỉ (Nhà riêng, Văn phòng...)" required>
+                                        </div>
+                                        <div class="mb-3">
+                                            <input type="text" class="form-control" name="receiverName" placeholder="Họ tên người nhận" required>
+                                        </div>
+                                        <div class="mb-3">
+                                            <input type="text" class="form-control" name="receiverPhone" placeholder="Số điện thoại" required>
+                                        </div>
+                                        <div class="mb-3">
+                                            <textarea class="form-control" name="fullAddress" placeholder="Địa chỉ đầy đủ" required></textarea>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" name="default" id="defaultAddress">
+                                            <label class="form-check-label" for="defaultAddress">Đặt làm mặc định</label>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="submit" class="btn btn-success">Lưu địa chỉ</button>
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Modal Sửa Địa Chỉ -->
+                    <div class="modal fade" id="editAddressModal" tabindex="-1">
+                        <div class="modal-dialog">
+                            <div class="modal-content rounded-3 shadow">
+                                <div class="modal-header bg-warning text-white">
+                                    <h5 class="modal-title">Sửa địa chỉ</h5>
+                                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                                </div>
+                                <form th:action="@{/user/profile/update-address}" method="post">
+                                    <input type="hidden" name="activeTab" value="address-tab">
+                                    <input type="hidden" name="addressId" id="editAddressId">
+                                    <div class="modal-body">
+                                        <input type="text" name="type" id="editType" class="form-control mb-2" required>
+                                        <input type="text" name="receiverName" id="editReceiverName" class="form-control mb-2" required>
+                                        <input type="text" name="receiverPhone" id="editReceiverPhone" class="form-control mb-2" required>
+                                        <textarea name="fullAddress" id="editFullAddress" class="form-control mb-2" required></textarea>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" name="default" id="editDefault">
+                                            <label class="form-check-label" for="editDefault">Đặt làm mặc định</label>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="submit" class="btn btn-success">Cập nhật</button>
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
             </div>
-
         </div>
-
     </div>
-
-
-
-
-
-
-</section>
+</main>
 
 <hr class="brick">
 
@@ -169,6 +348,49 @@
 <div th:replace="/fragments/footer :: footer"></div>
 <!-- End Footer  -->
 
+<script>
+    function showAddressForm() {
+        document.getElementById("add-address-form").style.display = "block";
+        document.getElementById("address-list").style.display = "none";
+    }
+
+    function hideAddressForm() {
+        document.getElementById("add-address-form").style.display = "none";
+        document.getElementById("address-list").style.display = "block";
+    }
+
+    const editModal = document.getElementById('editAddressModal');
+    editModal.addEventListener('show.bs.modal', function (event) {
+        const button = event.relatedTarget;
+        document.getElementById('editAddressId').value = button.getAttribute('data-id');
+        document.getElementById('editType').value = button.getAttribute('data-type');
+        document.getElementById('editReceiverName').value = button.getAttribute('data-name');
+        document.getElementById('editReceiverPhone').value = button.getAttribute('data-phone');
+        document.getElementById('editFullAddress').value = button.getAttribute('data-fulladdress');
+        document.getElementById('editDefault').checked = button.getAttribute('data-default') === 'true';
+    });
+
+    document.addEventListener("DOMContentLoaded", function () {
+        const activeTab = /*[[${activeTab}]]*/ 'info-tab'; // tab mặc định nếu không có
+        if (activeTab) {
+            const tabTrigger = document.querySelector(`#myTab button[data-bs-target="#${activeTab.replace('-tab', '')}"]`);
+            if (tabTrigger) {
+                new bootstrap.Tab(tabTrigger).show();
+            }
+        }
+    });
+
+    document.getElementById("userRegister").addEventListener("submit", function(event) {
+        const password = document.getElementById("password").value;
+        const confirmPassword = document.getElementById("confirm-password").value;
+
+        if (password !== confirmPassword) {
+            alert("Mật khẩu và xác nhận mật khẩu không khớp!");
+            event.preventDefault();
+            return;
+        }
+    });
+</script>
 
 <!-- Jquery Validation Library  -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>

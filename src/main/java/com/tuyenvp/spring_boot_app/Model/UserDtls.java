@@ -2,6 +2,7 @@ package com.tuyenvp.spring_boot_app.Model;
 
 import jakarta.persistence.*;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 import java.util.Date;
@@ -14,6 +15,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.format.annotation.DateTimeFormat;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -29,21 +31,18 @@ public class UserDtls {
 
     private String name;
 
-    private String mobileNumber;
+    private String phone;
 
     private String email;
 
-    private String province;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate birthday;
 
-    private String district;
-
-    private String commune;
-
-    private String address;
+    private String gender;
 
     private String password;
 
-    private String profileImage;
+    /*private String profileImage;*/
 
     private String role;
 

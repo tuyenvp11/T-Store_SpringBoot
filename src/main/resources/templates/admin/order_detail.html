@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<div th:replace="admin/fragments/head :: head"></div>
+
+<body>
+<!-- Header -->
+<div th:replace="admin/fragments/header :: header"></div>
+
+<!-- Sidenav -->
+<div id="layoutSidenav">
+    <div th:replace="admin/fragments/sidebar :: sidebar"></div>
+
+    <!-- Sidenav Content -->
+    <div class="container mt-4">
+        <h4>Chi tiết đơn hàng #<span th:text="${order.orderId}"></span></h4>
+
+        <div class="card mb-3">
+            <div class="card-header">
+                Thông tin giao hàng
+            </div>
+            <div class="card-body">
+                <p><strong>Họ tên:</strong> <span th:text="${order.address.receiverName}"></span></p>
+                <p><strong>Số điện thoại:</strong> <span th:text="${order.address.receiverPhone}"></span></p>
+                <p><strong>Địa chỉ:</strong> <span th:text="${order.address.fullAddress}"></span></p>
+                <p><strong>Ngày đặt:</strong> <span th:text="${@formatUtils.formatDateTime(order.orderDate)}"></span></p>
+                <p><strong>Trạng thái:</strong>
+                    <span class="badge bg-success" th:if="${order.status == 'Đã giao hàng' or order.status == 'Giao thành công'}"
+                          th:text="${order.status}"></span>
+
+                    <span class="badge bg-secondary" th:if="${order.status == 'Đã huỷ'}"
+                          th:text="${order.status}"></span>
+
+                    <span class="badge bg-danger" th:if="${order.status != 'Đã giao hàng' and order.status != 'Giao thành công' and order.status != 'Đã huỷ'}"
+                          th:text="${order.status}"></span>
+                </p>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                Danh sách sản phẩm
+            </div>
+            <div class="card-body">
+                <table class="table table-bordered text-center">
+                    <thead class="table-light">
+                    <tr>
+                        <th>Mã sản phẩm</th>
+                        <th>Sản phẩm</th>
+                        <th>Màu</th>
+                        <th>Hình ảnh</th>
+                        <th>Số lượng</th>
+                        <th>Giá</th>
+                        <th>Thành tiền</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="d, stat : ${orderDetails}">
+                        <td th:text="${d.productVariant.variantId}"></td>
+                        <td th:text="${d.productVariant.product.productName}"></td>
+                        <td th:text="${d.productVariant.color.colorName}"></td>
+                        <td>
+                            <img th:src="@{'/be/img/products/'+ ${d.productVariant.productImg}}" style="width: 80px; height: 80px;"/>
+                        </td>
+                        <td th:text="${d.quantity}"></td>
+                        <td th:text="${@formatUtils.formatCurrency(d.sellPrice)}"></td>
+                        <td th:text="${@formatUtils.formatCurrency(d.sellPrice * d.quantity)}"></td>
+                    </tr>
+                    </tbody>
+                    <tfoot>
+                    <tr>
+                        <td colspan="6" class="text-end"><strong>Giảm giá:</strong></td>
+                        <td th:text="${order.discount != null} ? ${@formatUtils.formatCurrency(order.discount.discountValue)} : 0"></td>
+                    </tr>
+                    <tr>
+                        <td colspan="6" class="text-end"><strong>Tổng cộng:</strong></td>
+                        <td th:text="${@formatUtils.formatCurrency(order.totalPrice)}"></td>
+                    </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+
+        <a href="/admin/order" class="btn btn-secondary btn-sm mt-3">← Quay lại danh sách</a>
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+
+</body>
+</html>

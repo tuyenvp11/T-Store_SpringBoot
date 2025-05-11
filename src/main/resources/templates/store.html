@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<!-- Start Head -->
+<div th:replace="/fragments/head :: head"></div>
+<!-- End Head -->
+
+
+
+<body>
+<!-- Start Navbar  -->
+<div th:replace="/fragments/header :: header"></div>
+<!-- End Navbar -->
+
+<div th:replace="/fragments/nav :: nav"></div>
+
+
+<main class="stores-container">
+    <div class="stores-header">
+        <h4 class="mb-4">Tìm cửa hàng Tstore gần bạn</h4>
+        <form class="search-form">
+            <div class="form-group">
+                <label>Tỉnh/Thành phố</label>
+                <select class="form-control" id="city">
+                    <option value="">Chọn tỉnh/thành phố</option>
+                    <option value="hcm">TP. Hồ Chí Minh</option>
+                    <option value="hanoi">Hà Nội</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Quận/Huyện</label>
+                <select class="form-control" id="district">
+                    <option value="">Chọn quận/huyện</option>
+                </select>
+            </div>
+
+            <button type="button" class="search-btn" onclick="searchStores()">
+                Tìm cửa hàng
+            </button>
+        </form>
+    </div>
+
+    <div class="stores-grid">
+        <div class="store-card">
+            <!--<img src="https://cdn2.cellphones.com.vn/x/media/wysiwyg/store-image.jpg" alt="CellphoneS Quận 1" class="store-image">-->
+            <div class="store-info">
+                <h3 class="store-name">Tstore Hoàng Mai</h3>
+                <div class="store-address">
+                    <i class="bi bi-geo-alt"></i>
+                    123 Đường Lĩnh Nam, Phường Vĩnh Hưng, Quận Hoàng Mai, Hà Nội
+                </div>
+                <div class="store-phone">
+                    <i class="bi bi-telephone"></i>
+                    1800.2097
+                </div>
+                <div class="store-hours">
+                    <i class="bi bi-clock"></i>
+                    08:00 - 21:30 (Hôm nay)
+                </div>
+                <div class="store-features">
+                    <span class="feature-tag">Bảo hành chính hãng</span>
+                    <span class="feature-tag">Thu cũ đổi mới</span>
+                    <span class="feature-tag">Trả góp 0%</span>
+                </div>
+                <span class="store-status status-open">Đang mở cửa</span>
+                <div class="store-actions">
+                    <a href="#" class="action-btn btn-directions">
+                        <i class="bi bi-geo"></i> Chỉ đường
+                    </a>
+                    <a href="#" class="action-btn btn-details">
+                        <i class="bi bi-info-circle"></i> Chi tiết
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="store-card">
+            <div class="store-info">
+                <h3 class="store-name">Tstore Cầu Giấy</h3>
+                <div class="store-address">
+                    <i class="bi bi-geo-alt"></i>
+                    456 Đường Xuân Thủy, Phường Mai Dịch, Cầu Giấy, TP.HCM
+                </div>
+                <div class="store-phone">
+                    <i class="bi bi-telephone"></i>
+                    1800.2097
+                </div>
+                <div class="store-hours">
+                    <i class="bi bi-clock"></i>
+                    08:00 - 21:30 (Hôm nay)
+                </div>
+                <div class="store-features">
+                    <span class="feature-tag">Bảo hành chính hãng</span>
+                    <span class="feature-tag">Thu cũ đổi mới</span>
+                    <span class="feature-tag">Trả góp 0%</span>
+                </div>
+                <span class="store-status status-open">Đang mở cửa</span>
+                <div class="store-actions">
+                    <a href="#" class="action-btn btn-directions">
+                        <i class="bi bi-geo"></i> Chỉ đường
+
+                    </a>
+                    <a href="#" class="action-btn btn-details">
+                        <i class="bi bi-info-circle"></i> Chi tiết
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="store-card">
+            <!--<img src="https://cdn2.cellphones.com.vn/x/media/wysiwyg/store-image.jpg" alt="CellphoneS Quận 3" class="store-image">-->
+            <div class="store-info">
+                <h3 class="store-name">Tstore Ba Đình</h3>
+                <div class="store-address">
+                    <i class="bi bi-geo-alt"></i>
+                    789 Đường Lê Trọng Tấn, Phường ABC, Quận 3, TP.HCM
+                </div>
+                <div class="store-phone">
+                    <i class="bi bi-telephone"></i>
+                    1800.2097
+                </div>
+                <div class="store-hours">
+                    <i class="bi bi-clock"></i>
+                    08:00 - 21:30 (Hôm nay)
+                </div>
+                <div class="store-features">
+                    <span class="feature-tag">Bảo hành chính hãng</span>
+                    <span class="feature-tag">Thu cũ đổi mới</span>
+                    <span class="feature-tag">Trả góp 0%</span>
+                </div>
+                <span class="store-status status-open">Đang mở cửa</span>
+                <div class="store-actions">
+                    <a href="#" class="action-btn btn-directions">
+                        <i class="bi bi-geo"></i> Chỉ đường
+                    </a>
+                    <a href="#" class="action-btn btn-details">
+                        <i class="bi bi-info-circle"></i> Chi tiết
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    </main>
+
+
+<hr class="brick">
+
+<!-- Start Footer -->
+<div th:replace="/fragments/footer :: footer"></div>
+<!-- End Footer  -->
+
+<script>
+    // Handle city selection
+    document.getElementById('city').addEventListener('change', function() {
+        const city = this.value;
+        const district = document.getElementById('district');
+        district.innerHTML = '<option value="">Chọn quận/huyện</option>';
+
+        if (city === 'hcm') {
+            const districts = ['Quận 1', "Quận 2"];
+            districts.forEach(d => {
+                const option = document.createElement('option');
+                option.value = d.toLowerCase().replace(' ', '');
+                option.textContent = d;
+                district.appendChild(option);
+            });
+        } else if (city === 'hanoi') {
+            const districts = ['Hoàng Mai', 'Cầu Giấy'];
+            districts.forEach(d => {
+                const option = document.createElement('option');
+                option.value = d.toLowerCase().replace(' ', '');
+                option.textContent = d;
+                district.appendChild(option);
+            });
+        }
+    });
+
+    function searchStores() {
+        const city = document.getElementById('city').value;
+        const district = document.getElementById('district').value;
+
+        if (!city) {
+            alert('Vui lòng chọn tỉnh/thành phố');
+            return;
+        }
+
+        // In real app, this would filter stores based on selection
+        console.log('Searching stores in:', city, district);
+    }
+</script>
+
+
+<!-- Jquery Validation Library  -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.js}"></script>
+<script type="text/javascript" th:src="@{fe/js/script.js}"></script>
+<!-- End  -->
+<script
+        src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous">
+</script>
+</body>
+</html>

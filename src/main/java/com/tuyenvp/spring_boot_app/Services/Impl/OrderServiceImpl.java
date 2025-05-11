@@ -2,9 +2,13 @@ package com.tuyenvp.spring_boot_app.Services.Impl;
 
 import com.tuyenvp.spring_boot_app.Model.*;
 import com.tuyenvp.spring_boot_app.Repository.DbConnect;
+import com.tuyenvp.spring_boot_app.Services.CartService;
+import com.tuyenvp.spring_boot_app.Services.DiscountService;
 import com.tuyenvp.spring_boot_app.Services.OrderService;
 import com.tuyenvp.spring_boot_app.Util.CommonUtil;
 import com.tuyenvp.spring_boot_app.Util.OrderStatus;
+import jakarta.servlet.http.HttpSession;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -13,9 +17,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 
 @Service
@@ -25,120 +29,185 @@ public class OrderServiceImpl implements OrderService {
     private DbConnect DbConnect;
 
     @Autowired
-    private CommonUtil commonUtil;
+    private CartService cartService;
 
+    @Autowired
+    private EmailServiceImpl emailServiceImpl;
 
-    // Lưu đơn hàng
     @Override
-    public void saveOrder(Integer userid, OrderRequest orderRequest) throws Exception {
-        List<Cart> carts = DbConnect.cartRepo.findByUserId(userid);
+    @Transactional
+    public Long placeOrder(String paymentMethod, String email, HttpSession session) {
+        // 1. Lấy user
+        UserDtls user = DbConnect.userRepo.findByEmail(email);
 
-        for (Cart cart : carts) {
-            ProductOrder order = new ProductOrder();
+        // 2. Lấy địa chỉ mặc định
+        Address defaultAddress = DbConnect.addressRepo.findByUserIdAndIsDefault(user.getId(), true);
 
-//            String orderId = UUID.randomUUID().toString().substring(0, 8);
-//            order.setOrderId(orderId);
-//            Tạo mã đơn hàng sử dụng thời gian
-//            String orderId = "ĐH" + System.currentTimeMillis();
-//            order.setOrderId(orderId);
-            order.setOrderDate(LocalDateTime.now());
+        // 3. Lấy giỏ hàng
+        List<Cart> cartItems = cartService.getCartByUser(user.getId());
 
-            order.setProduct(cart.getProduct());
-            order.setPrice(new BigDecimal(Float.toString(cart.getProduct().getProduct_price())));
+        // Tính tổng tạm tính (subtotal)
+        BigDecimal totalPrice = cartItems.stream()
+                .map(cart -> cart.getProductVariant().getSellPrice().multiply(BigDecimal.valueOf(cart.getQuantity())))
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
 
-            order.setQuantity(cart.getQuantity());
-            order.setUser(cart.getUser());
+        // Lấy mã giảm giá từ session nếu có
+        Discount discount = (Discount) session.getAttribute("appliedDiscount");
+        BigDecimal discountValue = (discount != null) ? discount.getDiscountValue() : BigDecimal.ZERO;
+        BigDecimal totalOrderPrice = totalPrice.subtract(discountValue);
 
-            order.setStatus(OrderStatus.IN_PROGRESS.getName());
-            order.setPaymentType(orderRequest.getPaymentType());
+        // 7. Tạo đơn hàng
+        Order order = new Order();
+        order.setUser(user);
+        order.setOrderDate(LocalDateTime.now());
+        order.setStatus(OrderStatus.IN_PROGRESS.getName());
+        order.setPaymentType(paymentMethod);
+        order.setTotalPrice(totalOrderPrice);
+        order.setAddress(defaultAddress);
+        order.setDiscount(discount);
 
-            OrderAddress address = new OrderAddress();
-            address.setFirstName(orderRequest.getFirstName());
-            address.setLastName(orderRequest.getLastName());
-            address.setEmail(orderRequest.getEmail());
-            address.setPhone(orderRequest.getPhone());
-            address.setProvince(orderRequest.getProvince());
-            address.setDistrict(orderRequest.getDistrict());
-            address.setCommune(orderRequest.getCommune());
-            address.setAddress(orderRequest.getAddress());
+        DbConnect.orderRepo.save(order);
 
-            order.setOrderAddress(address);
+        // 8. Tạo chi tiết đơn hàng
+        for (Cart cartItem : cartItems) {
+            OrderDetail detail = new OrderDetail();
+            detail.setOrder(order);
+            detail.setProductVariant(cartItem.getProductVariant());
+            detail.setQuantity(cartItem.getQuantity());
+            detail.setSellPrice(cartItem.getProductVariant().getSellPrice());
 
-            ProductOrder saveOrder = DbConnect.orderRepo.save(order);
-            commonUtil.sendMailForProductOrder(saveOrder, "Thành công");
+            DbConnect.orderDetailRepo.save(detail);
         }
+
+        // 9. Xóa giỏ hàng
+        DbConnect.cartRepo.deleteAll(cartItems);
+
+        // 10. Xóa mã giảm giá khỏi session
+        session.removeAttribute("discountId");
+
+        // 11. Gửi email thông báo đơn hàng
+        try {
+            emailServiceImpl.sendMailForOrder(order, order.getStatus());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return order.getOrderId();
     }
+
 
     // Lấy danh sách đơn hàng theo User
     @Override
-    public List<ProductOrder> getOrdersByUser(Integer userId) {
-        List<ProductOrder> orders = DbConnect.orderRepo.findByUserId(userId);
-
-        for (ProductOrder order : orders) {
-            if (order.getPrice() == null) {
-                order.setPrice(BigDecimal.ZERO);
-            }
-            if (order.getQuantity() == null) {
-                order.setQuantity(0);
-            }
-        }
+    public List<Order> getOrdersByUser(Integer userId) {
+        List<Order> orders = DbConnect.orderRepo.findByUserId(userId);
         return orders;
     }
 
-    // Cập nhật trạng thái cho đơn hàng
     @Override
-    public ProductOrder updateOrderStatus(Integer id, String status) {
-        Optional<ProductOrder> findById = DbConnect.orderRepo.findById(id);
-        if (findById.isPresent()) {
-            ProductOrder productOrder = findById.get();
-            productOrder.setStatus(status);
-            ProductOrder updateOrder = DbConnect.orderRepo.save(productOrder);
-            return updateOrder;
+    public Order updateOrderStatus(Integer id, String status) {
+        Optional<Order> findById = DbConnect.orderRepo.findById(id);
+        if (findById.isEmpty()) {
+            throw new RuntimeException("Không tìm thấy đơn hàng với ID: " + id);
         }
-        return null;
+
+        Order order = findById.get();
+
+        // Nếu cập nhật sang DELIVERED và chưa trừ kho
+        if ("Đã giao hàng".equalsIgnoreCase(status) && !order.isStockDeducted()) {
+            List<OrderDetail> orderDetails = DbConnect.orderDetailRepo.findByOrder(order);
+            for (OrderDetail detail : orderDetails) {
+                ProductVariant variant = detail.getProductVariant();
+                int currentStock = variant.getStockQuantity();
+                int qty = detail.getQuantity();
+
+                if (currentStock < qty) {
+                    throw new RuntimeException("Không đủ hàng trong kho cho biến thể: " + variant.getVariantId());
+                }
+
+                variant.setStockQuantity(currentStock - qty);
+                DbConnect.productVariantRepo.save(variant);
+            }
+
+            order.setStockDeducted(true); // đánh dấu đã trừ kho
+        }
+
+        order.setStatus(status);
+        return DbConnect.orderRepo.save(order);
+    }
+
+
+    @Override
+    public List<Order> searchOrder(String keyword) {
+        return DbConnect.orderRepo.searchOrder(keyword);
     }
 
     @Override
-    public List<ProductOrder> searchProductOrder(String keyword) {
-        return DbConnect.orderRepo.searchProductOrder(keyword);
-    }
-
-    @Override
-    public Page<ProductOrder> getAll(Integer pageNo) {
-        Pageable pageable = PageRequest.of(pageNo-1, 5);
+    public Page<Order> getAll(Integer pageNo) {
+        Pageable pageable = PageRequest.of(pageNo-1, 10);
         return DbConnect.orderRepo.findAll(pageable);
     }
 
     @Override
-    public Page<ProductOrder> searchProductOrder(String keyword, Integer pageNo) {
-        List list = searchProductOrder(keyword);
-        Pageable pageable = PageRequest.of(pageNo-1, 5);
+    public Page<Order> searchOrder(String keyword, Integer pageNo) {
+        List list = searchOrder(keyword);
+        Pageable pageable = PageRequest.of(pageNo-1, 10);
         Integer start = (int) pageable.getOffset();
         Integer end =(int) ((pageable.getOffset() + pageable.getPageSize()) > list.size()
                 ? list.size()
                 : pageable.getOffset() + pageable.getPageSize());
         list = list.subList(start, end);
 
-        return new PageImpl<ProductOrder>(list, pageable, searchProductOrder(keyword).size());
+        return new PageImpl<Order>(list, pageable, searchOrder(keyword).size());
+    }
+
+    @Override
+    public Page<Order> getAllOrdersPagination(Integer pageNo, Integer pageSize) {
+        return null;
     }
 
     /*@Override
-    public ProductOrder getOrdersByOrderId(String orderId) {
+    public Order getOrdersByOrderId(String orderId) {
         return DbConnect.orderRepo.findByOrderId(orderId);
     }*/
 
+
+    // phuong thuc dem tong so luong don hang
     @Override
     public long getTotalOrders() {
         return DbConnect.orderRepo.count();
     }
 
+
     @Override
+    public void createOrderAfterPayment(String orderId) {
+        // Thêm logic tạo đơn hàng sau khi thanh toán thành công
+        // Gồm lưu đơn, gửi email, cập nhật giỏ hàng, v.v
+        System.out.println("Đã tạo đơn hàng mã: " + orderId);
+    }
+
+    @Override
+    public Order getOrderById(Long orderId) {
+        return DbConnect.orderRepo.findById(orderId.intValue()).orElse(null);
+    }
+
+    @Override
+    public List<OrderDetail> getOrderDetails(Long orderId) {
+        return DbConnect.orderDetailRepo.findByOrderId(orderId);
+    }
+
+    @Override
+    public Order findByOrderId(Long orderId) {
+        return DbConnect.orderRepo.findByOrderId(orderId).orElse(null);
+    }
+
+    /*@Override
     public double getTotalRevenue() {
         return DbConnect.orderRepo.findAll()
                 .stream()
-                .mapToDouble(product -> product.getPrice().multiply(BigDecimal.valueOf(product.getQuantity())).doubleValue())
+                .mapToDouble(product -> product.getSellPrice().multiply(BigDecimal.valueOf(product.getQuantity())).doubleValue())
                 .sum();
-    }
+
+    }*/
 
 
 

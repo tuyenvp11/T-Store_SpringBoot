@@ -11,7 +11,7 @@ import java.util.Optional;
 public interface CategoryService {
     public List<Category> ListCategory();
     Optional<Category> findCategoryById(int category_id);
-    public Category addCategory(Category add_category);
+    public String addCategory(Category add_category);
     public Category updateCategory(Category edit_category);
     public Category deleteCategory(int category_id);
     public List<Category> searchCategory(String keyword);
@@ -19,4 +19,6 @@ public interface CategoryService {
     List<Category> getAllCategory();
     Page<Category> searchCategory(String keyword, Integer pageNo);
     //public Category getCategoryById(int category_id);
+    public long getTotalCategory();
+    public boolean isCategoryExists(String name);
 }

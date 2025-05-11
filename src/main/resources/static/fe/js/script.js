@@ -1,15 +1,16 @@
-$(function(){
+/*
+$(function () {
 
 // User Register validation
 
-	var $userRegister=$("#userRegister");
+	var $userRegister = $("#userRegister");
 
 	$userRegister.validate({
-		
-		rules:{
-			name:{
-				required:true,
-				lettersonly:true
+
+		rules: {
+			name: {
+				required: true,
+				lettersonly: true
 			}
 			,
 			email: {
@@ -60,12 +61,12 @@ $(function(){
 			}, img: {
 				required: true,
 			}
-			
+
 		},
-		messages:{
-			name:{
-				required:'name required',
-				lettersonly:'invalid name'
+		messages: {
+			name: {
+				required: 'name required',
+				lettersonly: 'invalid name'
 			},
 			email: {
 				required: 'email name must be required',
@@ -118,21 +119,21 @@ $(function(){
 			}
 		}
 	})
-	
-	
+
+
 // Orders Validation
 
-var $orders=$("#orders");
+	var $orders = $("#orders");
 
-$orders.validate({
-		rules:{
-			firstName:{
-				required:true,
-				lettersonly:true
+	$orders.validate({
+		rules: {
+			firstName: {
+				required: true,
+				lettersonly: true
 			},
-			lastName:{
-				required:true,
-				lettersonly:true
+			lastName: {
+				required: true,
+				lettersonly: true
 			}
 			,
 			email: {
@@ -170,18 +171,18 @@ $orders.validate({
 				numericOnly: true
 
 			},
-			paymentType:{
-			required: true
+			paymentType: {
+				required: true
 			}
 		},
-		messages:{
-			firstName:{
-				required:'first required',
-				lettersonly:'invalid name'
+		messages: {
+			firstName: {
+				required: 'first required',
+				lettersonly: 'invalid name'
 			},
-			lastName:{
-				required:'last name required',
-				lettersonly:'invalid name'
+			lastName: {
+				required: 'last name required',
+				lettersonly: 'invalid name'
 			},
 			email: {
 				required: 'email name must be required',
@@ -195,7 +196,7 @@ $orders.validate({
 				minlength: 'min 10 digit',
 				maxlength: 'max 12 digit'
 			}
-		   ,
+			,
 			address: {
 				required: 'address must be required',
 				all: 'invalid'
@@ -218,19 +219,19 @@ $orders.validate({
 				numericOnly: 'invalid pincode'
 
 			},
-			paymentType:{
-			required: 'select payment type'
+			paymentType: {
+				required: 'select payment type'
 			}
-		}	
-})
+		}
+	})
 
 // Reset Password Validation
 
-var $resetPassword=$("#resetPassword");
+	var $resetPassword = $("#resetPassword");
 
-$resetPassword.validate({
-		
-		rules:{
+	$resetPassword.validate({
+
+		rules: {
 			password: {
 				required: true,
 				space: true
@@ -243,8 +244,8 @@ $resetPassword.validate({
 
 			}
 		},
-		messages:{
-		   password: {
+		messages: {
+			password: {
 				required: 'password must be required',
 				space: 'space not allowed'
 
@@ -255,34 +256,33 @@ $resetPassword.validate({
 				equalTo: 'password mismatch'
 
 			}
-		}	
+		}
+	})
+
+
 })
 
 
+jQuery.validator.addMethod('lettersonly', function (value, element) {
+	return /^[^-\s][a-zA-Z_\s-]+$/.test(value);
+});
 
-	
-	
-	
-	
-})
+jQuery.validator.addMethod('space', function (value, element) {
+	return /^[^-\s]+$/.test(value);
+});
 
-
-
-jQuery.validator.addMethod('lettersonly', function(value, element) {
-		return /^[^-\s][a-zA-Z_\s-]+$/.test(value);
-	});
-	
-		jQuery.validator.addMethod('space', function(value, element) {
-		return /^[^-\s]+$/.test(value);
-	});
-
-	jQuery.validator.addMethod('all', function(value, element) {
-		return /^[^-\s][a-zA-Z0-9_,.\s-]+$/.test(value);
-	});
+jQuery.validator.addMethod('all', function (value, element) {
+	return /^[^-\s][a-zA-Z0-9_,.\s-]+$/.test(value);
+});
 
 
-	jQuery.validator.addMethod('numericOnly', function(value, element) {
-		return /^[0-9]+$/.test(value);
-	});
+jQuery.validator.addMethod('numericOnly', function (value, element) {
+	return /^[0-9]+$/.test(value);
+});
 
 
+// them dia chi moi
+
+
+
+*/

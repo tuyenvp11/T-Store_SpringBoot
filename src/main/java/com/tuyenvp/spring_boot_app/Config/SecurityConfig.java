@@ -49,6 +49,11 @@ public class SecurityConfig {
             .authorizeHttpRequests(req->req
                     .requestMatchers("/user**").hasRole("USER")
                     .requestMatchers("/admin**").hasRole("ADMIN")
+                    .requestMatchers("/admin/category**").hasRole("ADMIN")
+                    .requestMatchers("/admin/product**").hasRole("ADMIN")
+                    .requestMatchers("/admin/order**").hasRole("ADMIN")
+                    .requestMatchers("/admin/statistic**").hasRole("ADMIN")
+                    .requestMatchers("/admin/account**").hasRole("ADMIN")
                     .requestMatchers("/**")
                     .permitAll()
                     .requestMatchers("/user/carts**").hasRole("USER"))
@@ -59,6 +64,7 @@ public class SecurityConfig {
                     .failureHandler(authenticationFailureHandler)
                     .successHandler(authenticationSuccessHandler)
                     .permitAll())
+
             .logout(logout->logout
                     .logoutUrl("/logout") // URL cho logout
                     .logoutSuccessUrl("/login?logout=true") // Chuyển hướng về trang login

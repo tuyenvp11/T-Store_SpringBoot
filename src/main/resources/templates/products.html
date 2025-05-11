@@ -10,43 +10,94 @@
     <div th:replace="fragments/header :: header"></div>
     <!-- End Navbar -->
 
-    <div class="product-list container mt-4 mb-4">
-         <div class="row">
-            <div class="col-6 col-md-4 col-lg-2 mb-4" th:each="product : ${products}">
-                <a th:href="@{'/detail_product/' + ${product.product_id}}" class="text-decoration-none">
-                    <div class="card h-100 shadow-sm">
-                        <img th:src="@{'/be/img/products/'+${product.product_img}}" class="card-img-top p-3" alt="Ảnh sản phẩm">
-                        <div class="card-body text-center d-flex flex-column justify-content-between">
-                            <h6 class="card-title mb-2" th:text="${product.product_name}"></h6>
+    <!-- Start nav -->
+    <div th:replace="fragments/nav :: nav"></div>
+    <!-- End nav -->
 
-                            <!-- Price Section with Fixed Height -->
-                            <div style="min-height: 70px;">
-                                <p class="card-text">
-                                    <!--<del class="text-muted">600.000</del><br>-->
-                                    <span class="text-danger font-weight-bold" th:text="${@formatUtils.formatCurrency(product.product_price)}"></span>
-                                </p>
+    <div th:replace="fragments/breadcrumb :: breadcrumb"></div>
+
+    <main class="main-content">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-3">
+                        <form th:action="@{/products/filter}" method="get" style="border: 1px solid #ccc; padding: 20px; border-radius: 10px; width: 300px; background-color: #f9f9f9; margin-top: 20px;">
+                            <h6 style="margin-bottom: 15px;">🔍 Bộ lọc sản phẩm</h6>
+
+                            <!-- Thương hiệu -->
+                            <div style="margin-bottom: 20px;">
+                                <strong>Thương hiệu:</strong><br>
+                                <label><input type="checkbox" name="brand" value="Apple" th:checked="${selectedBrand == 'Apple'}"> Apple</label><br>
+                                <label><input type="checkbox" name="brand" value="Samsung" th:checked="${selectedBrand == 'Samsung'}"> Samsung</label><br>
+                                <label><input type="checkbox" name="brand" value="Xiaomi" th:checked="${selectedBrand == 'Xiaomi'}"> Xiaomi</label><br>
+                                <label><input type="checkbox" name="brand" value="OPPO" th:checked="${selectedBrand == 'OPPO'}"> OPPO</label><br>
+                                <label><input type="checkbox" name="brand" value="Google Pixel" th:checked="${selectedBrand == 'Google Pixel'}"> Google Pixel</label><br>
+                                <label><input type="checkbox" name="brand" value="Sony" th:checked="${selectedBrand == 'Sony'}"> Sony</label><br>
                             </div>
 
-                            <!-- Rating Section -->
-                            <div class="d-flex justify-content-center align-items-center">
-                                <div class="rating text-warning" style="font-size: 12px;">
-                                    <i class="fa-solid fa-star"></i>
-                                    <i class="fa-solid fa-star"></i>
-                                    <i class="fa-solid fa-star"></i>
-                                    <i class="fa-solid fa-star"></i>
-                                    <i class="fa-solid fa-star"></i>
+                            <!-- Mức giá -->
+                            <div style="margin-bottom: 20px;">
+                                <strong>Mức giá:</strong><br>
+                                <label><input type="radio" name="priceRange" value="0-2000000" th:checked="${minPrice == 0 and maxPrice == 2000000}"> Dưới 2 triệu</label><br>
+                                <label><input type="radio" name="priceRange" value="2000000-4000000" th:checked="${minPrice == 2000000 and maxPrice == 4000000}"> 2 - 4 triệu</label><br>
+                                <label><input type="radio" name="priceRange" value="4000000-7000000" th:checked="${minPrice == 4000000 and maxPrice == 7000000}"> 4 - 7 triệu</label><br>
+                                <label><input type="radio" name="priceRange" value="7000000-13000000" th:checked="${minPrice == 7000000 and maxPrice == 13000000}"> 7 - 13 triệu</label><br>
+                                <label><input type="radio" name="priceRange" value="13000000-100000000" th:checked="${minPrice == 13000000}"> Trên 13 triệu</label><br>
+                            </div>
+
+                            <!-- Khoảng giá tùy chọn -->
+                            <div style="margin-bottom: 20px; display: flex; flex-direction: column; gap: 10px;">
+                                <strong>Khoảng giá tùy chọn:</strong>
+                                <input type="number" name="minPrice" placeholder="Từ" th:value="${minPrice}" style="width: 100%; margin-right: 5px;">
+                                <input type="number" name="maxPrice" placeholder="Đến" th:value="${maxPrice}" style="width: 100%;">
+                            </div>
+
+                            <button type="submit" style="padding: 10px 20px; background-color: #D70018; color: white; border: none; border-radius: 5px; cursor: pointer; width: 100%;">
+                                Lọc
+                            </button>
+                        </form>
+                </div>
+
+                <div class="col-lg-9">
+                    <div class="products-container" th:if="${!products.isEmpty()}">
+                        <div class="products-item" th:each="product : ${products}">
+                            <a class="link-products" th:href="@{'/detail_product/' + ${product.productId}}">
+                                <img th:src="@{'/be/img/products/'+${product.thumbnail}}" alt="product">
+                                <h3 th:text="${product.productName}"></h3>
+                                <div class="price">
+                                    <span class="current-price" th:text="${@formatUtils.formatCurrency(product.price)}"></span>
+                                    <span class="original-price" th:text="${@formatUtils.formatCurrency(product.originalPrice)}"></span>
                                 </div>
-                                <span class="ms-2 text-muted" style="font-size: 12px;">112 đánh giá</span>
+                            </a>
+                            <div class="promotion">
+                                T-Student giảm thêm đến <span class="highlight">600.000đ</span>
+                            </div>
+                            <div class="installment-info">
+                                Không phí chuyển đổi khi trả góp 0% qua thẻ tín dụng
+                            </div>
+                            <div class="rating">
+                                <div class="stars">★★★★★</div>
+                                <button class="favorite">Yêu thích ♡</button>
                             </div>
                         </div>
                     </div>
-                </a>
+                    <div class="justify-content-center" style="font-size: 16px; display: flex; margin-top: 20px;" th:if="${products.isEmpty()}">
+                        <p>Không tìm thấy sản phẩm cần tìm!</p>
+                    </div>
+
+                    <!--<div class="pagination">
+                        <a href="#" class="page-link active">1</a>
+                        <a href="#" class="page-link">2</a>
+                        <a href="#" class="page-link">3</a>
+                        <a href="#" class="page-link">4</a>
+                        <a href="#" class="page-link">5</a>
+                    </div>-->
+                </div>
+
+
             </div>
+            <p th:if="${products.isEmpty()}">Không tìm thấy sản phẩm phù hợp.</p>
         </div>
-    </div>
-
-
-    </div>
+    </main>
 
     <hr class="brick">
 

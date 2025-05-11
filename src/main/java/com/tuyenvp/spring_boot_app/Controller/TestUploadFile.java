@@ -20,7 +20,7 @@ public class TestUploadFile {
     }
     @PostMapping
     public String save(@RequestParam("file") MultipartFile file){
-        systemStorageServiceImpl.store(file);
+        systemStorageServiceImpl.store(file, "product");
         return "uploadFile";
     }
 }

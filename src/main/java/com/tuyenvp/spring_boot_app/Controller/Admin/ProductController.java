@@ -1,12 +1,13 @@
 package com.tuyenvp.spring_boot_app.Controller.Admin;
 
+import com.tuyenvp.spring_boot_app.Dto.ProductDto;
 import com.tuyenvp.spring_boot_app.Model.Category;
 import com.tuyenvp.spring_boot_app.Model.Product;
-import com.tuyenvp.spring_boot_app.Model.Vendor;
+import com.tuyenvp.spring_boot_app.Model.Specification;
+import com.tuyenvp.spring_boot_app.Repository.DbConnect;
 import com.tuyenvp.spring_boot_app.Services.CategoryService;
 import com.tuyenvp.spring_boot_app.Services.ProductService;
 import com.tuyenvp.spring_boot_app.Services.SystemStorageService;
-import com.tuyenvp.spring_boot_app.Services.VendorService;
 import jakarta.servlet.http.HttpServletResponse;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -21,6 +22,10 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.List;
 import java.util.Optional;
 
@@ -32,9 +37,9 @@ public class ProductController {
     @Autowired
     public CategoryService categoryService;
     @Autowired
-    public VendorService vendorService;
-    @Autowired
     private SystemStorageService systemStorageService;
+    @Autowired
+    private DbConnect DbConnect;
 
 
     @GetMapping("/product")
@@ -61,48 +66,65 @@ public class ProductController {
         Product add_product = new Product();
         model.addAttribute("add_product", add_product);
 
-        List<Category> categories = categoryService.ListCategory();
+        Specification specification = new Specification();
+        model.addAttribute("specification", specification);
+
+        List<Category> categories = categoryService.getAllCategory();
         model.addAttribute("ListCategory", categories);
 
-        List<Vendor> vendors = vendorService.ListVendor();
-        model.addAttribute("ListVendor", vendors);
         return "admin/product/add_product";
     }
     @PostMapping("product/add_product")
     public String save_product(@ModelAttribute("product") Product product,
+                               @ModelAttribute ProductDto productDto,
                                @RequestParam("img") MultipartFile file) {
-        // upload file
-        systemStorageService.store(file);
-        String fileName = file.getOriginalFilename();
-        product.setProduct_img(fileName);
+        // Lưu ảnh vào thư mục
+        if (!file.isEmpty()) {
+            String fileName = file.getOriginalFilename();
+            Path uploadPath = Paths.get("src/main/resources/static/be/img/products");
 
-        productService.addProduct(product);
+            try {
+                Files.copy(file.getInputStream(), uploadPath.resolve(fileName), StandardCopyOption.REPLACE_EXISTING);
+                product.setThumbnail(fileName); // set tên file vào DB
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        if (product.getSpecification() == null) {
+            product.setSpecification(new Specification());
+        }
+        // Lưu vào database
+        //specification.setProduct(product); // Gán quan hệ giữa Specification và Product
+        DbConnect.specificationRepo.save(product.getSpecification());
+        DbConnect.productRepo.save(product);
+        //productService.addProduct(product);
+
         return "redirect:/admin/product";
     }
 
     // sửa sản phẩm
-    @GetMapping("/product/edit_product/{product_id}")
-    public String edit_product(Model model, @ModelAttribute("product_id") Integer product_id) {
-        Optional<Product> product = productService.findProductById(product_id);
+    @GetMapping("/product/edit_product/{productId}")
+    public String edit_product(Model model, @ModelAttribute("productId") Integer productId) {
+        Optional<Product> product = productService.findProductById(productId);
         model.addAttribute("edit_product", product.get());
 
         List<Category> categories = categoryService.ListCategory();
         model.addAttribute("ListCategory", categories);
 
-        List<Vendor> vendors = vendorService.ListVendor();
-        model.addAttribute("ListVendor", vendors);
         return "admin/product/edit_product";
     }
 
     @PostMapping("/product/edit_product")
-    public String update_product(@ModelAttribute("edit_product") Product product, @RequestParam("img") MultipartFile file) {
+    public String update_product(@ModelAttribute("edit_product") Product product,
+                                 @RequestParam("img") MultipartFile file) {
         if(!file.isEmpty()) {
-            systemStorageService.store(file);
+            systemStorageService.store(file, "product");
             String fileName = file.getOriginalFilename();
-            product.setProduct_img(fileName);
+            product.setThumbnail(fileName);
         }else {
-            Product existingProduct = productService.findProductById(product.getProduct_id()).get();
-            product.setProduct_img(existingProduct.getProduct_img());
+            Product existingProduct = productService.findProductById(product.getProductId()).get();
+            product.setThumbnail(existingProduct.getThumbnail());
         }
         productService.updateProduct(product);
         return "redirect:/admin/product";
@@ -132,29 +154,39 @@ public class ProductController {
         headerRow.createCell(0).setCellValue("Mã sản phẩm");
         headerRow.createCell(1).setCellValue("Tên sản phẩm");
         headerRow.createCell(2).setCellValue("Danh mục");
-        headerRow.createCell(3).setCellValue("Nhà cung cấp");
+        //headerRow.createCell(3).setCellValue("Nhà cung cấp");
+        headerRow.createCell(3).setCellValue("Thương hiệu");
         headerRow.createCell(4).setCellValue("Hình ảnh");
         headerRow.createCell(5).setCellValue("Mô tả sản phẩm");
-        headerRow.createCell(6).setCellValue("Giá sản phẩm");
-        headerRow.createCell(7).setCellValue("Tổng số lượng nhập");
+        //headerRow.createCell(6).setCellValue("Giá sản phẩm");
+        //headerRow.createCell(7).setCellValue("Tổng số lượng nhập");
 
         int rowCount = 1;
         for (Product product : products) {
             Row row = sheet.createRow(rowCount++);
-            row.createCell(0).setCellValue(product.getProduct_id());
-            row.createCell(1).setCellValue(product.getProduct_name());
-            row.createCell(2).setCellValue(product.getCategory().getCategory_name());
-            row.createCell(3).setCellValue(product.getVendor().getVendor_name());
-            row.createCell(4).setCellValue(product.getProduct_img());
-            row.createCell(5).setCellValue(product.getProduct_descrip());
-            row.createCell(6).setCellValue(product.getProduct_price());
-            row.createCell(7).setCellValue(product.getProduct_quantity());
+            row.createCell(0).setCellValue(product.getProductId());
+            row.createCell(1).setCellValue(product.getProductName());
+            row.createCell(2).setCellValue(product.getCategory().getCategoryName());
+            //row.createCell(3).setCellValue(product.getBrand().getVendor_name());
+            row.createCell(3).setCellValue(product.getBrand());
+            row.createCell(4).setCellValue(product.getThumbnail());
+            row.createCell(5).setCellValue(product.getProductDescrip());
+            /*row.createCell(6).setCellValue(product.getProduct_price());
+            row.createCell(7).setCellValue(product.getProduct_quantity());*/
         }
 
         workbook.write(response.getOutputStream());
         workbook.close();
     }
 
+
+    // Xu ly trang xem thong tin chi tiet san pham
+    @GetMapping("/product/product_detail/{productId}")
+    public String productDetail(@PathVariable("productId") int productId, Model model) {
+        Product product = productService.getProductById(productId);
+        model.addAttribute("product", product);
+        return "admin/product/product_detail";
+    }
 
 }
 

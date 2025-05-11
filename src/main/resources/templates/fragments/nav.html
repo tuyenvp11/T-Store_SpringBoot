@@ -1,0 +1,136 @@
+<!--
+
+&lt;!&ndash; Container &ndash;&gt;
+<div class="sidebar_slide" th:fragment="sidebar_slide">
+    <div class="row">
+        &lt;!&ndash; Sidebar - Danh mục &ndash;&gt;
+
+        <div class="col-md-2 bg-white p-3 border sidebar">
+            <nav class="navbar navbar-expand-md navbar-light flex-column align-items-start">
+                <h3 class="navbar-brand">
+                    <i class="fa-solid fa-list"></i> Danh mục
+                </h3>
+                <ul class="navbar-nav flex-column w-100" href="/products" th:each="c:${catagories}">
+                    <li class="nav-item active">
+                        <a th:href="@{'/products?category=' + ${c.categoryId}}" class="nav-link d-flex align-items-center">
+                            &lt;!&ndash;<i class="fa-solid fa-mobile-screen-button me-2"></i>&ndash;&gt;
+                            [[${c.categoryName}]]
+                        </a>
+                    </li>
+                </ul>
+                &lt;!&ndash;<li class="nav-item">
+                        <a href="/laptop" class="nav-link d-flex align-items-center">
+                            <i class="fa-solid fa-laptop me-2"></i>
+                            Laptop
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/tablet" class="nav-link d-flex align-items-center">
+                            <i class="fa-solid fa-tablet-screen-button me-2"></i>
+                            Máy tính bảng
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="" class="nav-link d-flex align-items-center">
+                            <i class="fa-solid fa-headphones me-2"></i>
+                            Âm thanh
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link d-flex align-items-center">
+                            <i class="fa-solid fa-house me-2"></i>
+                            Nhà thông minh
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link d-flex align-items-center">
+                            <i class="fa-solid fa-desktop me-2"></i>
+                            PC - Màn hình
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link d-flex align-items-center">
+                            <i class="fa-solid fa-keyboard me-2"></i>
+                            Phụ kiện
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link d-flex align-items-center">
+                            <i class="fa-solid fa-tv me-2"></i>
+                            Ti vi
+                        </a>
+                    </li>&ndash;&gt;
+            </nav>
+        </div>
+
+        &lt;!&ndash; Banner &ndash;&gt;
+        <div class="col-md-10">
+            <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
+                <div class="carousel-indicators">
+                    <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+                    <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
+                    <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
+                </div>
+                <div class="carousel-inner">
+                    <div class="carousel-item active">
+                        <img src="/fe/img/dien-thoai-samsung-galaxy-s24-fe-home-27-9-2024.jpg" class="d-block w-100" alt="...">
+                    </div>
+                    <div class="carousel-item">
+                        <img src="/fe/img/sliding-home-iphone-16-pro-km-moi.jpg" class="d-block w-100" alt="...">
+                    </div>
+                    <div class="carousel-item">
+                        <img src="/fe/img/xiaomi-14t-series-mo-ban-gd2-slide.jpg" class="d-block w-100" alt="...">
+                    </div>
+                </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Next</span>
+                </button>
+            </div>
+
+            &lt;!&ndash; Banners dưới carousel &ndash;&gt;
+            <div class="row mt-3">
+                <div class="col-md-3">
+                    <img src="/fe/img/right-banner-mac-mini-m4.jpg" class="img-fluid" alt="...">
+                </div>
+                <div class="col-md-3">
+                    <img src="/fe/img/camera-365-home.jpg" class="img-fluid" alt="...">
+                </div>
+                <div class="col-md-3">
+                    <img src="/fe/img/samsung-s24-ultra-home-20-11.jpg" class="img-fluid" alt="...">
+                </div>
+                <div class="col-md-3">
+                    <img src="/fe/img/vivo-y19s-16-12.jpg" class="img-fluid" alt="...">
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+-->
+
+
+<nav class="main-nav" th:fragment="nav">
+    <div class="container">
+        <ul class="nav-menu">
+            <li><a href="/products"><i class="bi bi-phone"></i> Điện thoại</a></li>
+            <!--<li><a href="/laptop"><i class="bi bi-laptop"></i> Laptop</a></li>-->
+            <li><a href="/audio"><i class="bi bi-headphones"></i> Âm thanh</a></li>
+            <li><a href="/camera"><i class="bi bi-camera"></i> Camera</a></li>
+            <!--<li><a href="/smart-home"><i class="bi bi-house"></i> Đồ gia dụng</a></li>-->
+            <li><a href="/accessories"><i class="bi bi-plug"></i> Phụ kiện</a></li>
+            <!--<li><a href="/pc-printer"><i class="bi bi-display"></i> PC, Màn hình, Máy in</a></li>-->
+            <!--<li><a href="/tv"><i class="bi bi-tv"></i> Tivi</a></li>-->
+            <li><a href="/trade-in"><i class="bi bi-arrow-repeat"></i> Thu cũ đổi mới</a></li>
+            <li><a href="/used"><i class="bi bi-box"></i> Hàng cũ</a></li>
+            <li><a href="/promotion"><i class="bi bi-percent"></i> Khuyến mãi</a></li>
+            <li><a href="/tech-news"><i class="bi bi-newspaper"></i> Tin công nghệ</a></li>
+        </ul>
+    </div>
+</nav>

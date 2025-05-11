@@ -1,100 +1,81 @@
 package com.tuyenvp.spring_boot_app.Controller;
 
 import com.tuyenvp.spring_boot_app.Config.VNPayConfig;
+import com.tuyenvp.spring_boot_app.Services.OrderService;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.apache.commons.codec.binary.Hex;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.view.RedirectView;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
+
 @Controller
+@RequestMapping("/")
 public class VNPayController {
-    @GetMapping("/payment/vn-pay")
-    public RedirectView createPayment(HttpServletRequest request) throws UnsupportedEncodingException {
-        String vnp_Version = "2.1.0";
-        String vnp_Command = "pay";
-        String orderType = "billpayment";
-        String vnp_TxnRef = UUID.randomUUID().toString(); // Mã giao dịch duy nhất
-        String vnp_IpAddr = VNPayConfig.getIpAddress();
+    @Autowired
+    private VNPayConfig vnPayConfig;
 
-        // Thời gian tạo giao dịch
-        Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("Asia/Ho_Chi_Minh"));
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMddHHmmss");
-        String vnp_CreateDate = formatter.format(calendar.getTime());
+    @Autowired
+    private OrderService orderService;
 
-        // Thời gian hết hạn
-        calendar.add(Calendar.MINUTE, 15);
-        String vnp_ExpireDate = formatter.format(calendar.getTime());
+    /*@PostMapping("/pay-vnpay")
+    public void payWithVNPay(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        long totalAmount = 500000; // ví dụ: 500k (có thể lấy từ giỏ hàng)
+        String orderId = UUID.randomUUID().toString().replace("-", "").substring(0, 8);
+        String orderInfo = "Thanh toán đơn hàng #" + orderId;
 
-        // Thông tin thanh toán
+        String paymentUrl = vnPayConfig.createPaymentUrl(totalAmount, orderInfo, orderId, request);
+        response.sendRedirect(paymentUrl);
+    }
+
+    @GetMapping("/payment-return")
+    public String paymentReturn(HttpServletRequest request, Model model) {
+        Map<String, String[]> fields = request.getParameterMap();
         Map<String, String> vnp_Params = new HashMap<>();
-        vnp_Params.put("vnp_Version", vnp_Version);
-        vnp_Params.put("vnp_Command", vnp_Command);
-        vnp_Params.put("vnp_TmnCode", VNPayConfig.vnp_TmnCode);
-        vnp_Params.put("vnp_Amount", String.valueOf(100000 * 100)); // Giá trị thanh toán (VND x 100)
-        vnp_Params.put("vnp_CurrCode", "VND");
-        vnp_Params.put("vnp_TxnRef", vnp_TxnRef);
-        vnp_Params.put("vnp_OrderInfo", "Thanh toán hóa đơn #" + vnp_TxnRef);
-        vnp_Params.put("vnp_OrderType", orderType);
-        vnp_Params.put("vnp_ReturnUrl", VNPayConfig.vnp_ReturnUrl);
-        vnp_Params.put("vnp_IpAddr", vnp_IpAddr);
-        vnp_Params.put("vnp_CreateDate", vnp_CreateDate);
-        vnp_Params.put("vnp_ExpireDate", vnp_ExpireDate);
 
-        // Tạo URL
-        List<String> fieldList = new ArrayList<>(vnp_Params.keySet());
-        Collections.sort(fieldList);
+        for (Map.Entry<String, String[]> entry : fields.entrySet()) {
+            vnp_Params.put(entry.getKey(), entry.getValue()[0]);
+        }
+
+        String vnp_SecureHash = vnp_Params.remove("vnp_SecureHash");
+        List<String> fieldNames = new ArrayList<>(vnp_Params.keySet());
+        Collections.sort(fieldNames);
+
         StringBuilder hashData = new StringBuilder();
-        StringBuilder query = new StringBuilder();
+        for (String name : fieldNames) {
+            String value = vnp_Params.get(name);
+            if (hashData.length() > 0) hashData.append('&');
+            hashData.append(name).append('=').append(value);
+        }
 
-        for (String fieldName : fieldList) {
-            String fieldValue = vnp_Params.get(fieldName);
-            if ((fieldValue != null) && (fieldValue.length() > 0)) {
-                hashData.append(fieldName).append('=').append(URLEncoder.encode(fieldValue, "UTF-8")).append('&');
-                query.append(fieldName).append('=').append(URLEncoder.encode(fieldValue, "UTF-8")).append('&');
+        String secureHash = vnPayConfig.hmacSHA512(VNPayConfig.vnp_HashSecret, hashData.toString());
+
+        if (secureHash.equals(vnp_SecureHash)) {
+            String responseCode = vnp_Params.get("vnp_ResponseCode");
+            if ("00".equals(responseCode)) {
+                // ✅ Thanh toán thành công → tạo đơn hàng
+                orderService.createOrderAfterPayment(vnp_Params.get("vnp_TxnRef"));
+                model.addAttribute("message", "Thanh toán thành công và đã tạo đơn hàng!");
+            } else {
+                model.addAttribute("message", "Thanh toán thất bại. Mã lỗi: " + responseCode);
             }
-        }
-
-        String queryUrl = query.substring(0, query.length() - 1);
-        String vnp_SecureHash = VNPayConfig.vnp_HashSecret; // Tạo hash từ secret key
-        hashData.deleteCharAt(hashData.length() - 1); // Xóa ký tự `&` cuối
-
-        vnp_SecureHash = HmacSHA256(VNPayConfig.vnp_HashSecret, hashData.toString()); // Tạo mã hóa SHA256
-        queryUrl += "&vnp_SecureHash=" + vnp_SecureHash;
-
-        return new RedirectView(VNPayConfig.vnp_Url + "?" + queryUrl);
-    }
-
-    @GetMapping("/payment/vnpay-return")
-    public String vnpayReturn(HttpServletRequest request, Model model) {
-        Map<String, String[]> paramMap = request.getParameterMap();
-        String vnp_ResponseCode = paramMap.get("vnp_ResponseCode")[0];
-        if ("00".equals(vnp_ResponseCode)) {
-            model.addAttribute("message", "Thanh toán thành công!");
         } else {
-            model.addAttribute("message", "Thanh toán không thành công!");
+            model.addAttribute("message", "Sai chữ ký! Giao dịch bị từ chối.");
         }
-        return "user/payment-status";
-    }
 
-    // Hàm mã hóa SHA256
-    private String HmacSHA256(String key, String data) {
-        try {
-            SecretKeySpec secretKeySpec = new SecretKeySpec(key.getBytes(), "HmacSHA256");
-            Mac mac = Mac.getInstance("HmacSHA256");
-            mac.init(secretKeySpec);
-            byte[] result = mac.doFinal(data.getBytes());
-            return Hex.encodeHexString(result);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
+        return "payment-result"; // file .html hiển thị kết quả
+    }*/
 }

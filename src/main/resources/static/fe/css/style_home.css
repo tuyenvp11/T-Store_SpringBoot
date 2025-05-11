@@ -13,11 +13,13 @@
 	color: red;
 }
 
+
+
 /* Header */
-header {
+/*header {
 	position: sticky;
 	top: 0;
-	z-index: 999; /* Ensure the header is on top of other elements */
+	z-index: 999; !* Ensure the header is on top of other elements *!
 	box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 	width: 100%;
 	padding-bottom: 20px;
@@ -37,7 +39,7 @@ header a {
 	font-weight: 500;
 }
 header a:hover {
-	/*color: #ffc107;*/
+	!*color: #ffc107;*!
 	color: #f8f9fa;
 }
 
@@ -49,7 +51,7 @@ footer a {
 header a:hover,
 footer a:hover {
 	text-decoration: underline;
-}
+}*/
 
 
 

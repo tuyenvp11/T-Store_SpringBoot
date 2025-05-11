@@ -1,24 +1,17 @@
 package com.tuyenvp.spring_boot_app.Controller.Admin;
 
 import com.tuyenvp.spring_boot_app.Model.UserDtls;
-import com.tuyenvp.spring_boot_app.Services.OrderService;
-import com.tuyenvp.spring_boot_app.Services.UserService;
+import com.tuyenvp.spring_boot_app.Services.*;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 public class AdminController {
@@ -29,19 +22,25 @@ public class AdminController {
     @Autowired
     private OrderService orderService;
 
+    @Autowired
+    private ProductService productService;
+
+    @Autowired
+    private CategoryService categoryService;
+
+    @Autowired
+    private StatisticService statisticService;
+
     @RequestMapping("/admin")
     public String admin(Model model) {
-        model.addAttribute("totalRevenue", orderService.getTotalRevenue());
+        model.addAttribute("totalUsers", userService.getTotalUsers());
+        model.addAttribute("totalCategory", categoryService.getTotalCategory());
+        model.addAttribute("totalProduct", productService.getTotalProducts());
+        model.addAttribute("totalOrder", orderService.getTotalOrders());
         return "admin/index_admin";
     }
 
-    @GetMapping("/login_admin")
-    public String login_admin(Model model) {
-        return "admin/login_admin";
-    }
-
-
-    @GetMapping("/customer")
+    @GetMapping("/account")
     public String getAllUsers(Model model, @RequestParam Integer type) {
         List<UserDtls> users = null;
         if (type == 1) {
@@ -51,40 +50,30 @@ public class AdminController {
         }
         model.addAttribute("userType",type);
         model.addAttribute("users", users);
-        return "/admin/customer";
-    }
-
-    @GetMapping("/register_admin")
-    public String addAdmin(Model model) {
-        return "/admin/register_admin";
-    }
-
-    @PostMapping("/save_admin")
-    public String saveAdmin(@ModelAttribute UserDtls user, @RequestParam("img") MultipartFile file, HttpSession session)
-            throws IOException {
-
-        String imageName = file.isEmpty() ? "default.jpg" : file.getOriginalFilename();
-        user.setProfileImage(imageName);
-        UserDtls saveUser = userService.saveAdmin(user);
-
-        if (!ObjectUtils.isEmpty(saveUser)) {
-            if (!file.isEmpty()) {
-                File saveFile = new ClassPathResource("static/be/img").getFile();
-
-                Path path = Paths.get(saveFile.getAbsolutePath() + File.separator + "profile_img" + File.separator
-                        + file.getOriginalFilename());
-
-//				System.out.println(path);
-                Files.copy(file.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
-            }
-            session.setAttribute("succMsg", "Đăng ký thành công");
-        } else {
-            session.setAttribute("errorMsg", "Có lỗi gì đó xảy ra trên server");
-        }
-
-        return "/admin/login_admin";
+        return "admin/account";
     }
 
 
+    @GetMapping("/admin")
+    public String showRevenueChart(Model model) {
+
+        Map<String, Double> revenueByMonth = statisticService.getMonthlyRevenue();
+        List<Object[]> topProducts = statisticService.getTopSellingProducts(5);
+
+        model.addAttribute("months", revenueByMonth.keySet());
+        model.addAttribute("revenues", revenueByMonth.values());
+
+        List<String> productNames = topProducts.stream().map(row -> (String) row[0]).toList();
+        List<Long> quantities = topProducts.stream().map(row -> ((Number) row[1]).longValue()).toList();
+
+        model.addAttribute("topProductNames", productNames);
+        model.addAttribute("topProductQuantities", quantities);
+
+        model.addAttribute("productCount", statisticService.getProductCount());
+        model.addAttribute("orderCount", statisticService.getOrderCount());
+        model.addAttribute("userCount", statisticService.getUserCount());
+
+        return "/admin/index_admin";
+    }
 
 }

@@ -5,76 +5,140 @@
 <div th:replace="/fragments/head :: head"></div>
 <!-- End Head -->
 
+
+
 <body>
 <!-- Start Navbar  -->
 <div th:replace="/fragments/header :: header"></div>
 <!-- End Navbar -->
 
+<!-- Start nav -->
+<div th:replace="fragments/nav :: nav"></div>
+<!-- End nav -->
+
+<div th:replace="fragments/breadcrumb :: breadcrumb"></div>
+
 <!-- Content container -->
 <section>
-    <div class="container-fluid mt-5 p-5">
-        <div th:if="${carts.size() == 0}" class="d-flex flex-column justify-content-center align-items-center">
+
+<main class="main-content">
+    <th:block th:if="${user == null}">
+        <div class="d-flex flex-column justify-content-center align-items-center">
             <h6>Bạn cần đăng nhập để thêm vào giỏ hàng <a href="/login" class="text-primary">Đăng nhập</a></h6>
         </div>
+    </th:block>
 
-        <div class="card card-sh" th:if="${carts.size() > 0}">
-            <div class="card-header text-center">
-                <p class="fs-4">Giỏ hàng</p>
-                <th:block th:if="${session.succMsg}">
-                    <p class="text-success fw-bold">[[${session.succMsg}]]</p>
-                    <th:block th:text="${@commnServiceImpl.removeSessionMessage()}"></th:block>
-                </th:block>
+    <th:block th:if="${user != null}">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8">
+                    <div class="cart-container">
+                        <div class="cart-header">
+                            <h2 class="cart-title">Giỏ hàng của bạn</h2>
+                            <!--<span class="cartCount">.. sản phẩm</span>-->
+                        </div>
+                        <th:block th:if="${session.succMsg}">
+                            <p class="text-success alert alert-success text-center" role="alert">[[${session.succMsg}]]</p>
+                            <th:block th:text="${@commnServiceImpl.removeSessionMessage()}"></th:block>
+                        </th:block>
 
-                <th:block th:if="${session.errorMsg}">
-                    <p class="text-danger fw-bold">[[${session.errorMsg}]]</p>
-                    <th:block th:text="${@commnServiceImpl.removeSessionMessage()}"></th:block>
-                </th:block>
-            </div>
-            <div class="card-body">
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th scope="col">STT</th>
-                            <th scope="col">Hình ảnh</th>
-                            <th scope="col">Tên sản phẩm</th>
-                            <th scope="col">Đơn giá</th>
-                            <th scope="col" class="text-center">Số lượng</th>
-                            <th scope="col">Thành tiền</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr th:each="cart, c:${carts}">
-                            <th scope="row">[[${c.count}]]</th>
-                            <td>
-                                <img th:src="@{'/be/img/products/' + ${cart.product.product_img}}"
-                                     width="60px" height="80px">
-                            </td>
-                            <td th:text="${cart.product.product_name ?: 'không xác định'}"></td>
-                            <td th:text="${@formatUtils.formatCurrency(cart.product.product_price) ?: 0}"></td>
-                            <td class="text-center"><a
-                                    th:href="@{'/user/cartQuantityUpdate?sy=de&cid='+${cart.cart_id}}">
-                                <i class="fa-solid fa-minus"></i>
-                                </a> [ [[${cart.quantity}]] ] <a
-                                        th:href="@{'/user/cartQuantityUpdate?sy=in&cid='+${cart.cart_id}}">
-                                    <i class="fa-solid fa-plus"></i>
-                                </a>
-                            </td>
-                            <td th:text="${@formatUtils.formatCurrency(cart.totalPrice) != null ? @formatUtils.formatCurrency(cart.totalPrice) : '0.00'}"></td>
-                        </tr>
-                        <tr>
-                            <td colspan="4"></td>
-                            <td class="fw-bold">Tổng tiền</td>
-                            <td class="fw-bold">[[${@formatUtils.formatCurrency(totalOrderPrice)}]]</td>
-                        </tr>
-                    </tbody>
-                </table>
-                <div class="text-center">
-                    <a href="/user/orders" class="btn btn-warning"> Tiến hành thanh toán</a>
+                        <th:block th:if="${session.errorMsg}">
+                            <p class="text-danger text-center  alert alert-danger">[[${session.errorMsg}]]</p>
+                            <th:block th:text="${@commnServiceImpl.removeSessionMessage()}"></th:block>
+                        </th:block>
+                        <div class="cart-items" th:if="${!carts.isEmpty()}">
+                            <div class="cart-item" th:each="cart : ${carts}">
+                                <!-- Ảnh sản phẩm -->
+                                <img th:src="@{'/be/img/products/' + ${cart.productVariant.productImg}}"
+                                     alt="Ảnh sản phẩm" class="cart-item-image">
+
+                                <!-- Thông tin sản phẩm -->
+                                <div class="cart-item-details">
+                                    <h6 th:text="${cart.productVariant.product.productName}">Tên sản phẩm</h6>
+                                    <p class="cart-item-price"
+                                       th:text="${@formatUtils.formatCurrency(cart.productVariant.sellPrice)}">
+                                    </p>
+                                    <p class="cart-item-old-price"
+                                       th:text="${@formatUtils.formatCurrency(cart.productVariant.product.originalPrice)}">
+                                    </p>
+                                </div>
+
+                                <!-- Số lượng -->
+                                <div class="cart-item-quantity">
+                                    <button class="quantity-btn">
+                                        <a th:href="@{'/user/cartQuantityUpdate?sy=de&cid='+${cart.cart_id}}">
+                                            <i class="fa-solid fa-minus"></i>
+                                        </a>
+                                    </button>
+                                        <input class="quantity-input" type="text" th:value="${cart.quantity}" min="1" readonly>
+                                    <button class="quantity-btn">
+                                        <a th:href="@{'/user/cartQuantityUpdate?sy=in&cid='+${cart.cart_id}}">
+                                            <i class="fa-solid fa-plus"></i>
+                                        </a>
+                                    </button>
+                                </div>
+
+                                <!-- Xoá sản phẩm -->
+                                <form th:action="@{/user/carts/remove}" method="post" style="margin-left: 10px;">
+                                    <input type="hidden" name="cartId" th:value="${cart.cart_id}">
+                                    <button type="submit" class="cart-item-remove">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+
+                        <div style="font-size: 16px; display: flex; margin-top: 20px;" th:if="${carts.isEmpty()}">
+                            <p>Bạn không có sản phẩm nào trong giỏ hàng!</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-4">
+                    <div class="cart-summary">
+                        <h2 class="cart-title">Tổng tiền giỏ hàng</h2>
+                        <div class="summary-row">
+                            <span>Tạm tính</span>
+                            <span class="totalPrice" th:text="${@formatUtils.formatCurrency(totalPrice)}"></span>
+                        </div>
+
+                        <form action="/user/carts/applyDiscount" method="post" class="d-flex align-items-center gap-2 mb-3">
+                            <label for="code" class="me-2">Mã giảm giá:</label>
+                            <input class="form-control form-control-sm w-auto" type="text" id="code" name="code" placeholder="Nhập mã giảm giá" required>
+                            <button type="submit" class="btn btn-sm btn-primary">Áp dụng</button>
+                        </form>
+
+                        <!-- Hiển thị kết quả giảm giá -->
+                        <div th:if="${discountValue != null}">
+                            <p class="d-flex align-items-center gap-2">Mã giảm giá
+                                    <strong th:text="${@formatUtils.formatCurrency(discountValue)}"></strong> đã được áp dụng!
+                                    <span th:text="${@formatUtils.formatCurrency(discountValue)}"></span>
+                            </p>
+                            <form action="/user/carts/removeDiscount" method="post" class="d-inline">
+                                <button type="submit" class="btn btn-sm" style="background-color: #D70018; color: white;">Hủy mã</button>
+                            </form>
+                        </div>
+                        <div class="summary-row summary-total">
+                            <span>Tổng cộng</span>
+                            <span class="total" th:text="${@formatUtils.formatCurrency(totalOrderPrice)}"></span>
+                        </div>
+                        <button class="checkout-btn" th:if="${#lists.size(carts) > 0}">
+                            <a href="/user/orders" class="text-white text-decoration-none">
+                                <i class="fa-solid fa-credit-card"></i>TIẾN HÀNH ĐẶT HÀNG
+                            </a>
+                        </button>
+
+                        <!-- Nếu không có sản phẩm thì hiển thị cảnh báo -->
+                        <div class="alert alert-warning mt-3" th:if="${#lists.isEmpty(carts)}">
+                            Giỏ hàng của bạn đang trống. Vui lòng thêm sản phẩm trước khi đặt hàng.
+                        </div>
+                    </div>
                 </div>
             </div>
-
         </div>
-    </div>
+    </th:block>
+
+</main>
 
 </section>
 
@@ -88,7 +152,9 @@
 <!-- Jquery Validation Library  -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.js}"></script>
+<!--
 <script type="text/javascript" th:src="@{fe/js/script.js}"></script>
+-->
 <!-- End  -->
 <script
         src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"

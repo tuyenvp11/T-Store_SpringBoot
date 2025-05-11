@@ -10,116 +10,141 @@
 <div th:replace="/fragments/header :: header"></div>
 <!-- End Navbar -->
 
+<!-- Start nav -->
+<div th:replace="fragments/nav :: nav"></div>
+<!-- End nav -->
+
+<div th:replace="fragments/breadcrumb :: breadcrumb"></div>
+
 <!-- Content container -->
 <section>
-    <div class="container mt-5 p-5">
-        <form action="/user/save-order" method="post" id="orders" novalidate>
-            <div class="row">
-                <div class="col-md-6">
-                    <div class="mb-3 row">
-                        <p class="text-center fs-4">Địa chỉ nhận hàng</p>
-                        <hr>
-                        <div class="col p-1">
-                            <label>Họ</label>
-                            <input type="text" name="firstName" required class="form-control mt-1">
-                        </div>
-                        <div class="col p-1">
-                            <label>Tên</label>
-                            <input type="text" name="lastName" required class="form-control mt-1">
-                        </div>
-                    </div>
+    <th:block th:if="${user == null}">
+        <div class="d-flex flex-column justify-content-center align-items-center">
+            <h6>Bạn cần đăng nhập để thêm vào giỏ hàng <a href="/login" class="text-primary">Đăng nhập</a></h6>
+        </div>
+    </th:block>
 
-                    <div class="mb-3 row">
-                        <div class="col p-1">
-                            <label>Email</label>
-                            <input type="email" name="email" required class="form-control col">
-                        </div>
-                        <div class="col p-1">
-                            <label>Số điện thoại</label>
-                            <input type="text" name="phone" required class="form-control col ms-2">
-                        </div>
-                    </div>
+    <th:block th:if="${user != null}">
+    <main class="main-content">
+        <div class="container">
+            <form th:action="@{/user/checkout}" method="post">
+                <div class="row">
+                    <div class="col-lg-8">
+                        <div class="checkout-container">
+                            <h1 class="checkout-title">Thông tin thanh toán</h1>
 
-                    <div class="mb-3 row">
-                        <div class="col p-1">
-                            <label>Tỉnh/thành phố</label>
-                            <input type="text" name="province" required class="form-control col">
-                        </div>
-                        <div class="col p-1">
-                            <label>Huyện/quận</label>
-                            <input type="text" name="district" required class="form-control col ms-2">
-                        </div>
-                    </div>
-                    <div class="mb-3 row">
-                        <div class="col p-1">
-                            <label>Xã/phường</label>
-                            <input type="text" name="commune" required class="form-control col">
-                        </div>
-                        <div class="col p-1">
-                            <label>Số nhà</label>
-                            <input type="text" name="address" required class="form-control col ms-2">
-                        </div>
-                    </div>
-                    <!-- </form> -->
+                                <div class="address-list">
+                                    <h6>Chọn địa chỉ giao hàng:</h6>
+                                    <div class="address-grid">
+                                        <div class="address-card-checkout" th:each="address : ${addresses}">
+                                            <label class="address-option">
+                                                <input type="radio" name="selectedAddress" th:value="${address.addressId}"
+                                                       th:checked="${address.default == true}" />
+                                                <div class="address-content">
+                                                    <div class="address-header">
+                                                        <strong th:text="${address.type}">Nhà riêng</strong>
+                                                        <span th:if="${address.default == true}" class="badge default">Mặc định</span>
+                                                        <span th:if="${address.default == false}" class="badge secondary">Phụ</span>
+                                                    </div>
+                                                    <div class="receiver-info">
+                                                        <span th:text="${address.receiverName}">Tên người nhận</span> |
+                                                        <span th:text="${address.receiverPhone}">SĐT</span>
+                                                    </div>
+                                                    <div class="full-address" th:text="${address.fullAddress}">Địa chỉ chi tiết</div>
+                                                    <div class="address-actions" th:if="${address.default == false}">
+                                                        <a th:href="@{/user/profile/set-default/{addressId}(addressId=${address.addressId})}"
+                                                           class="set-default-link">Đặt làm mặc định</a>
+                                                    </div>
+                                                </div>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
 
-                </div>
-                <div class="col-md-6">
-                    <p class="text-center fs-4">Phương thức thanh toán</p>
-                    <hr>
-                    <div class="card">
-                        <div class="card-body">
-                            <table class="table table-borderless">
-                                <tbody>
-                                <tr>
-                                    <td>Tổng tiền</td>
-                                    <td>:</td>
-                                    <td>[[${@formatUtils.formatCurrency(orderPrice)}]]</td>
-                                </tr>
-                                <tr>
-                                    <td>Phí vận chuyển</td>
-                                    <td>:</td>
-                                    <td>30000 đ</td>
-                                </tr>
+                            <div class="form-group">
+                                <label>Phương thức thanh toán</label>
+                                <div class="payment-methods">
+                                    <label class="payment-method">
+                                        <input type="radio" name="paymentMethod" value="cod" checked>
+                                        <div class="payment-method-details">
+                                            <div class="payment-method-title">Thanh toán khi nhận hàng (COD)</div>
+                                            <div class="payment-method-description">Thanh toán bằng tiền mặt khi nhận hàng</div>
+                                        </div>
+                                    </label>
 
-                                <tr>
-                                    <td>Thuế</td>
-                                    <td>:</td>
-                                    <td>10000 đ</td>
-                                </tr>
+                                    <label class="payment-method">
+                                        <input type="radio" name="paymentMethod" value="bank">
+                                        <div class="payment-method-details">
+                                            <div class="payment-method-title">Thanh toán qua ngân hàng</div>
+                                            <div class="payment-method-description">Quét mã QR để thanh toán</div>
+                                        </div>
+                                    </label>
 
-                                <tr class="border-top">
-                                    <td>Thanh toán</td>
-                                    <td>:</td>
-                                    <td>[[${@formatUtils.formatCurrency(totalOrderPrice)}]]</td>
-                                </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-
-                    <div class="card shadow p-3 mb-5 mt-2 bg-body-tertiary rounded">
-
-                        <div class="card-body">
-                            <!-- <form action="/login" method="post"> -->
-                            <div class="mb-3">
-                                <label class="form-label">Phương thức thanh toán</label>
-                                <select required name="paymentType" class="form-control">
-                                    <option value="">--Lựa chọn--</option>
-                                    <option value="COD">Thanh toán khi nhận hàng</option>
-                                    <option value="ONLINE">Thanh toán trực tuyến</option>
-                                </select>
-                                <a href="/payment/vn-pay" class="btn btn-primary">Thanh toán bằng VNPay</a>
+                                    <!--<label class="payment-method">
+                                        <input type="radio" name="paymentMethod" value="vnpay">
+                                        <div class="payment-method-details">
+                                            <div class="payment-method-title">Thanh toán qua VNPay</div>
+                                            <div class="payment-method-description">Quét mã QR để thanh toán</div>
+                                        </div>
+                                    </label>-->
+                                </div>
                             </div>
 
-                            <button class="btn bg-primary text-white col-md-12">Đặt hàng</button>
+
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4">
+                        <div class="checkout-container">
+                            <h2 class="checkout-title">Đơn hàng của bạn</h2>
+
+                            <div class="order-summary">
+                                <div id="order-items" th:each="cart : ${carts}">
+                                    <!-- Order items will be added dynamically -->
+                                    <div class="order-item">
+                                        <img th:src="@{'/be/img/products/' + ${cart.productVariant.productImg}}" alt="Ảnh sản phẩm">
+                                        <div class="order-item-details">
+                                            <h6 th:text="${cart.productVariant.product.productName}"></h6>
+                                            <p th:text="${@formatUtils.formatCurrency(cart.productVariant.sellPrice)}"></p>
+                                            <p>Số lượng: <span th:text="${cart.quantity}"></span></p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="summary-row">
+                                    <span>Tạm tính</span>
+                                    <span class="totalPrice" th:text="${@formatUtils.formatCurrency(totalPrice)}"></span>
+                                </div>
+
+                                <div class="summary-row">
+                                    <span>Giảm giá</span>
+                                    <span th:text="${@formatUtils.formatCurrency(discountValue)}"></span>
+                                </div>
+
+                                <div class="summary-row">
+                                    <span>Phí vận chuyển</span>
+                                    <span id="shipping">Miễn phí</span>
+                                </div>
+
+                                <div class="summary-row summary-total">
+                                    <span>Tổng cộng</span>
+                                    <span class="total" th:text="${@formatUtils.formatCurrency(totalOrderPrice)}"></span>
+                                </div>
+                            </div>
+
+                            <button type="submit" class="place-order-btn">
+                                ĐẶT HÀNG
+                            </button>
 
                         </div>
                     </div>
                 </div>
 
-            </div>
-        </form>
-    </div>
+
+            </form>
+        </div>
+    </main>
+    </th:block>
 
 </section>
 
@@ -128,6 +153,30 @@
 <!-- Start Footer -->
 <div th:replace="/fragments/footer :: footer"></div>
 <!-- End Footer  -->
+
+<!-- xu ly lua chon phuong thuc thanh toan -->
+<script>
+    document.querySelectorAll('.payment-method').forEach(item => {
+        item.addEventListener('click', () => {
+            document.getElementById('paymentMethodInput').value = item.getAttribute('data-method');
+
+            // Optional: highlight chọn
+            document.querySelectorAll('.payment-method').forEach(el => el.classList.remove('selected'));
+            item.classList.add('selected');
+        });
+    });
+
+    /*function toggleQRCode() {
+        const qrContainer = document.getElementById("qrCodeContainer");
+        const selected = document.querySelector('input[name="paymentMethod"]:checked').value;
+        if (selected === "bank") {
+            qrContainer.style.display = "block";
+        } else {
+            qrContainer.style.display = "none";
+        }
+    }*/
+</script>
+
 
 
 <!-- Jquery Validation Library  -->

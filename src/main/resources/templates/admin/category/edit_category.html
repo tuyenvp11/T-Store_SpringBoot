@@ -15,23 +15,35 @@
     <div id="layoutSidenav_content">
         <main>
             <div class="container-fluid px-4">
-                <h1 class="mt-4">Sửa danh mục</h1>
+                <h6 class="mt-4">Sửa danh mục</h6>
 
                 <div class="card mb-4">
-                    <!--<div class="card-header">
-                        <i class="fas fa-table me-1"></i>
-                        Sản phẩm
-                    </div>-->
+
                     <div class="card-body">
-                        <form role="form" method="post" th:action="@{/admin/category/edit_category}" th:object="${edit_category}">
-                            <input type="hidden" class="form-control" id="productId" th:field="*{category_id}">
-                            <div class="form-group">
-                                <label>Danh mục</label>
-                                <input type="text" class="form-control"  th:field="*{category_name}">
-                                <!--<div th:if="${#fields.hasErrors('nameCategory')}" th:errors="*{category_name}" class="alert alert-danger"></div>-->
+                        <form role="form" method="post" th:action="@{/admin/category/edit_category}" th:object="${edit_category}" enctype="multipart/form-data">
+                            <input type="hidden" class="form-control" id="productId" th:field="*{categoryId}">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Danh mục</label>
+                                        <input type="text" class="form-control"  th:field="*{categoryName}">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="iconCategory">Icon danh mục</label>
+                                        <input type="file" class="form-control" id="iconCategory" name="img">
+                                        <input type="hidden" th:field="*{iconUrl}" th:value="*{iconUrl}"/>
+                                        <p>Icon danh mục hiện tại: <span th:text="*{iconUrl}"></span></p>
+                                    </div>
+                                </div>
                             </div>
 
-                            <button type="submit" class="btn btn-primary">Cập nhật</button>
+                            <div class="text-end mt-3">
+                                <button type="submit" class="btn btn-primary">
+                                    Cập nhật
+                                </button>
+                            </div>
                         </form>
                     </div>
                 </div>
@@ -53,7 +65,7 @@
         </footer>
     </div>
 </div>
-<script th:src="@{https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js}" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
 
 </body>
 </html>

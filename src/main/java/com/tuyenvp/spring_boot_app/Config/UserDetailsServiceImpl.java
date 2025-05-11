@@ -12,12 +12,12 @@ import org.springframework.stereotype.Service;
 public class UserDetailsServiceImpl implements UserDetailsService {
 
 	@Autowired
-	private UserRepo userRepository;
+	private UserRepo userRepo;
 
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
-		UserDtls user = userRepository.findByEmail(username);
+		UserDtls user = userRepo.findByEmail(username);
 
 		if (user == null) {
 			throw new UsernameNotFoundException("Người dùng không được tìm thấy");

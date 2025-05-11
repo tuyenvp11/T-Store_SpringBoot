@@ -23,17 +23,16 @@
                 </a>
                 <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
                     <nav class="sb-sidenav-menu-nested nav">
-                        <a class="nav-link" th:href="@{/admin/product}">Quản lý sản phẩm</a>
-                        <a class="nav-link" th:href="@{/admin/product_variant}">Chi tiết sản phẩm</a>
+                        <a class="nav-link" th:href="@{/admin/product}">Thông tin sản phẩm</a>
+                        <a class="nav-link" th:href="@{/admin/product_variant}">Kho sản phẩm</a>
                         <a class="nav-link" th:href="@{/admin/color_product}">Màu sản phẩm</a>
-                        <a class="nav-link" th:href="@{/admin/size_product}">Dung lượng sản phẩm</a>
                     </nav>
                 </div>
 
-                <!-- Quản lý nhà cung cấp -->
-                <a class="nav-link" th:href="@{/admin/vendor}">
-                    <div class="sb-nav-link-icon"><i class="fa-solid fa-handshake"></i></div>
-                    Quản lý nhà cung cấp
+                <!-- Quản lý giam gia -->
+                <a class="nav-link" th:href="@{/admin/discount}">
+                    <div class="sb-nav-link-icon"><i class="fa-solid fa-tags"></i></div>
+                    Quản lý giảm giá
                 </a>
 
                 <!-- Quản lý đơn hàng -->
@@ -43,7 +42,7 @@
                 </a>
 
                 <!-- Quản lý người dùng -->
-                <a class="nav-link" th:href="@{/admin/customer}">
+                <a class="nav-link" th:href="@{/admin/account}">
                     <div class="sb-nav-link-icon"><i class="fa-solid fa-users"></i></div>
                     Quản lý tài khoản
                 </a>
@@ -54,11 +53,11 @@
                     Thống kê
                 </a>
 
-                <div class="sb-sidenav-menu-heading">Tài khoản</div>
-                <a class="nav-link" th:href="@{/admin/add_admin}">
+                <!--<div class="sb-sidenav-menu-heading">Tài khoản</div>
+                <a class="nav-link" th:href="@{/admin/register_admin}">
                     <div class="sb-nav-link-icon"><i class="fa-solid fa-right-to-bracket"> </i></div>
                     Đăng ký tài khoản
-                </a>
+                </a>-->
                 <!--<div class="collapse" id="collapsePages" aria-labelledby="headingTwo" data-bs-parent="#sidenavAccordion">
                     <nav class="sb-sidenav-menu-nested nav accordion" id="sidenavAccordionPages">
                         <a class="nav-link collapsed" href="" data-bs-toggle="collapse" data-bs-target="#pagesCollapseAuth" aria-expanded="false" aria-controls="pagesCollapseAuth">

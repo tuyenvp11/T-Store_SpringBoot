@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<!-- Start Head -->
+<div th:replace="fragments/head :: head"></div>
+<!-- End Head -->
+<body>
+
+<!-- Start Navbar  -->
+<div th:replace="fragments/header :: header"></div>
+<!-- End Navbar -->
+
+<!-- Start nav -->
+<div th:replace="fragments/nav :: nav"></div>
+<!-- End nav -->
+
+<div th:replace="fragments/breadcrumb :: breadcrumb"></div>
+
+<main class="main-content">
+    <div class="container">
+        <div class="row">
+
+            <div class="col-lg-12">
+                <div class="products-container">
+                    <div class="products-item" th:each="product : ${productCat}">
+                        <a class="link-products" th:href="@{'/detail_product/' + ${product.productId}}">
+                            <img th:src="@{'/be/img/products/'+${product.thumbnail}}" alt="product">
+                            <h3 th:text="${product.productName}"></h3>
+                            <div class="price">
+                                <span class="current-price" th:text="${@formatUtils.formatCurrency(product.price)}"></span>
+                                <span class="original-price" th:text="${@formatUtils.formatCurrency(product.originalPrice)}"></span>
+                            </div>
+                        </a>
+                        <div class="promotion">
+                            T-Student giảm thêm đến <span class="highlight">600.000đ</span>
+                        </div>
+                        <div class="installment-info">
+                            Không phí chuyển đổi khi trả góp 0% qua thẻ tín dụng
+                        </div>
+                        <div class="rating">
+                            <div class="stars">★★★★★</div>
+                            <button class="favorite">Yêu thích ♡</button>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="pagination">
+                    <a href="#" class="page-link active">1</a>
+                    <a href="#" class="page-link">2</a>
+                    <a href="#" class="page-link">3</a>
+                    <a href="#" class="page-link">4</a>
+                    <a href="#" class="page-link">5</a>
+                </div>
+            </div>
+
+
+        </div>
+        <p th:if="${products.isEmpty()}">Không tìm thấy sản phẩm phù hợp.</p>
+    </div>
+</main>
+
+<hr class="brick">
+
+<!-- Start Footer -->
+<div th:replace="fragments/footer :: footer"></div>
+<!-- End Footer  -->
+
+<!-- Jquery Validation Library  -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.js}"></script>
+<script type="text/javascript" th:src="@{fe/js/script.js}"></script>
+<!-- End  -->
+<script
+        src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous">
+</script>
+</body>
+</html>

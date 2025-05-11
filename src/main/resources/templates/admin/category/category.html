@@ -15,15 +15,16 @@
     <div id="layoutSidenav_content">
         <main>
             <div class="container-fluid px-4">
-                <h1 class="mt-4">Quản lý danh mục</h1>
+                <h4 class="mt-4">Quản lý danh mục</h4>
+
 
                 <div class="card mb-4">
                     <div class="card-header">
                         <i class="fas fa-table me-1"></i>
-                        Bảng danh mục
+                        Danh sách danh mục
                     </div>
 
-                    <form class="d-none d-md-inline-block form-inline ms-auto me-0 me-md-3 mt-2" th:action="@{/admin/category}">
+                    <form class="d-none d-md-inline-block form-inline ms-auto me-0 me-md-3 mt-2" style="font-size: 13px" th:action="@{/admin/category}">
                         <div class="input-group">
                             <input class="form-control" name="keyword" type="text" placeholder="Tìm kiếm..."  th:value="${keyword}"/>
                             <button class="btn btn-primary" type="submit"><i class="fas fa-search"></i></button>
@@ -36,9 +37,10 @@
                                 <tr>
                                     <th>Mã danh mục</th>
                                     <th>Tên danh mục</th>
+                                    <th>Icon danh mục</th>
                                     <th>
-                                        <a th:href="@{category/add_category}" class="btn btn-success" style="padding: 5px 10px; font-size: 14px;">
-                                            <i class="fa-solid fa-square-plus"></i> Thêm danh mục
+                                        <a th:href="@{category/add_category}" class="btn btn-success" style="padding: 5px 10px; font-size: 13px;">
+                                            <i class="fa-solid fa-square-plus"></i> Thêm
                                         </a>
                                     </th>
                                 </tr>
@@ -46,14 +48,18 @@
 
                             <tbody>
                                 <tr th:each="category : ${ListCategory}">
-                                    <td th:text="${category.id}"></td>
-                                    <td th:text="${category.category_name}"></td>
+                                    <td th:text="${category.categoryId}"></td>
+                                    <td th:text="${category.categoryName}"></td>
                                     <td>
-                                        <a th:href="@{/admin/category/edit_category/{id}(id=${category.id})}"
+                                        <img th:src="@{'/be/img/categorys/' + ${category.iconUrl}}" alt="Category Icon" width="25px" height="25px">
+                                    </td>
+                                    <td>
+                                        <a th:href="@{/admin/category/edit_category/{id}(id=${category.categoryId})}"
                                            class="btn btn-warning" style="padding: 5px 10px; font-size: 10px;">
                                                 <i class="fa-solid fa-pen-to-square"></i>
                                         </a>
-                                        <a th:href="@{/admin/category/del_category/{id}(id=${category.id})}"
+                                        <!-- button xoa -->
+                                        <a th:href="@{/admin/category/del_category/{id}(id=${category.categoryId})}"
                                            onclick="return confirm('Bạn có muốn xóa danh mục này!')" class="btn btn-danger"
                                            style="padding: 5px 10px; font-size: 10px;">
                                             <i class="fa-solid fa-trash-can"></i>
@@ -61,8 +67,53 @@
                                     </td>
                                 </tr>
                             </tbody>
-
                         </table>
+
+                        <!-- Modal -->
+                        <!-- Modal Thêm Danh Mục -->
+                        <!--<div class="modal fade" id="addCategoryModal" tabindex="-1" aria-labelledby="addCategoryModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="addCategoryModalLabel">Thêm danh mục mới</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <form id="addCategoryForm">
+                                            <div class="mb-3">
+                                                <label for="categoryName" class="form-label">Tên danh mục</label>
+                                                <input type="text" class="form-control" id="categoryName" name="category_name" required>
+                                            </div>
+                                            <button type="submit" class="btn btn-primary">Lưu</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>-->
+
+                        <!-- Modal Sửa Danh Mục -->
+                        <!--<div class="modal fade" id="editCategoryModal" tabindex="-1" aria-labelledby="editCategoryLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="editCategoryLabel">Chỉnh Sửa Danh Mục</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <form id="editCategoryForm">
+                                            <input type="hidden" id="editCategoryId">
+                                            <div class="mb-3">
+                                                <label for="editCategoryName" class="form-label">Tên danh mục</label>
+                                                <input type="text" class="form-control" id="editCategoryName" required>
+                                            </div>
+                                            <button type="submit" class="btn btn-primary">Lưu</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>-->
+
+
                     </div>
 
 
@@ -106,6 +157,78 @@
         </footer>
     </div>
 </div>
+
+<!-- Xử ly them danh muc -->
+<!--<script>
+    document.getElementById("addCategoryForm").addEventListener("submit", function(event) {
+        event.preventDefault(); // Ngăn chặn form tải lại trang
+
+        let categoryName = document.getElementById("categoryName").value;
+
+        fetch("/admin/category/add_category", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ category_name: categoryName })
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert("Thêm danh mục thành công!");
+                    location.reload(); // Load lại trang để cập nhật danh sách
+                } else {
+                    alert("Thêm danh mục thất bại!");
+                }
+            })
+            .catch(error => console.error("Lỗi:", error));
+    });
+</script>
+
+&lt;!&ndash; Xu ly sua danh muc &ndash;&gt;
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        // Xử lý khi click vào nút sửa
+        document.querySelectorAll(".edit-btn").forEach(button => {
+            button.addEventListener("click", function() {
+                let id = this.getAttribute("data-id");
+                let name = this.getAttribute("data-name");
+
+                document.getElementById("editCategoryId").value = id;
+                document.getElementById("editCategoryName").value = name;
+            });
+        });
+
+        // Xử lý khi submit form sửa danh mục
+        document.getElementById("editCategoryForm").addEventListener("submit", function(e) {
+            e.preventDefault();
+            let categoryId = document.getElementById("editCategoryId").value;
+            let categoryName = document.getElementById("editCategoryName").value;
+
+            fetch("/admin/category/edit_category", {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    id: categoryId,
+                    category_name: categoryName
+                })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert("Cập nhật danh mục thành công!");
+                        location.reload();
+                    } else {
+                        alert("Cập nhật thất bại!");
+                    }
+                });
+        });
+    });
+</script>-->
+
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
 
 </body>

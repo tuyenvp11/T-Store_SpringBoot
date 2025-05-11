@@ -15,7 +15,7 @@
     <div id="layoutSidenav_content">
         <main>
             <div class="container-fluid px-4">
-                <h1 class="mt-4">Quản lý đơn hàng</h1>
+                <h4 class="mt-4">Quản lý đơn hàng</h4>
                 <th:block th:if="${session.succMsg}">
                     <p class="text-success fw-bold text-center">[[${session.succMsg}]]</p>
                     <th:block th:text="${@commnServiceImpl.removeSessionMessage()}"></th:block>
@@ -42,41 +42,55 @@
                         <table class="table table-bordered">
                             <thead>
                                 <tr>
-                                    <th class="col-1">Mã đơn hàng</th>
-                                    <th class="col-1">Chi tiết vận chuyển</th>
-                                    <th class="col-1">Ngày đặt hàng</th>
-                                    <th class="col-1">Chi tiết sản phẩm</th>
-                                    <th class="col-1">Tổng tiền</th>
-                                    <th class="col-1">Trạng thái</th>
-                                    <th class="col-1">#</th>
+                                    <th style="width: 7%;">Mã đơn</th>
+                                    <th style="width: 10%;">Khách hàng</th>
+                                    <th style="width: 8%;">Giảm giá</th>
+                                    <th style="width: 9%;">Thanh toán</th>
+                                    <th style="width: 10%;">Tổng tiền</th>
+                                    <th style="width: 12%;">Ngày đặt</th>
+                                    <th style="width: 10%;">Trạng thái</th>
+                                    <th style="width: 18%">Cập nhật</th>
+                                    <th style="width: 6%;">Chi tiết</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <!-- Hiển thị danh sách khi có đơn hàng -->
                                 <tr th:each="o : ${ListOrder}">
-                                    <td th:if="${o?.id != null}">[[${o.id}]]</td>
-                                    <td th:if="${o?.orderAddress != null}">
-                                        <b>Họ và Tên:</b> [[${o.orderAddress.firstName+' '+o.orderAddress.lastName}]]<br>
-                                        <b>Email:</b> [[${o.orderAddress.email}]] <br>
-                                        <b>Số điện thoại:</b> [[${o.orderAddress.phone}]] <br>
-                                        <b>Tỉnh/Thành phố:</b> [[${o.orderAddress.province}]] <br>
-                                        <b>Quận/Huyện:</b> [[${o.orderAddress.district}]] <br>
-                                        <b>Phường/Xã:</b> [[${o.orderAddress.commune}]] <br>
-                                        <b>Địa chỉ:</b> [[${o.orderAddress.address}]]
-                                    </td>
-                                    <td th:text="${o.orderDate}"></td>
-                                    <td th:text="${o.product.product_name}"></td>
+                                    <td th:if="${o.orderId != null}">[[${o.orderId}]]</td>
+                                    <!--<td th:if="${o.getAddress() != null}">
+                                        <b>Họ và Tên: <span th:text="${o.address.receiverName}"></span></b><br>
+                                        <b>Số điện thoại: <span th:text="${o.address.receiverPhone}"></span></b><br>
+                                        <b>Địa chỉ cụ thể: <span th:text="${o.address.fullAddress}"></span></b><br>
+                                    </td>-->
+                                    <td th:text="${o.user.name}"></td>
                                     <td>
-                                        <b>Số lượng:</b> [[${o.quantity}]] <br>
-                                        <b>Giá:</b> [[${@formatUtils.formatCurrency(o.price)}]] <br>
-                                        <b>Tổng tiền:</b> [[${@formatUtils.formatCurrency(o.quantity * o.price)}]]
+                                        <th:block th:if="${o.discount != null}">
+                                            <span th:text="${@formatUtils.formatCurrency(o.discount.discountValue)}"></span>
+                                        </th:block>
+                                        <th:block th:unless="${o.discount != null}">
+                                            <span>0đ</span>
+                                        </th:block>
                                     </td>
-                                    <td th:text="${o.status}"></td>
+                                    <td th:text="${o.paymentType}"></td>
+                                    <td th:text="${@formatUtils.formatCurrency(o.totalPrice)}"></td>
+                                    <td th:text="${@formatUtils.formatDateTime(o.orderDate)}"></td>
+                                    <!--<td th:text="${o.status}"></td>-->
+                                    <td>
+                                        <span class="badge bg-success" th:if="${o.status == 'Đã giao hàng' or o.status == 'Giao thành công'}"
+                                                th:text="${o.status}"></span>
+
+                                        <span class="badge bg-secondary" th:if="${o.status == 'Đã huỷ'}"
+                                                th:text="${o.status}"></span>
+
+                                        <span class="badge bg-danger" th:if="${o.status != 'Đã giao hàng' and o.status != 'Giao thành công' and o.status != 'Đã huỷ'}"
+                                                th:text="${o.status}"></span>
+                                    </td>
+
                                     <td>
                                         <form action="/admin/update-order-status" method="post">
-                                            <div class="row">
+                                            <div class="row" style="font-size: 13px">
                                                 <div class="col-md-6">
-                                                    <select class="form-control" name="st">
+                                                    <select class="form-control" name="st" style="font-size: 13px">
                                                         <option>--Lựa chọn--</option>
                                                         <option value="1">Đang xử lý</option>
                                                         <option value="2">Đã xác nhận</option>
@@ -86,7 +100,7 @@
                                                         <option value="6">Đã huỷ</option>
                                                     </select>
                                                 </div>
-                                                <input th:value="${o.id}" name="id" type="hidden">
+                                                <input th:value="${o.orderId}" name="id" type="hidden">
                                                 <div class="col-md-6">
                                                     <th:block
                                                             th:if="${o.status=='Huỷ' || o.status=='Đã giao hàng'}">
@@ -96,10 +110,16 @@
                                                             th:unless="${o.status=='Huỷ' || o.status=='Đã giao hàng'}">
                                                         <button class="btn btn-sm btn-primary ">Cập nhật</button>
                                                     </th:block>
-
                                                 </div>
                                             </div>
                                         </form>
+
+                                    </td>
+                                    <td>
+                                            <a th:href="@{'/admin/order-detail/' + ${o.orderId}}"
+                                               class="btn btn-info btn-sm" title="Xem chi tiết">
+                                                <i class="fa-solid fa-eye"></i>
+                                            </a>
                                     </td>
                                 </tr>
 
@@ -107,6 +127,7 @@
                         </table>
 
                     </div>
+
 
                     <!-- Phân trang -->
                     <div class="d-flex justify-content-center">

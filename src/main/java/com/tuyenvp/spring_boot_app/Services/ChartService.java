@@ -1,6 +1,5 @@
 package com.tuyenvp.spring_boot_app.Services;
 
-import com.tuyenvp.spring_boot_app.Model.ProductOrder;
 import com.tuyenvp.spring_boot_app.Repository.OrderRepo;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
@@ -14,7 +13,6 @@ import org.springframework.stereotype.Service;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -27,7 +25,7 @@ public class ChartService {
     private OrderRepo orderRepo;
 
     // Tạo biểu đồ dạng cột
-    public byte[] generateBarChart() throws IOException {
+    /*public byte[] generateBarChart() throws IOException {
 
         // Lấy dữ liệu từ database
         List<Object[]> revenueByMonth = orderRepo.getRevenueByMonth();
@@ -76,7 +74,7 @@ public class ChartService {
         ImageIO.write(bufferedImage, "png", byteArrayOutputStream);
 
         return byteArrayOutputStream.toByteArray();
-    }
+    }*/
 
     // Tạo biểu đồ hình tròn
     /*public byte[] generatePieChart() throws IOException {

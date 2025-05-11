@@ -1,32 +1,36 @@
 package com.tuyenvp.spring_boot_app.Services;
 
-import com.tuyenvp.spring_boot_app.Model.OrderRequest;
-import com.tuyenvp.spring_boot_app.Model.Product;
-import com.tuyenvp.spring_boot_app.Model.ProductOrder;
+import com.tuyenvp.spring_boot_app.Model.OrderDetail;
+import com.tuyenvp.spring_boot_app.Model.Order;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.data.domain.Page;
 
-import java.time.LocalDate;
 import java.util.List;
 
 public interface OrderService {
-    public void saveOrder(Integer userid, OrderRequest orderRequest) throws Exception;
 
-    public List<ProductOrder> getOrdersByUser(Integer userId);
+    public Long placeOrder(String paymentMethod, String email, HttpSession session);
 
-    public ProductOrder updateOrderStatus(Integer id, String status);
+    public List<Order> getOrdersByUser(Integer userId);
 
-    //public List<ProductOrder> getAllOrders();
+    public Order updateOrderStatus(Integer id, String status);
 
-    public List<ProductOrder> searchProductOrder(String keyword);
+    public List<Order> searchOrder(String keyword);
 
-    Page<ProductOrder> getAll(Integer pageNo);
+    Page<Order> getAll(Integer pageNo);
 
-    Page<ProductOrder> searchProductOrder(String keyword, Integer pageNo);
+    Page<Order> searchOrder(String keyword, Integer pageNo);
 
-    //public Page<ProductOrder> getAllOrdersPagination(Integer pageNo, Integer pageSize);
+    public Page<Order> getAllOrdersPagination(Integer pageNo, Integer pageSize);
 
     public long getTotalOrders();
 
-    public double getTotalRevenue();
+    public void createOrderAfterPayment(String orderId);
+
+    public Order getOrderById(Long orderId);
+
+    public List<OrderDetail> getOrderDetails(Long orderId);
+
+    public Order findByOrderId(Long orderId);
 
 }

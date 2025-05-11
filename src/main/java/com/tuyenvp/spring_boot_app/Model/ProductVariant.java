@@ -1,14 +1,15 @@
 package com.tuyenvp.spring_boot_app.Model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.math.BigDecimal;
+
 @Entity
-@Table(name = "productvariants")
+@Table(name = "product_variants")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -18,33 +19,27 @@ public class ProductVariant {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
 
     @Column(name = "variant_id")
-    private int variant_id;
+    private Integer variantId;
 
-    @Column(name = "product_id")
-    private int product_id;
-
-    @Column(name = "size_id")
-    private int size_id;
-
-    @Column(name = "color_id")
-    private int color_id;
-
-    @Column(name = "product_quantity")
-    private int product_quantity;
-
-    @JoinColumn(name = "product_id",insertable = false,updatable = false)
-    @JsonBackReference(value = "products-productvariants")
     @ManyToOne
+    @JoinColumn(name = "product_id", updatable = false)
     private Product product;
 
-    @JoinColumn(name = "size_id",insertable = false,updatable = false)
-    @JsonBackReference(value = "sizeproducts-productvariants")
     @ManyToOne
-    private SizeProduct size;
-
-    @JoinColumn(name = "color_id",insertable = false,updatable = false)
-    @JsonBackReference(value = "colorproducts-productvariants")
-    @ManyToOne
+    @JoinColumn(name = "color_id", nullable = false)
     private ColorProduct color;
+
+    @Column(name = "product_img")
+    private String productImg;
+
+    @Column(name = "import_price", nullable = false)
+    private BigDecimal importPrice;
+
+    @Column(name = "sell_price", nullable = false)
+    private BigDecimal sellPrice;
+
+
+    @Column(name = "stock_quantity", nullable = false)
+    private Integer stockQuantity;
 
 }

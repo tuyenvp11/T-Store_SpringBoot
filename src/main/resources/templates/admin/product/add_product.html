@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-
-<div th:replace="admin/fragments/head :: head"></div>
-
+<head>
+    <div th:replace="admin/fragments/head :: head"></div>
+</head>
 <body>
 <!-- Header -->
 <div th:replace="admin/fragments/header :: header"></div>
@@ -15,57 +15,145 @@
     <div id="layoutSidenav_content">
         <main>
             <div class="container-fluid px-4">
-                <h1 class="mt-4">Thêm sản phẩm</h1>
-
-                <div class="card mb-4">
-                    <!--<div class="card-header">
-                        <i class="fas fa-table me-1"></i>
-                        Nhà cung cấp
-                    </div>-->
+                <div class="card shadow-sm mb-4 mt-3">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="mb-0">Thêm sản phẩm mới</h5>
+                    </div>
                     <div class="card-body">
+                        <!-- Nút Quay Lại -->
+                        <a href="/admin/product" class="btn btn-secondary mb-3" style="font-size:12px">
+                            <i class="fas fa-arrow-left"></i> Quay lại
+                        </a>
                         <form role="form" method="post" th:action="@{/admin/product/add_product}" th:object="${add_product}" enctype="multipart/form-data">
-                            <input type="hidden" class="form-control" id="productId" th:field="*{product_id}">
-                            <div class="form-group">
-                                <label >Tên sản phẩm</label>
-                                <input type="text" class="form-control" id="product_name" th:field="*{product_name}">
-                            </div>
-                            <div class="form-group">
-                                <label>Danh mục</label>
-                                <select class="form-control select2 select2-hidden-accessible" style="width:100%;" th:field="*{category_id}" >
-                                    <option th:each="category : ${ListCategory}" th:value="${category.category_id}" th:text="${category.category_name}"></option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label>Nhà cung cấp</label>
-                                <select class="form-control select2 select2-hidden-accessible" style="width:100%;" th:field="*{vendor_id}" >
-                                    <option th:each="vendor : ${ListVendor}" th:value="${vendor.vendor_id}" th:text="${vendor.vendor_name}"></option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label for="product_img">Hình ảnh</label>
-                                <input type="file" class="form-control" id="product_img" name="img">
-                            </div>
-                            <div class="form-group">
-                                <label>Giá sản phẩm</label>
-                                <input type="text" class="form-control" id="product_price" th:field="*{product_price}">
-                            </div>
-                            <div class="form-group">
-                                <label>Mô tả sản phẩm</label>
-                               <!-- <input type="text" class="form-control" id="product_descrip" th:field="*{product_descrip}">-->
-                                <textarea class="form-control" id="product_descrip" th:field="*{product_descrip}"></textarea>
-                            </div>
-                            <div class="form-group">
-                                <label>Số lượng sản phẩm nhập</label>
-                                <input type="text" class="form-control" id="product_quantity" th:field="*{product_quantity}">
+                            <input type="hidden" class="form-control" th:field="*{productId}">
+
+                            <div class="row">
+                                <!-- Tên sản phẩm -->
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="form-label">Tên sản phẩm</label>
+                                        <input type="text" class="form-control form-control-sm" th:field="*{productName}" required>
+                                    </div>
+                                </div>
+                                <!-- Danh mục -->
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="form-label">Danh mục</label>
+                                        <select class="form-control form-control-sm" th:field="*{categoryId}">
+                                            <option th:each="category : ${ListCategory}" th:value="${category.categoryId}" th:text="${category.categoryName}"></option>
+                                        </select>
+                                    </div>
+                                </div>
                             </div>
 
-                            <button type="submit" class="btn btn-primary" >Thêm</button>
+                            <div class="row">
+                                <!-- Thương hiệu -->
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="form-label">Thương hiệu</label>
+                                        <input type="text" class="form-control form-control-sm" th:field="*{brand}" required>
+                                    </div>
+                                </div>
+                                <!-- Hình ảnh -->
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="form-label">Hình ảnh</label>
+                                        <input type="file" class="form-control form-control-sm" name="img" required>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Mô tả -->
+                            <div class="form-group">
+                                <label class="form-label">Mô tả sản phẩm</label>
+                                <textarea class="form-control form-control-sm" rows="2" th:field="*{productDescrip}" required></textarea>
+                            </div>
+
+                            <div class="row">
+                                <!-- Giá sản phẩm -->
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label class="form-label">Giá gốc</label>
+                                        <input type="text" class="form-control form-control-sm" th:field="*{originalPrice}" required>
+                                    </div>
+                                </div>
+                                <!-- Giá niêm yết -->
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label class="form-label">Giá niêm yết</label>
+                                        <input type="text" class="form-control form-control-sm" th:field="*{price}" required>
+                                    </div>
+                                </div>
+                                <!-- Năm ra mắt -->
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label class="form-label">Năm ra mắt</label>
+                                        <input type="number" class="form-control form-control-sm" th:field="*{releaseDate}" required>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label class="form-label">Bảo hành</label>
+                                        <input type="text" class="form-control form-control-sm" th:field="*{warranty}" required>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Nhóm thông số kỹ thuật -->
+                            <div class="card mt-3">
+                                <div class="card-header bg-light">
+                                    <h6 class="mb-0">Thông số kỹ thuật</h6>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label class="form-label">Màn hình</label>
+                                                <input type="text" class="form-control form-control-sm" th:field="*{specification.screenSize}" placeholder="Kích thước màn hình">
+                                                <input type="text" class="form-control form-control-sm mt-2" th:field="*{specification.screenType}" placeholder="Loại màn hình">
+                                                <input type="text" class="form-control form-control-sm mt-2" th:field="*{specification.resolution}" placeholder="Độ phân giải">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label class="form-label">Hiệu năng</label>
+                                                <input type="text" class="form-control form-control-sm" th:field="*{specification.chipset}" placeholder="Chipset">
+                                                <input type="text" class="form-control form-control-sm mt-2" th:field="*{specification.ram}" placeholder="RAM">
+                                                <input type="text" class="form-control form-control-sm mt-2" th:field="*{specification.storage}" placeholder="Bộ nhớ trong">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label class="form-label">Pin & Hệ điều hành</label>
+                                                <input type="text" class="form-control form-control-sm" th:field="*{specification.battery}" placeholder="Dung lượng pin">
+                                                <input type="text" class="form-control form-control-sm mt-2" th:field="*{specification.charging}" placeholder="Công suất sạc">
+                                                <input type="text" class="form-control form-control-sm mt-2" th:field="*{specification.os}" placeholder="Hệ điều hành">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label class="form-label">Camera & Trọng lượng</label>
+                                                <input type="text" class="form-control form-control-sm" th:field="*{specification.cameraMain}" placeholder="Camera chính">
+                                                <input type="text" class="form-control form-control-sm mt-2" th:field="*{specification.cameraFront}" placeholder="Camera trước">
+                                                <input type="text" class="form-control form-control-sm mt-2" th:field="*{specification.weight}" placeholder="Trọng lượng">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Nút bấm -->
+                            <div class="text-end mt-3">
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fa-solid fa-plus"></i> Thêm sản phẩm
+                                </button>
+                            </div>
                         </form>
                     </div>
                 </div>
             </div>
-        </main>
 
+        </main>
 
         <footer class="py-4 bg-light mt-auto">
             <div class="container-fluid px-4">
@@ -81,7 +169,23 @@
         </footer>
     </div>
 </div>
-<script th:src="@{https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js}" crossorigin="anonymous"></script>
 
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+
+<script>
+    (() => {
+        'use strict';
+        const forms = document.querySelectorAll('.needs-validation');
+        Array.from(forms).forEach(form => {
+            form.addEventListener('submit', event => {
+                if (!form.checkValidity()) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                }
+                form.classList.add('was-validated');
+            }, false);
+        });
+    })();
+</script>
 </body>
 </html>

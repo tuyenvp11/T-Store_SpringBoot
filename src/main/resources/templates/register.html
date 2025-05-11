@@ -12,103 +12,109 @@
 
 <!-- Content container -->
 <section>
-    <div class="container mt-5 p-5">
-        <div class="row">
-            <div class="col-md-5 p-5">
-                <img alt="" src="fe/img/ecom.png" width="100%" height="400px">
-            </div>
-            <div class="col-md-7 p-2">
-                <div class="card shadow p-3 mb-5 bg-body-tertiary rounded">
-                    <div class="card-header text-center">
-                        <p class="fs-4 text-center">Đăng ký</p>
-                        <th:block th:if="${session.succMsg}">
-                            <p class="text-success fw-bold">[[${session.succMsg}]]</p>
-                            <th:block th:text="${@commnServiceImpl.removeSessionMessage()}"></th:block>
-                        </th:block>
+    <div class="container auth-container">
+        <div class="auth-box">
+            <h1>Đăng ký tài khoản</h1>
+            <th:block th:if="${session.succMsg}">
+                <p class="text-success fw-bold">[[${session.succMsg}]]</p>
+                <th:block th:text="${@commnServiceImpl.removeSessionMessage()}"></th:block>
+            </th:block>
 
-                        <th:block th:if="${session.errorMsg}">
-                            <p class="text-danger fw-bold">[[${session.errorMsg}]]</p>
-                            <th:block th:text="${@commnServiceImpl.removeSessionMessage()}"></th:block>
-                        </th:block>
-                    </div>
-
-                    <div class="card-body">
-                        <form action="/saveUser" enctype="multipart/form-data" id="userRegister" novalidate method="post">
-                            <div class="row">
-                                <div class="col">
-                                    <label class="form-label">Họ và tên</label>
-                                    <input required class="form-control" name="name" type="text">
-                                </div>
-
-                                <div class="col">
-                                    <label class="form-label">Số điện thoại</label>
-                                    <input required class="form-control" name="mobileNumber" type="text">
-                                </div>
-                            </div>
-
-                            <div class="mb-3">
-                                <label class="form-label">Email</label>
-                                <input required class="form-control" name="email" type="email">
-                            </div>
-
-
-                            <div class="row">
-                                <div class="col">
-                                    <label class="form-label">Tỉnh/thành phố</label>
-                                    <input required class="form-control" name="province" type="text">
-                                </div>
-
-                                <div class="col">
-                                    <label class="form-label">Huyện/quận</label>
-                                    <input required class="form-control" name="district" type="text">
-                                </div>
-
-
-                            </div>
-
-                            <div class="row">
-                                <div class="col">
-                                    <label class="form-label">Xã/phường</label>
-                                    <input required class="form-control" name="commune" type="text">
-                                </div>
-
-                                <div class="col">
-                                    <label class="form-label">Số nhà</label>
-                                    <input required class="form-control" name="address" type="text">
-                                </div>
-
-                            </div>
-
-                            <div class="row">
-                                <div class="col">
-                                    <label class="form-label">Mật khẩu</label>
-                                    <input required class="form-control" name="password" type="password" id="pass">
-                                </div>
-
-                                <div class="col">
-                                    <label class="form-label">Xác nhận mật khẩu</label>
-                                    <input required class="form-control" name="cpassword" type="password">
-                                </div>
-
-                            </div>
-
-                            <div class="mb-3">
-                                <label class="form-label">Ảnh hồ sơ</label> <input
-                                    class="form-control" name="img" type="file">
-                            </div>
-                            <button type="submit" class="btn bg-danger text-white col-md-12">Đăng ký</button>
-                        </form>
-                    </div>
-
-                    <div class="card-footer text-center">
-                        Bạn đã có tài khoản? <a href="/login" class="text-decoration-none">Đăng nhập ngay!</a>
-                    </div>
+            <th:block th:if="${session.errorMsg}">
+                <p class="text-danger fw-bold">[[${session.errorMsg}]]</p>
+                <th:block th:text="${@commnServiceImpl.removeSessionMessage()}"></th:block>
+            </th:block>
+            <form class="auth-form" action="/saveUser" enctype="multipart/form-data" id="userRegister" method="post">
+                <div class="form-group">
+                    <label for="name">Họ và tên</label>
+                    <input type="text" id="name" name="name" pattern="^[^\d]+$"
+                           title="Họ và tên không được chứa số" required>
                 </div>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" pattern="^[a-zA-Z0-9._%+-]+@gmail\.com$"
+                           title="Email không hợp lệ. Ví dụ: example@gmail.com" required>
+                </div>
+                <div class="form-group">
+                    <label for="phone">Số điện thoại</label>
+                    <input type="tel" id="phone" name="phone" pattern="^0\d{9}$"
+                           title="Số điện thoại phải có 10 chữ số và bắt đầu bằng 0" required>
+                </div>
+                <div class="form-group">
+                    <label for="birthday">Ngày sinh</label>
+                    <input type="date" id="birthday" name="birthday" required>
+                </div>
+                <div class="form-group">
+                    <label for="gender">Giới tính</label>
+                    <select class="form-control" id="gender" name="gender" required>
+                        <option value="Nam">Nam</option>
+                        <option value="Nữ">Nữ</option>
+                        <option value="Khác">Khác</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="password">Mật khẩu</label>
+                    <input type="password" id="password" name="password"
+                           pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$"
+                           title="Mật khẩu phải có ít nhất 8 ký tự, bao gồm ít nhất 1 chữ hoa, 1 chữ thường, 1 số và 1 ký tự đặc biệt (!@#$%^&*)"
+                           required>
+                </div>
+                <div class="form-group">
+                    <label for="confirm-password">Xác nhận mật khẩu</label>
+                    <input type="password" id="confirm-password" name="confirm-password" required>
+                </div>
+                <!--<div class="form-group">
+                    <label class="form-label">Ảnh hồ sơ</label>
+                    <input class="form-control" name="img" type="file">
+                </div>-->
+                <button type="submit" class="login-btn">Đăng ký</button>
+            </form>
+            <div class="auth-footer">
+                <p>Đã có tài khoản? <a href="/login">Đăng nhập</a></p>
             </div>
         </div>
     </div>
 
 </section>
+
+<script>
+    document.getElementById("userRegister").addEventListener("submit", function(event) {
+        const password = document.getElementById("password").value;
+        const confirmPassword = document.getElementById("confirm-password").value;
+        const birthday = new Date(document.getElementById("birthday").value);
+        const today = new Date();
+
+        if (password !== confirmPassword) {
+            alert("Mật khẩu và xác nhận mật khẩu không khớp!");
+            event.preventDefault();
+            return;
+        }
+
+        if (birthday > today) {
+            alert("Ngày sinh không hợp lệ!");
+            event.preventDefault();
+        }
+    });
+
+    document.getElementById("userRegister").addEventListener("submit", function (e) {
+        const email = document.getElementById("email").value;
+        if (/\s/.test(email)) {
+            alert("Email không được chứa khoảng trắng.");
+            e.preventDefault();
+        }
+    });
+
+    const form = document.getElementById('userRegister');
+    form.addEventListener('submit', function(e) {
+        const password = document.getElementById('password').value;
+        const confirmPassword = document.getElementById('confirm-password').value;
+        if (password !== confirmPassword) {
+            e.preventDefault();
+            alert('Mật khẩu xác nhận không khớp.');
+        }
+    });
+</script>
+
 
 <hr class="brick">
 

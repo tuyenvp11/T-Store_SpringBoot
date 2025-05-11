@@ -12,7 +12,7 @@ import java.math.BigDecimal;
 @Table(name = "carts")
 @Getter
 @Setter
-@NoArgsConstructor
+//@NoArgsConstructor
 @AllArgsConstructor
 
 public class Cart {
@@ -22,8 +22,8 @@ public class Cart {
     private Long cart_id;
 
     @ManyToOne
-    @JoinColumn(name="product_id", referencedColumnName = "product_id", nullable=false)
-    private Product product;
+    @JoinColumn(name="variant_id", referencedColumnName = "variant_id", nullable=false)
+    private ProductVariant productVariant;
 
     @ManyToOne
     @JoinColumn(name="user_id", referencedColumnName = "id", nullable=false)
@@ -38,61 +38,14 @@ public class Cart {
     @Transient
     private BigDecimal totalOrderPrice;
 
-    /*@JoinColumn(name = "user_id" , insertable = false, updatable = false)
-    @JsonBackReference(value = "user_dtls-carts")
-    @ManyToOne
-    private UserDtls user_dtls;
+    // 🟢 Constructor không tham số (bắt buộc cho Hibernate)
+    public Cart() {}
 
-    @JoinColumn(name = "product_id", insertable = false, updatable = false)
-    @JsonBackReference(value = "products-carts")
-    @ManyToOne
-    private Product product;*/
-
-    public Long getCart_id() {
-        return cart_id;
-    }
-
-    public void setCart_id(Long cart_id) {
-        this.cart_id = cart_id;
-    }
-
-    public Product getProduct() {
-        return product;
-    }
-
-    public void setProduct(Product product) {
-        this.product = product;
-    }
-
-    public UserDtls getUser_dtls() {
-        return user;
-    }
-
-    public void setUser_dtls(UserDtls user) {
+    // 🟢 Constructor đầy đủ
+    public Cart(UserDtls user, ProductVariant productVariant, int quantity) {
         this.user = user;
-    }
-
-    public int getQuantity() {
-        return quantity;
-    }
-
-    public void setQuantity(int quantity) {
+        this.productVariant = productVariant;
         this.quantity = quantity;
     }
 
-    public Double getTotalPrice() {
-        return totalPrice;
-    }
-
-    public void setTotalPrice(double totalPrice) {
-        this.totalPrice = totalPrice;
-    }
-
-    public BigDecimal getTotalOrderPrice() {
-        return totalOrderPrice;
-    }
-
-    public void setTotalOrderPrice(BigDecimal totalOrderPrice) {
-        this.totalOrderPrice = totalOrderPrice;
-    }
 }

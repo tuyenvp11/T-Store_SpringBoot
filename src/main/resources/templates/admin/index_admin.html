@@ -15,13 +15,13 @@
     <div id="layoutSidenav_content">
         <main>
             <div class="container-fluid px-4">
-                <h1 class="mt-4">Bảng điều khiển</h1>
+                <h4 class="mt-4">Bảng điều khiển</h4>
                 <div class="row">
                     <!-- Điều hướng quản lý danh mục -->
                     <div class="col-xl-3 col-md-6">
                         <div class="card bg-primary text-white mb-4">
                             <div class="card-body">Quản lý danh mục</div>
-                            <div class="card-footer d-flex align-items-center justify-content-between">
+                            <div class="card-footer d-flex align-items-center justify-content-admintween">
                                 <a class="small text-white stretched-link" th:href="@{/admin/category}">Xem chi tiết</a>
                                 <div class="small text-white"><i class="fas fa-angle-right"></i></div>
                             </div>
@@ -31,7 +31,7 @@
                     <div class="col-xl-3 col-md-6">
                         <div class="card bg-warning text-white mb-4">
                             <div class="card-body">Quản lý sản phẩm</div>
-                            <div class="card-footer d-flex align-items-center justify-content-between">
+                            <div class="card-footer d-flex align-items-center justify-content-admintween">
                                 <a class="small text-white stretched-link" th:href="@{/admin/product}">Xem chi tiết</a>
                                 <div class="small text-white"><i class="fas fa-angle-right"></i></div>
                             </div>
@@ -40,9 +40,9 @@
                     <!-- Điều hướng quản lý nhà cung cấp -->
                     <div class="col-xl-3 col-md-6">
                         <div class="card bg-success text-white mb-4">
-                            <div class="card-body">Quản lý nhà cung cấp</div>
-                            <div class="card-footer d-flex align-items-center justify-content-between">
-                                <a class="small text-white stretched-link" th:href="@{/admin/vendor}">Xem chi tiết</a>
+                            <div class="card-body">Quản lý mã giảm giá</div>
+                            <div class="card-footer d-flex align-items-center justify-content-admintween">
+                                <a class="small text-white stretched-link" th:href="@{/admin/discount}">Xem chi tiết</a>
                                 <div class="small text-white"><i class="fas fa-angle-right"></i></div>
                             </div>
                         </div>
@@ -51,7 +51,7 @@
                     <div class="col-xl-3 col-md-6">
                         <div class="card bg-danger text-white mb-4">
                             <div class="card-body">Quản lý đơn hàng</div>
-                            <div class="card-footer d-flex align-items-center justify-content-between">
+                            <div class="card-footer d-flex align-items-center justify-content-admintween">
                                 <a class="small text-white stretched-link" th:href="@{/admin/order}">Xem chi tiết</a>
                                 <div class="small text-white"><i class="fas fa-angle-right"></i></div>
                             </div>
@@ -61,9 +61,9 @@
                     <!-- Điều hướng quản lý khách hàng -->
                     <div class="col-xl-3 col-md-6">
                         <div class="card bg-info text-white mb-4">
-                            <div class="card-body">Quản lý khách hàng</div>
-                            <div class="card-footer d-flex align-items-center justify-content-between">
-                                <a class="small text-white stretched-link" th:href="@{/admin/customer}">Xem chi tiết</a>
+                            <div class="card-body">Quản lý tài khoản</div>
+                            <div class="card-footer d-flex align-items-center justify-content-admintween">
+                                <a class="small text-white stretched-link" th:href="@{/admin/account}">Xem chi tiết</a>
                                 <div class="small text-white"><i class="fas fa-angle-right"></i></div>
                             </div>
                         </div>
@@ -73,7 +73,7 @@
                     <div class="col-xl-3 col-md-6">
                         <div class="card bg-secondary text-white mb-4">
                             <div class="card-body">Thống kê</div>
-                            <div class="card-footer d-flex align-items-center justify-content-between">
+                            <div class="card-footer d-flex align-items-center justify-content-admintween">
                                 <a class="small text-white stretched-link" th:href="@{/admin/statistic}">Xem chi tiết</a>
                                 <div class="small text-white"><i class="fas fa-angle-right"></i></div>
                             </div>
@@ -81,38 +81,171 @@
                     </div>
 
                 </div>
-                <div class="row">
-                    <div class="col-xl-6">
-                        <div class="card mb-4">
-                            <div class="card-header">
-                                <i class="fas fa-chart-area me-1"></i>
-                                Area Chart
-                            </div>
-                            <div class="card-body"><canvas id="myAreaChart" width="100%" height="40"></canvas></div>
-                        </div>
+
+            </div>
+
+            <!--<div style="width: 60%; margin: auto;">
+                <h6 style="text-align: center;">Biểu đồ doanh thu theo tháng</h6>
+                <canvas id="revenueChart" width="400" height="200"></canvas>
+            </div>
+
+            &lt;!&ndash; Thong ke doanh thu &ndash;&gt;
+            <script th:inline="javascript">
+                let labels = [[${months}]];
+                let data = [[${revenues}]];
+
+                const ctx = document.getElementById('revenueChart').getContext('2d');
+                new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: 'Tổng doanh thu (VNĐ)',
+                            data: data,
+                            backgroundColor: 'rgba(75, 192, 192, 0.6)',
+                            borderColor: 'rgba(75, 192, 192, 1)',
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        scales: {
+                            y: {
+                                beginAtZero: true
+                            }
+                        }
+                    }
+                });
+            </script>
+
+
+            <div class="container text-center mt-4">
+                <h2>Thống kê hệ thống</h2>
+                <div class="row mt-3">
+                    <div class="col-md-4">
+                        <h5>Sản phẩm</h5>
+                        <p style="font-size: 24px;" th:text="${productCount}"></p>
                     </div>
-                    <div class="col-xl-6">
-                        <div class="card mb-4">
-                            <div class="card-header">
-                                <i class="fas fa-chart-bar me-1"></i>
-                                Bar Chart
-                                <div class="card-body" style="text-align: center;">
-                                    <img src="admin/chartBar-revenue" alt="Bar Chart"
-                                        style="max-width: 100%; height: auto; height: 400px">
-                                </div>
-                                <h4>Tổng doanh thu: [[${@formatUtils.formatCurrency(totalRevenue)}]]</h4>
-                            </div>
-                            <div class="card-body"><canvas id="myBarChart" width="100%" height="40"></canvas></div>
-                        </div>
+                    <div class="col-md-4">
+                        <h5>Đơn hàng</h5>
+                        <p style="font-size: 24px;" th:text="${orderCount}"></p>
+                    </div>
+                    <div class="col-md-4">
+                        <h5>Tài khoản</h5>
+                        <p style="font-size: 24px;" th:text="${userCount}"></p>
+                    </div>
+                </div>
+
+                <h4 class="mt-5">Top 5 sản phẩm bán chạy</h4>
+                <div style="max-width: 600px; margin: auto;">
+                    <canvas id="topSellingChart"></canvas>
+                </div>
+            </div>
+
+            &lt;!&ndash; Thong ke san pham ban chay &ndash;&gt;
+            <script th:inline="javascript">
+                const labels = /*[[${topProductNames}]]*/ [];
+                const data = /*[[${topProductQuantities}]]*/ [];
+
+                const ctx = document.getElementById('topSellingChart').getContext('2d');
+                new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: 'Số lượng bán',
+                            data: data,
+                            backgroundColor: 'rgba(255, 99, 132, 0.6)',
+                            borderColor: 'rgba(255, 99, 132, 1)',
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                ticks: { precision: 0 }
+                            }
+                        }
+                    }
+                });
+            </script>-->
+                <div class="container mt-5">
+                <h2 class="text-center">Thống kê hệ thống</h2>
+
+                <div class="row text-center mt-4">
+                    <div class="col-md-4"><h5>Sản phẩm</h5><p th:text="${productCount}"></p></div>
+                    <div class="col-md-4"><h5>Đơn hàng</h5><p th:text="${orderCount}"></p></div>
+                    <div class="col-md-4"><h5>Tài khoản</h5><p th:text="${userCount}"></p></div>
+                </div>
+
+                <div class="row mt-5">
+                    <div class="col-md-6">
+                        <h5 class="text-center">Doanh thu theo tháng</h5>
+                        <canvas id="revenueChart"></canvas>
+                    </div>
+                    <div class="col-md-6">
+                        <h5 class="text-center">Top 5 sản phẩm bán chạy</h5>
+                        <canvas id="topSellingChart"></canvas>
                     </div>
                 </div>
             </div>
+
+                <!-- Chart.js Script -->
+                <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+                <script th:inline="javascript">
+                const months = /*[[${months}]]*/ [];
+                const revenues = /*[[${revenues}]]*/ [];
+
+                const topProductNames = /*[[${topProductNames}]]*/ [];
+                const topProductQuantities = /*[[${topProductQuantities}]]*/ [];
+
+                new Chart(document.getElementById('revenueChart'), {
+                    type: 'bar',
+                    data: {
+                        labels: months,
+                        datasets: [{
+                            label: 'Doanh thu (VNĐ)',
+                            data: revenues,
+                            backgroundColor: 'rgba(75,192,192,0.6)',
+                            borderColor: 'rgba(75,192,192,1)',
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        scales: { y: { beginAtZero: true } }
+                    }
+                });
+
+                new Chart(document.getElementById('topSellingChart'), {
+                    type: 'bar',
+                    data: {
+                        labels: topProductNames,
+                        datasets: [{
+                            label: 'Số lượng bán',
+                            data: topProductQuantities,
+                            backgroundColor: 'rgba(255,99,132,0.6)',
+                            borderColor: 'rgba(255,99,132,1)',
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        scales: { y: { beginAtZero: true, ticks: { precision: 0 } } }
+                    }
+                });
+            </script>
+
+
         </main>
         
         
         <footer class="py-4 bg-light mt-auto">
             <div class="container-fluid px-4">
-                <div class="d-flex align-items-center justify-content-between small">
+                <div class="d-flex align-items-center justify-content-admintween small">
                     <div class="text-muted">Copyright &copy; Phạm Văn Tuyến</div>
                     <div>
                         <a href="#">Chính sách riêng tư</a>
@@ -125,7 +258,6 @@
     </div>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
-
 
 </body>
 </html>

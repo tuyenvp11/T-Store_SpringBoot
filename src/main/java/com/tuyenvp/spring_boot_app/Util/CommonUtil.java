@@ -1,6 +1,7 @@
 package com.tuyenvp.spring_boot_app.Util;
 
-import com.tuyenvp.spring_boot_app.Model.ProductOrder;
+import com.tuyenvp.spring_boot_app.Model.Order;
+import com.tuyenvp.spring_boot_app.Model.OrderDetail;
 import com.tuyenvp.spring_boot_app.Model.UserDtls;
 import com.tuyenvp.spring_boot_app.Services.UserService;
 import jakarta.mail.MessagingException;
@@ -22,7 +23,11 @@ public class CommonUtil {
     @Autowired
     private UserService userService;
 
-    public Boolean sendMail(String url, String reciepentEmail) throws UnsupportedEncodingException, MessagingException {
+    @Autowired
+    private FormatUtil formatUtils;
+
+
+    /*public Boolean sendMail(String url, String reciepentEmail) throws UnsupportedEncodingException, MessagingException {
 
         MimeMessage message = mailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message);
@@ -37,49 +42,85 @@ public class CommonUtil {
         helper.setText(content, true);
         mailSender.send(message);
         return true;
-    }
+    }*/
 
-    public static String generateUrl(HttpServletRequest request) {
+    /*public static String generateUrl(HttpServletRequest request) {
 
         // http://localhost:8088/forgot-password
         String siteUrl = request.getRequestURL().toString();
 
         return siteUrl.replace(request.getServletPath(), "");
-    }
+    }*/
 
-    String msg=null;;
+    //String msg=null;;
 
-    public Boolean sendMailForProductOrder(ProductOrder order, String status) throws Exception
-    {
+    /*public Boolean sendMailForOrder(Order order, String status) throws Exception {
 
-        msg="<p>Xin chào [[name]],</p>"
-                + "<p>Cảm ơn bạn đặt <b>[[orderStatus]]</b>.</p>"
-                + "<p><b>Chi tiết sản phẩm:</b></p>"
-                + "<p>Tên sản phẩm : [[productName]]</p>"
-                + "<p>Danh mục : [[category]]</p>"
-                + "<p>Số lượng : [[quantity]]</p>"
-                + "<p>Giá : [[@formatUtils.formatCurrency(price)]]</p>"
-                + "<p>Phương thức thanh toán : [[paymentType]]</p>";
+        StringBuilder msgBuilder = new StringBuilder();
+
+        msgBuilder.append("<p>Xin chào <b>")
+                .append(order.getAddress().getReceiverName())
+                .append("</b>,</p>");
+
+        msgBuilder.append("<p>Cảm ơn bạn đã <b>")
+                .append(status)
+                .append("</b> đơn hàng tại T-store.</p>");
+
+        msgBuilder.append("<p><b>Chi tiết đơn hàng:</b></p>")
+                .append("<table style='border-collapse: collapse; width: 100%;'>")
+                .append("<thead>")
+                .append("<tr>")
+                .append("<th style='border: 1px solid #ddd; padding: 8px;'>Tên sản phẩm</th>")
+                .append("<th style='border: 1px solid #ddd; padding: 8px;'>Danh mục</th>")
+                .append("<th style='border: 1px solid #ddd; padding: 8px;'>Số lượng</th>")
+                .append("<th style='border: 1px solid #ddd; padding: 8px;'>Giá</th>")
+                .append("</tr>")
+                .append("</thead><tbody>");
+
+        for (OrderDetail detail : order.getOrderDetail()) {
+            String productName = detail.getProductVariant().getProduct().getProductName();
+            String categoryName = detail.getProductVariant().getProduct().getCategory().getCategoryName();
+            int quantity = detail.getQuantity();
+            String price = formatUtils.formatCurrency(detail.getSellPrice().doubleValue());
+
+            msgBuilder.append("<tr>")
+                    .append("<td style='border: 1px solid #ddd; padding: 8px;'>").append(productName).append("</td>")
+                    .append("<td style='border: 1px solid #ddd; padding: 8px;'>").append(categoryName).append("</td>")
+                    .append("<td style='border: 1px solid #ddd; padding: 8px;'>").append(quantity).append("</td>")
+                    .append("<td style='border: 1px solid #ddd; padding: 8px;'>").append(price).append("</td>")
+                    .append("</tr>");
+        }
+
+        msgBuilder.append("</tbody></table>");
+
+        msgBuilder.append("<p>Phương thức thanh toán: <b>")
+                .append(order.getPaymentType())
+                .append("</b></p>");
+
+        msgBuilder.append("<p>Tổng tiền: <b>")
+                .append(formatUtils.formatCurrency(order.getTotalPrice().doubleValue()))
+                .append("</b></p>");
+
+        // Thêm link xem chi tiết đơn hàng
+        String link = "http://localhost:8080/user/order-detail/" + order.getOrderId();
+        msgBuilder.append("<p>Bạn có thể xem chi tiết đơn hàng tại đây: <a href='")
+                .append(link)
+                .append("'>Xem đơn hàng</a></p>");
+
+        msgBuilder.append("<p>Trân trọng,<br>T-store</p>");
 
         MimeMessage message = mailSender.createMimeMessage();
-        MimeMessageHelper helper = new MimeMessageHelper(message);
+        MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
 
         helper.setFrom("tuyenpham191103@gmail.com", "T-store");
-        helper.setTo(order.getOrderAddress().getEmail());
+        helper.setTo(order.getUser().getEmail());
+        helper.setSubject("Thông báo trạng thái đơn hàng #" + order.getOrderId());
+        helper.setText(msgBuilder.toString(), true);
 
-        msg=msg.replace("[[name]]",order.getOrderAddress().getFirstName());
-        msg=msg.replace("[[orderStatus]]",status);
-        msg=msg.replace("[[productName]]", order.getProduct().getProduct_name());
-        msg=msg.replace("[[category]]", String.valueOf(order.getProduct().getCategory_id()));
-        msg=msg.replace("[[quantity]]", order.getQuantity().toString());
-        msg=msg.replace("[[@formatUtils.formatCurrency(price)]]", order.getPrice().toString());
-        msg=msg.replace("[[paymentType]]", order.getPaymentType());
-
-        helper.setSubject("Trạng thái đơn hàng");
-        helper.setText(msg, true);
         mailSender.send(message);
         return true;
-    }
+    }*/
+
 
     public UserDtls getLoggedInUserDetails(Principal p) {
         String email = p.getName();

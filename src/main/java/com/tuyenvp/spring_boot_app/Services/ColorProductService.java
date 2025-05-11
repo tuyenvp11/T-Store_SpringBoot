@@ -1,6 +1,7 @@
 package com.tuyenvp.spring_boot_app.Services;
 
 import com.tuyenvp.spring_boot_app.Model.ColorProduct;
+import com.tuyenvp.spring_boot_app.Model.Product;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -16,6 +17,9 @@ public interface ColorProductService {
     ColorProduct updateColorProduct(ColorProduct update_color);
     ColorProduct deleteColorProduct(int color_id);
     List<ColorProduct> searchColorProduct(String keyword);
+    List<ColorProduct> getAllColorProducts();
     Page<ColorProduct> getAll(Integer pageNo);
     Page<ColorProduct> searchColorProduct(Pageable pageable, String keyword);
+
+    ColorProduct getColorProductByName(String colorName);
 }

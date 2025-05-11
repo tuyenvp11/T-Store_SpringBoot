@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<!-- Start Head -->
+<div th:replace="fragments/head :: head"></div>
+<!-- End Head -->
+
+<body>
+<!-- Start Navbar  -->
+<div th:replace="fragments/header :: header"></div>
+<!-- End Navbar -->
+
+<!-- Start nav -->
+<div th:replace="fragments/nav :: nav"></div>
+<!-- End nav -->
+
+<!-- Start View Product -->
+<!--<div class="container mt-4">
+    <div class="row">
+        &lt;!&ndash; Phần tiêu đề danh mục sản phẩm &ndash;&gt;
+        <div class="col-12 mb-3">
+            <h5 class="home-filter_label">SẢN PHẨM NỔI BẬT</h5>
+            <div class="btn-group" role="group" aria-label="Phone brands">
+                <button type="button" class="btn btn-outline-primary">Iphone</button>
+                <button type="button" class="btn btn-outline-primary">Samsung</button>
+                <button type="button" class="btn btn-outline-primary">Xiaomi</button>
+                <button type="button" class="btn btn-outline-primary">Realme</button>
+                <button type="button" class="btn btn-outline-primary">Oppo</button>
+                <button type="button" class="btn btn-outline-primary">Vivo</button>
+                <button type="button" class="btn btn-outline-primary">Nokia</button>
+                <button type="button" class="btn btn-outline-primary">Asus</button>
+                <button type="button" class="btn btn-primary">Xem tất cả</button>
+            </div>
+        </div>
+
+        &lt;!&ndash; Phần sản phẩm &ndash;&gt;
+        &lt;!&ndash; Sản phẩm 1 &ndash;&gt;
+        <div class="product-list container mt-4 mb-4">
+            <div class="row">
+                <div class="col-6 col-md-4 col-lg-2 mb-4" th:each="product : ${products}">
+                    <a th:href="@{'/detail_product/' + ${product.productId}}" class="text-decoration-none">
+                        <div class="card h-100 shadow-sm">
+                            <img th:src="@{'/be/img/products/'+${product.thumbnail}}" class="card-img-top p-3" alt="Ảnh sản phẩm">
+                            <div class="card-body text-center d-flex flex-column justify-content-between">
+                                <h6 class="card-title mb-2" th:text="${product.productName}"></h6>
+
+                                &lt;!&ndash; Price Section with Fixed Height &ndash;&gt;
+                                <div style="min-height: 70px;">
+                                    <p class="card-text">
+                                        &lt;!&ndash;<del class="text-muted">600.000</del><br>&ndash;&gt;
+                                        <span class="text-danger font-weight-bold" th:text="${@formatUtils.formatCurrency(product.sellPrice)}"></span>
+                                    </p>
+                                </div>
+
+                                &lt;!&ndash; Rating Section &ndash;&gt;
+                                <div class="d-flex justify-content-center align-items-center">
+                                    <div class="rating text-warning" style="font-size: 12px;">
+                                        <i class="fa-solid fa-star"></i>
+                                        <i class="fa-solid fa-star"></i>
+                                        <i class="fa-solid fa-star"></i>
+                                        <i class="fa-solid fa-star"></i>
+                                        <i class="fa-solid fa-star"></i>
+                                    </div>
+                                    <span class="ms-2 text-muted" style="font-size: 12px;">112 đánh giá</span>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+&lt;!&ndash; End View Product &ndash;&gt;
+</div>-->
+
+<h2>Kết quả thanh toán</h2>
+<p th:text="${message}"></p>
+<a href="/">Quay về trang chủ</a>
+
+
+<hr class="brick">
+
+<!-- Start Footer -->
+<div th:replace="fragments/footer :: footer"></div>
+<!-- End Footer  -->
+
+<!-- Jquery Validation Library  -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.js}"></script>
+<script type="text/javascript" th:src="@{fe/js/script.js}"></script>
+<!-- End  -->
+<script
+        src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous">
+</script>
+</body>
+</html>
